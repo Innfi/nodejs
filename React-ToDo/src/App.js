@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
 
-//const Todo = ({todo}) => <div className="todo">{todo.text}</div>;
 
 function TodoForm({ addTodo }) {
   const [value, setValue] = useState("");
@@ -25,7 +24,7 @@ function TodoForm({ addTodo }) {
   );
 }
 
-function Todo({todo, index, completeTodo}) {
+function Todo({todo, index, completeTodo, removeTodo}) {
   return (
     <div 
       className="todo" 
@@ -36,7 +35,15 @@ function Todo({todo, index, completeTodo}) {
         <button onClick={() => completeTodo(index) }>Complete</button>
         <button onClick={() => removeTodo(index) }>x</button>
       </div>
-      </div>
+    </div>
+  );
+}
+
+function WriteTodo({ writeTodo, todos }) {
+  return (
+    <div>
+      <button onClick={() => writeTodo(todos) }>Write</button>
+    </div>      
   );
 }
 
@@ -72,6 +79,12 @@ function App() {
     setTodos(newTodos);
   };
 
+  const write = todos => {
+    const newTodos = [...todos];
+    setTodos(newTodos);
+  };
+
+
   return (
     <div className="app">
       <div className="todo-list">
@@ -85,6 +98,10 @@ function App() {
           />
         ))}
         <TodoForm addTodo={addTodo} />
+        <WriteTodo 
+          writeTodo={write} 
+          todos={todos}
+        />
       </div>
     </div>
   );
