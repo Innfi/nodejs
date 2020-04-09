@@ -78,7 +78,7 @@ function App() {
     newTodos.splice(index, 1);
     setTodos(newTodos);
   };
-
+ 
   const write = todos => {
     const newTodos = [...todos];
     setTodos(newTodos);
