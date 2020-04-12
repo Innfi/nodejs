@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.2.1",
     "express-generator": "^4.16.1",
     "http-proxy-middleware": "^1.0.3",
+    "minimist": "^1.2.5",
     "mysql": "^2.18.1",
     "react": "^16.7.0-alpha.2",
     "react-dom": "^16.7.0-alpha.2",
