@@ -13,6 +13,19 @@ router.get("/index", (req, res, next) => {
 	res.send("api is working");
 });
 
+router.get("/", (req, res, next) => {
+	conn.connect((err) => {
+		if(err) throw err;
+
+		var sql = "select todo_text, complete from todo_history";
+		connquery(sql, (err, result) => {
+			if(err) throw err;
+
+			//TODO: todo list
+		});
+	});
+});
+
 router.post("/", (req, res, next) => {
 	conn.connect((err) => {
 		if(err) throw err;
