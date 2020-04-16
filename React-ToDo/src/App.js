@@ -47,6 +47,16 @@ function WriteTodo({ writeTodo, todos }) {
   );
 }
 
+function ReadTodo(todos) {
+  const getParams = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
+  };
+
+  fetch('http://localhost:3001/todo-history', getParams)
+    .then(response => response.json());
+}
+
 function App() {
   const [todos, setTodos]  = useState([
     { 
@@ -92,7 +102,6 @@ function App() {
 
     setTodos(newTodos);
   };
-
 
   return (
     <div className="app">
