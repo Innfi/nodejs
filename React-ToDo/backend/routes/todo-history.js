@@ -18,10 +18,17 @@ router.get("/", (req, res, next) => {
 		if(err) throw err;
 
 		var sql = "select todo_text, complete from todo_history";
-		connquery(sql, (err, result) => {
+		conn.query(sql, (err, result) => {
 			if(err) throw err;
 
-			//TODO: todo list
+			console.log("----");
+			for(var index in result) {
+				console.log("text: " + result[index].todo_text);
+				console.log("complete: " + result[index].complete);
+			}
+			console.log("----");
+
+			res.send(result);
 		});
 	});
 });
