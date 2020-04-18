@@ -47,28 +47,19 @@ function WriteTodo({ writeTodo, todos }) {
   );
 }
 
-function ReadTodo(todos) {
-  const getParams = {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' }
-  };
-
-  fetch('http://localhost:3001/todo-history', getParams)
-    .then(response => response.json());
+function ReadTodo({readTodo, todos}) {
+  return (
+    <div>
+      <button onClick={() => readTodo(todos)}>Read Todos</button>
+    </div>
+  );
 }
 
 function App() {
   const [todos, setTodos]  = useState([
-    { 
-      text: "Learn about React", 
-      isCompleted: false 
-    },
-    { text: "Work",
-      isCompleted: false  
-    },
-    { 
-      text: "Build an webapp for CodeCommit" ,
-      isCompleted: false 
+    {
+      text: "test",
+      isCompleted: false
     }
   ]);
 
@@ -103,6 +94,17 @@ function App() {
     setTodos(newTodos);
   };
 
+  const readTodos = todos => {
+    const getParams = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    };
+
+    let result = fetch('http://localhost:3001/todo-history', getParams)
+      .then(response => response.json());
+
+  };
+
   return (
     <div className="app">
       <div className="todo-list">
@@ -118,6 +120,10 @@ function App() {
         <TodoForm addTodo={addTodo} />
         <WriteTodo 
           writeTodo={write} 
+          todos={todos}
+        />
+        <ReadTodo 
+          readTodo={readTodos} 
           todos={todos}
         />
       </div>
