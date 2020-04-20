@@ -100,9 +100,19 @@ function App() {
       headers: { 'Content-Type': 'application/json' },
     };
 
-    let result = fetch('http://localhost:3001/todo-history', getParams)
-      .then(response => response.json());
+    fetch('http://localhost:3001/todo-history', getParams)
+      .then(response => response.json())
+      .then(response => {
+        const newTodos = response.map((todo) => {
+          return { 
+            text: todo.todo_text, 
+            isCompleted: todo.complete | 0
+          };
+        });
 
+        console.log(newTodos);
+        setTodos(newTodos);
+      });
   };
 
   return (
