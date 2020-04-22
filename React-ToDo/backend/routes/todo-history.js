@@ -55,5 +55,22 @@ router.post("/", (req, res, next) => {
 	res.send("test");	
 });
 
+router.delete("/", (req, res, next) => {
+	pool.getConnection((err) => {
+		if(err) throw err;
+
+		const todo = req.body.todo;
+		console.log("Delete: " + todo.todo_text);
+
+		//FIXME: use key
+		var sql = `delete from todo_history where todo_text='${todo.todo_text}'`;
+		pool.query(sql, (err, result) => {
+			if(err) throw err;
+		});
+	});
+
+	res.sendStatus(200);
+});
+
 module.exports = router;
 

@@ -76,6 +76,16 @@ function App() {
   
   const removeTodo = index => {
     const newTodos = [...todos];
+
+    const postParams = {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ todo: todo[index] })
+    };
+
+    fetch('http://localhost:3001/todo-history', postParams)
+      .then(response => response.json());
+
     newTodos.splice(index, 1);
     setTodos(newTodos);
   };
