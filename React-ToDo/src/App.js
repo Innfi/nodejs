@@ -1,6 +1,23 @@
 import React, { useState } from 'react';
 import './App.css';
 
+/*
+TODO
+-------------------------------------------------------------------------------
+* error handling with fetch()
+- timeout for backend api call 
+- throttling response from backend
+* login 
+* database: rdb to dynamodb 
+* build webapp
+* migrate to jsx
+
+DONE
+-------------------------------------------------------------------------------
+
+*/
+
+
 
 function TodoForm({ addTodo }) {
   const [value, setValue] = useState("");
@@ -55,6 +72,15 @@ function ReadTodo({readTodo, todos}) {
   );
 }
 
+/*
+testTimeout(() => {
+  const timer = setTimeout(() => {
+    console.log('testing setTimeout');
+  }, 1000);
+  return () => clearTimeout(timer);
+}, []);
+*/
+
 function App() {
   const [todos, setTodos]  = useState([
     {
@@ -63,9 +89,13 @@ function App() {
     }
   ]);
 
-  const addTodo = text => {
-    const newTodos = [...todos, { text }];
-    setTodos(newTodos);
+  const addTodo = text => {    
+    const timer = setTimeout(() => {
+      const newTodos = [...todos, { text }];
+      setTodos(newTodos);
+    }, 1000);
+    return () => clearTimeout(timer);
+    
   };
 
   const completeTodo = index => {
@@ -80,7 +110,7 @@ function App() {
     const postParams = {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ todo: todo[index] })
+      body: JSON.stringify({ todo: todos[index] })
     };
 
     fetch('http://localhost:3001/todo-history', postParams)
