@@ -47,6 +47,7 @@ function Todo({todo, index, completeTodo, removeTodo}) {
       className="todo" 
       style={{ textDecoration: todo.isCompleted ? "line-through" : ""}}
       >
+      <div>{todo.todoId}</div>
       {todo.text}
       <div>
         <button onClick={() => completeTodo(index) }>Complete</button>
@@ -72,19 +73,16 @@ function ReadTodo({readTodo, todos}) {
   );
 }
 
-/*
-testTimeout(() => {
-  const timer = setTimeout(() => {
-    console.log('testing setTimeout');
-  }, 1000);
-  return () => clearTimeout(timer);
-}, []);
-*/
-
 function App() {
   const [todos, setTodos]  = useState([
     {
-      text: "test",
+      todoId: 0,
+      text: "migrate backend DB from RDS to DynamoDB",
+      isCompleted: false
+    },
+    {
+      todoId: 1,
+      text: "create a new project",
       isCompleted: false
     }
   ]);
