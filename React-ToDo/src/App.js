@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Component, useState } from 'react';
 import './App.css';
 
 /*
@@ -73,21 +73,32 @@ function ReadTodo({readTodo, todos}) {
   );
 }
 
-function App() {
-  const [todos, setTodos]  = useState([
-    {
-      todoId: 0,
-      text: "migrate backend DB from RDS to DynamoDB",
-      isCompleted: false
-    },
-    {
-      todoId: 1,
-      text: "create a new project",
-      isCompleted: false
-    }
-  ]);
+interface TestTodo {
+  todoId: Number;
+  text: string;
+  isCompleted: Boolean
+}
 
-  const addTodo = text => {    
+class App extends Component {
+  
+
+/*
+const [todos, setTodos]  = useState([
+      {
+        todoId: 0,
+        text: "migrate backend DB from RDS to DynamoDB",
+        isCompleted: false
+      },
+      {
+        todoId: 1,
+        text: "create a new project",
+        isCompleted: false
+      }
+    ]);
+  
+*/  
+
+  addTodo = text => {    
     const timer = setTimeout(() => {
       const newTodos = [...todos, { text }];
       setTodos(newTodos);
@@ -96,13 +107,13 @@ function App() {
     
   };
 
-  const completeTodo = index => {
+  completeTodo = index => {
     const newTodos = [...todos];
     newTodos[index].isCompleted = true;
     setTodos(newTodos);
   };
-  
-  const removeTodo = index => {
+
+  removeTodo = index => {
     const newTodos = [...todos];
 
     const postParams = {
@@ -117,8 +128,8 @@ function App() {
     newTodos.splice(index, 1);
     setTodos(newTodos);
   };
- 
-  const write = todos => {
+
+  write = todos => {
     const newTodos = [...todos];
 
     const postParams = {
@@ -132,51 +143,53 @@ function App() {
     setTodos(newTodos);
   };
 
-  const readTodos = todos => {
-    const getParams = {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
+  readTodos = todos => {
+      const getParams = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      };
+  
+      fetch('http://localhost:3001/todo-history', getParams)
+        .then(response => response.json())
+        .then(response => {
+          const newTodos = response.map((todo) => {
+            return { 
+              text: todo.todo_text, 
+              isCompleted: todo.complete | 0
+            };
+          });
+  
+          console.log(newTodos);
+          setTodos(newTodos);
+        });
     };
 
-    fetch('http://localhost:3001/todo-history', getParams)
-      .then(response => response.json())
-      .then(response => {
-        const newTodos = response.map((todo) => {
-          return { 
-            text: todo.todo_text, 
-            isCompleted: todo.complete | 0
-          };
-        });
-
-        console.log(newTodos);
-        setTodos(newTodos);
-      });
-  };
-
-  return (
-    <div className="app">
-      <div className="todo-list">
-        {todos.map((todo, index) => (
-          <Todo 
-            key={index} 
-            index={index} 
-            todo={todo}
-            completeTodo={completeTodo}
-            removeTodo={removeTodo}
+  render() {
+    return (
+      <div className="app">
+        <div className="todo-list">
+          {todos.map((todo, index) => (
+            <Todo 
+              key={index} 
+              index={index} 
+              todo={todo}
+              completeTodo={completeTodo}
+              removeTodo={removeTodo}
+            />
+          ))}
+          <TodoForm addTodo={addTodo} />
+          <WriteTodo 
+            writeTodo={write} 
+            todos={todos}
           />
-        ))}
-        <TodoForm addTodo={addTodo} />
-        <WriteTodo 
-          writeTodo={write} 
-          todos={todos}
-        />
-        <ReadTodo 
-          readTodo={readTodos} 
-          todos={todos}
-        />
+          <ReadTodo 
+            readTodo={readTodos} 
+            todos={todos}
+          />
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default App;
