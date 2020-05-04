@@ -57,10 +57,24 @@ function Todo({todo, index, completeTodo, removeTodo}) {
 }
 
 class NewTodo extends Component {
+  componentDidMount() {
+    console.log("NewTodo mounted");
+  }
+
   render() {
+    const todo = this.props.todo;
+    const index = this.props.index;
+    const completeTodo = this.props.completeTodo;
+    const removeTodo = this.props.removeTodo;
+
     return (
-      <div className="todo">
-        {this.props.todo.text}
+      <div className="todo" style={{ textDecoration: todo.isCompleted ? "line-through" : ""}}>
+        <div>{todo.todoId}</div>
+        {todo.text}
+        <div>
+          <button onClick={() => completeTodo(index) }>Complete</button>
+          <button onClick={() => removeTodo(index) }>x</button>
+        </div>
       </div>
     );
   }
@@ -165,22 +179,15 @@ function App() {
   return (
     <div className="app">
       <div className="todo-list">
-        {todos.map((todo, index) => (
-          <Todo 
+      {todos.map((todo, index) => (
+          <NewTodo 
             key={index} 
             index={index} 
             todo={todo}
             completeTodo={completeTodo}
-            removeTodo={removeTodo}
+            removeTodo={removeTodo} 
           />
         ))}
-        <div className="new todo">
-        {todos.map((todo) => (
-          <NewTodo 
-            todo={todo} 
-          />
-        ))}
-        </div>
         <TodoForm addTodo={addTodo} />
         <WriteTodo 
           writeTodo={write} 
@@ -188,10 +195,9 @@ function App() {
         />
         <ReadTodo 
           readTodo={readTodos} 
-          todos={todos}
+          todos={todos}          
         />
       </div>
-      
     </div>
   );
 }
