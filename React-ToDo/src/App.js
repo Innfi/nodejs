@@ -40,6 +40,24 @@ function TodoForm({ addTodo }) {
   );
 }
 
+class NewTodoForm extends Component {
+	componentDidMount() {
+		console.log("NewTodoForm mounted"):
+	}
+
+	//TODO: event handler
+
+	render() {
+		return (
+			<form onSubmit={}>
+				<input type="text" className="input" value={value} 
+				 onChange = {e => setValue(e.target.value)}
+				/>
+			</form>
+		);
+	}
+}
+
 function Todo({todo, index, completeTodo, removeTodo}) {
   return (
     <div 
