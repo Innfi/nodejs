@@ -41,18 +41,34 @@ function TodoForm({ addTodo }) {
 }
 
 class NewTodoForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: ''};
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
 	componentDidMount() {
-		console.log("NewTodoForm mounted"):
+		console.log("NewTodoForm mounted");
 	}
 
-	//TODO: event handler
+  handleChange(event) {
+    console.log("handleChange: " + event.target.value);
+    this.setState({value: event.target.value});
+  }
+
+	handleSubmit(event) {
+    event.preventDefault();
+    console.log("value: " + this.state.value);
+    this.props.addTodo(this.state.value);
+  }
 
 	render() {
 		return (
-			<form onSubmit={}>
-				<input type="text" className="input" value={value} 
-				 onChange = {e => setValue(e.target.value)}
-				/>
+			<form onSubmit={this.handleSubmit}>
+				<input type="text" className="input" value={this.state.value} 
+				 onChange={this.handleChange} />
 			</form>
 		);
 	}
@@ -206,7 +222,7 @@ function App() {
             removeTodo={removeTodo} 
           />
         ))}
-        <TodoForm addTodo={addTodo} />
+        <NewTodoForm addTodo={addTodo} />
         <WriteTodo 
           writeTodo={write} 
           todos={todos}
