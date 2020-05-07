@@ -40,6 +40,22 @@ function TodoForm({ addTodo }) {
   );
 }
 
+function Todo({todo, index, completeTodo, removeTodo}) {
+  return (
+    <div 
+      className="todo" 
+      style={{ textDecoration: todo.isCompleted ? "line-through" : ""}}
+      >
+      <div>{todo.todoId}</div>
+      {todo.text}
+      <div>
+        <button onClick={() => completeTodo(index) }>Complete</button>
+        <button onClick={() => removeTodo(index) }>x</button>
+      </div>
+    </div>
+  );
+}
+
 class NewTodoForm extends Component {
   constructor(props) {
     super(props);
@@ -72,22 +88,6 @@ class NewTodoForm extends Component {
 			</form>
 		);
 	}
-}
-
-function Todo({todo, index, completeTodo, removeTodo}) {
-  return (
-    <div 
-      className="todo" 
-      style={{ textDecoration: todo.isCompleted ? "line-through" : ""}}
-      >
-      <div>{todo.todoId}</div>
-      {todo.text}
-      <div>
-        <button onClick={() => completeTodo(index) }>Complete</button>
-        <button onClick={() => removeTodo(index) }>x</button>
-      </div>
-    </div>
-  );
 }
 
 class NewTodo extends Component {
