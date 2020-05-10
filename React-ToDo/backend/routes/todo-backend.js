@@ -1,0 +1,63 @@
+var express = require("express");
+var aws = require("aws-sdk")
+
+aws.config.update({
+    region: "ap-northeast-2",
+    endpoint: "http://localhost:8000"
+});
+
+let dynamoDb = new aws.DynamoDB();
+
+function tryCreateTable(tableName) {
+    dynamoDb.listTables((err, data) => {
+        if(err) {
+            console.error("listTables error");
+        } else {
+            if(data.TableNames.includes(tableName))
+            {
+                console.log("tables: ", data.TableNames);
+                return;
+            }
+
+            createTableTodoHistory(tableName);
+        }
+    });
+}
+
+function createTableTodoHistory(tableName) {
+    let params = {
+        TableName: "TodoHistory", 
+        KeySchema: [
+            {AttributeName: "UserId", KeyType: "HASH"}
+        ],
+        AttributeDefinitions: [
+            {AttributeName: "UserId", AttributeType: "N"}
+        ],
+        ProvisionedThroughput: {
+            ReadCapacityUnits: 1, 
+            WriteCapacityUnits: 1
+        }
+    };
+    
+    dynamoDb.createTable(params, (err, data) => {
+        if(err) {
+            console.error("createTable error: ", JSON.stringify(err, null, 2));
+        } else {
+            console.log("table created: ", createTable.TableName);
+        }
+    });    
+}
+
+tryCreateTable("TodoHistory");
+
+let router = express.Router();
+
+router.get("/table", (req, res, next) => {
+    res.send("GET table here");
+});
+
+router.get("/user", (req, res, next) => {
+    
+});
+
+module.exports = router;
