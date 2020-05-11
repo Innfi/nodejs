@@ -28,10 +28,12 @@ function createTableTodoHistory(tableName) {
     let params = {
         TableName: "TodoHistory", 
         KeySchema: [
-            {AttributeName: "UserId", KeyType: "HASH"}
+            { AttributeName: "UserId", KeyType: "HASH" },
+            { AttributeName: "TodoId", KeyType: "RANGE" }
         ],
         AttributeDefinitions: [
-            {AttributeName: "UserId", AttributeType: "N"}
+            { AttributeName: "UserId", AttributeType: "S" },
+            { AttributeName: "TodoId", AttributeType: "N" }
         ],
         ProvisionedThroughput: {
             ReadCapacityUnits: 1, 
@@ -48,13 +50,40 @@ function createTableTodoHistory(tableName) {
     });    
 }
 
+function resetTable(tablenName) {
+    var params = {
+        TableName: tableName
+    };
+    dynamoDb.deleteTable(params, (err, data) => {
+        if(err) {
+            console.log("error deleteTable", err);
+        }
+    });
+}
+
+function insertTodoItem(tableName) {
+    const params = {
+        TableName = tableName,
+        Item: {
+            'UserId': {S: "innfi"},
+            'TodoId': {N: "1"},
+            'TodoText' : {S: "test-todos"}
+        }
+    };
+    
+    dynamoDb.putItem(params, (err, data) => {
+        if(err) {
+            console.log("insertTodoItem error: ", err);
+        } else {
+            console.log("insertTodoItem: ", data)
+        }
+    });
+}
+
+resetTable("TodoHistory");
 tryCreateTable("TodoHistory");
 
 let router = express.Router();
-
-router.get("/table", (req, res, next) => {
-    res.send("GET table here");
-});
 
 router.get("/user", (req, res, next) => {
     
