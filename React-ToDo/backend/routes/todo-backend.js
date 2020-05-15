@@ -8,6 +8,8 @@ aws.config.update({
 
 let dynamoDb = new aws.DynamoDB();
 
+const tableName = "TodoHistory";
+
 function tryCreateTable(tableName) {
     dynamoDb.listTables((err, data) => {
         if(err) {
@@ -51,7 +53,7 @@ function createTableTodoHistory(tableName) {
 }
 
 function resetTable(tablenName) {
-    var params = {
+    const params = {
         TableName: tableName
     };
     dynamoDb.deleteTable(params, (err, data) => {
@@ -61,32 +63,60 @@ function resetTable(tablenName) {
     });
 }
 
-function insertTodoItem(tableName) {
+function readTodos(userId) {
     const params = {
         TableName = tableName,
-        Item: {
-            'UserId': {S: "innfi"},
-            'TodoId': {N: "1"},
-            'TodoText' : {S: "test-todos"}
+        Key: {
+            'UserId': userId
         }
     };
-    
-    dynamoDb.putItem(params, (err, data) => {
+
+    dynamoDb.getItem(params, (err, data) => {
+        if(err) {
+            console.error("readTodos: ", JSON.stringify(err, null, 2));
+        } else {
+            //TODO: hand over todo list
+        }
+    });
+}
+
+function insertTodoItem(insertParams) {
+    dynamoDb.putItem(insertParams, (err, data) => {
         if(err) {
             console.log("insertTodoItem error: ", err);
+            throw err;
         } else {
             console.log("insertTodoItem: ", data)
         }
     });
 }
 
-resetTable("TodoHistory");
-tryCreateTable("TodoHistory");
+//resetTable("TodoHistory");
+tryCreateTable(tableName);
 
 let router = express.Router();
 
-router.get("/user", (req, res, next) => {
-    
+router.get("/", (req, res, next) => {
+    const userId = req.body.userId;
+
+});
+
+router.post("/", (req, res, next) => {
+    const todo = req.body.todo;
+    const userId = req.body.userId;
+
+    const insertParams = {
+        TableName = tableName, 
+        Item: {
+            'UserId': {S: userId},
+            'TodoId': {N: todo.todoId},
+            'TodoText': {S: todo.text},
+            'Completed': {N: todo.isCompleted}
+        }
+    };
+    insertTodoItem(insertParams);
+
+    res.sendStatus(200);
 });
 
 module.exports = router;
