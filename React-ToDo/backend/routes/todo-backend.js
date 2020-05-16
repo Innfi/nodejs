@@ -28,7 +28,7 @@ function tryCreateTable(tableName) {
 
 function createTableTodoHistory(tableName) {
     let params = {
-        TableName: "TodoHistory", 
+        TableName: tableName, 
         KeySchema: [
             { AttributeName: "UserId", KeyType: "HASH" },
             { AttributeName: "TodoId", KeyType: "RANGE" }
@@ -63,35 +63,7 @@ function resetTable(tablenName) {
     });
 }
 
-function readTodos(userId) {
-    const params = {
-        TableName = tableName,
-        Key: {
-            'UserId': userId
-        }
-    };
-
-    dynamoDb.getItem(params, (err, data) => {
-        if(err) {
-            console.error("readTodos: ", JSON.stringify(err, null, 2));
-        } else {
-            //TODO: hand over todo list
-        }
-    });
-}
-
-function insertTodoItem(insertParams) {
-    dynamoDb.putItem(insertParams, (err, data) => {
-        if(err) {
-            console.log("insertTodoItem error: ", err);
-            throw err;
-        } else {
-            console.log("insertTodoItem: ", data)
-        }
-    });
-}
-
-//resetTable("TodoHistory");
+//resetTable(tableName);
 tryCreateTable(tableName);
 
 let router = express.Router();
@@ -99,14 +71,46 @@ let router = express.Router();
 router.get("/", (req, res, next) => {
     const userId = req.body.userId;
 
+    var items = readTodos(userId);
+    const todos = items.map(item => {
+        const todo = {
+            UserId: item.UserId.S,
+            TodoId: item.TodoId.N,
+            TodoText: item.TodoText.S,
+            Completed: item.Completed.N != 0
+        };
+    
+        return todo;
+    });
+
+    res.send(todos);
 });
+
+function readTodos(userId) {
+    const params = {
+        TableName: tableName,
+        KeyConditionExpression: 'UserId = :userId',
+        ExpressionAttributeValues: {
+            ':userId': { S: userId}
+        }
+    };
+
+    dynamoDb.query(params, (err, data) => {
+        if(err) {
+            console.error("readTodos: ", JSON.stringify(err, null, 2));
+            throw err;
+        } else {
+            return data.Items;
+        }
+    });
+}
 
 router.post("/", (req, res, next) => {
     const todo = req.body.todo;
     const userId = req.body.userId;
 
     const insertParams = {
-        TableName = tableName, 
+        TableName: tableName, 
         Item: {
             'UserId': {S: userId},
             'TodoId': {N: todo.todoId},
@@ -118,5 +122,16 @@ router.post("/", (req, res, next) => {
 
     res.sendStatus(200);
 });
+
+function insertTodoItem(insertParams) {
+    dynamoDb.putItem(insertParams, (err, data) => {
+        if(err) {
+            console.log("insertTodoItem error: ", err);
+            throw err;
+        } else {
+            console.log("insertTodoItem: ", data)
+        }
+    });
+}
 
 module.exports = router;
