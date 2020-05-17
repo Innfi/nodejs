@@ -68,25 +68,42 @@ tryCreateTable(tableName);
 
 let router = express.Router();
 
-router.get("/", (req, res, next) => {
-    const userId = req.body.userId;
+router.get("/:userId", (req, res, next) => {    
+    const userId = req.params.userId;
+    const params = {
+        TableName: tableName,
+        KeyConditionExpression: 'UserId = :userId',
+        ExpressionAttributeValues: {
+            ':userId': { S: userId}
+        }
+    };
 
-    var items = readTodos(userId);
-    const todos = items.map(item => {
-        const todo = {
-            UserId: item.UserId.S,
-            TodoId: item.TodoId.N,
-            TodoText: item.TodoText.S,
-            Completed: item.Completed.N != 0
-        };
-    
-        return todo;
-    });
+    dynamoDb.query(params, (err, data) => {
+        if(err) {
+            console.error("readTodos: ", JSON.stringify(err, null, 2));
+            throw err;
+        } else {
+            var items = data.Items;
 
-    res.send(todos);
+            const todos = items.map(item => {
+                const todo = {
+                    UserId: item.UserId.S,
+                    TodoId: item.TodoId.N,
+                    TodoText: item.TodoText.S,
+                    Completed: item.Completed.N
+                };
+            
+                return todo;
+            });
+        
+            res.send(todos);   
+        }
+    });   
 });
 
 function readTodos(userId) {
+    console.log("userId: ", userId);
+
     const params = {
         TableName: tableName,
         KeyConditionExpression: 'UserId = :userId',
@@ -105,10 +122,10 @@ function readTodos(userId) {
     });
 }
 
-router.post("/", (req, res, next) => {
+router.post("/:userId", (req, res, next) => {
+    const userId = req.params.userId;
     const todo = req.body.todo;
-    const userId = req.body.userId;
-
+    
     const insertParams = {
         TableName: tableName, 
         Item: {

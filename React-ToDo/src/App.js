@@ -93,6 +93,20 @@ class NewTodoForm extends Component {
 class NewTodo extends Component {
   componentDidMount() {
     console.log("NewTodo mounted");
+
+    const getParams = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    };
+  
+    const userId = "test1";
+    const url = "http://localhost:3001/todo-backend/".concat(userId);
+
+    fetch(url, getParams)
+    .then(response => response.json())
+    .then(response => {
+      console.log(response);
+    });
   }
 
   render() {
@@ -193,11 +207,14 @@ function App() {
     const getParams = {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: "test1" })
     };
   
-    fetch('http://localhost:3001/todo-history', getParams)
+    fetch('http://localhost:3001/todo-backend', getParams)
       .then(response => response.json())
       .then(response => {
+        console.log(response);
+
         const newTodos = response.map((todo) => {
           return { 
             text: todo.todo_text, 
