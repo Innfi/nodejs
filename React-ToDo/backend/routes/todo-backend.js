@@ -121,18 +121,19 @@ router.post("/:userId", (req, res, next) => {
             'Completed': {N: todo.isCompleted}
         }
     };
-    insertTodoItem(insertParams);
-
-    res.sendStatus(200);
+    insertTodoItem(insertParams, (data) => {
+        res.sendStatus(200);
+    });    
 });
 
-function insertTodoItem(insertParams) {
+function insertTodoItem(insertParams, callback) {
     dynamoDb.putItem(insertParams, (err, data) => {
         if(err) {
             console.log("insertTodoItem error: ", err);
             throw err;
         } else {
-            console.log("insertTodoItem: ", data)
+            console.log("insertTodoItem: ", data);
+            callback(data);
         }
     });
 }
