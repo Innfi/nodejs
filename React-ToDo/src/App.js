@@ -16,46 +16,6 @@ DONE
 
 */
 
-
-
-function TodoForm({ addTodo }) {
-  const [value, setValue] = useState("");
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    if(!value) return;
-    addTodo(value);
-    setValue("");
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input 
-        type="text" 
-        className="input" 
-        value={value} 
-        onChange= {e => setValue(e.target.value)}
-      />
-    </form>
-  );
-}
-
-function Todo({todo, index, completeTodo, removeTodo}) {
-  return (
-    <div 
-      className="todo" 
-      style={{ textDecoration: todo.isCompleted ? "line-through" : ""}}
-      >
-      <div>{todo.todoId}</div>
-      {todo.text}
-      <div>
-        <button onClick={() => completeTodo(index) }>Complete</button>
-        <button onClick={() => removeTodo(index) }>x</button>
-      </div>
-    </div>
-  );
-}
-
 class NewTodoForm extends Component {
   constructor(props) {
     super(props);
@@ -136,14 +96,6 @@ function WriteTodo({ writeTodo, todos }) {
   );
 }
 
-function ReadTodo({readTodo, todos}) {
-  return (
-    <div>
-      <button onClick={() => readTodo(todos)}>Read Todos</button>
-    </div>
-  );
-}
-
 function App() {
   const [todos, setTodos]  = useState([
     {
@@ -203,30 +155,6 @@ function App() {
     setTodos(newTodos);
   };
   
-  const readTodos = todos => {
-    const getParams = {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: "test1" })
-    };
-  
-    fetch('http://localhost:3001/todo-backend', getParams)
-      .then(response => response.json())
-      .then(response => {
-        console.log(response);
-
-        const newTodos = response.map((todo) => {
-          return { 
-            text: todo.todo_text, 
-            isCompleted: todo.complete | 0
-          };
-        });
-  
-        console.log(newTodos);
-        setTodos(newTodos);
-      });
-  };
-    
   return (
     <div className="app">
       <div className="todo-list">
@@ -243,10 +171,6 @@ function App() {
         <WriteTodo 
           writeTodo={write} 
           todos={todos}
-        />
-        <ReadTodo 
-          readTodo={readTodos} 
-          todos={todos}          
         />
       </div>
     </div>
