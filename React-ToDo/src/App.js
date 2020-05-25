@@ -16,42 +16,41 @@ DONE
 
 */
 
-/*
-class NewTodoForm extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {value: ''};
-  
-      this.handleChange = this.handleChange.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
-    }
-  
-      componentDidMount() {
-          console.log("NewTodoForm mounted");
-      }
-  
-    handleChange(event) {
-      console.log("handleChange: " + event.target.value);
-      this.setState({value: event.target.value});
-    }
-  
-      handleSubmit(event) {
-      event.preventDefault();
-      console.log("value: " + this.state.value);
-      this.props.addTodo(this.state.value);
-    }
-  
-      render() {
-          return (
-              <form onSubmit={this.handleSubmit}>
-                  <input type="text" className="input" value={this.state.value} 
-                   onChange={this.handleChange} />
-              </form>
-          );
-      }
+
+class TodoForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { value: ''};
   }
-  
-*/
+
+  handleChange = (event) => {
+    this.setState({
+      value: event.target.value
+    });
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    this.props.addTodo(this.state.value);
+
+    this.resetInput();
+  };
+
+  resetInput = () => {
+    this.setState({
+      value: ''
+    });
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <input type="text" className="input" value={this.state.value} 
+                   onChange={this.handleChange} />
+      </form>
+    );
+  }
+}
 
 class TodoItem extends Component {
   render() {
@@ -106,13 +105,21 @@ class App extends Component {
           text: "create a new project",
           isCompleted: false
         }
-      ]
+      ],
+      todoIndex: 2
     }
   }
 
   addTodo = (newItem) => {
+    const newTodo = {
+      todoId: this.state.todoIndex,
+      text: newItem, 
+      isCompleted: false,
+    };
+
     this.setState({
-      todos: [...this.todos, newItem]
+      todos: [...this.state.todos, newTodo],
+      todoIndex: this.state.todoIndex+1,
     });
   };
 
@@ -135,10 +142,13 @@ class App extends Component {
     return (
       <div className="app">
         <div className="todo-list">
-        <TodoList data={this.state.todos} 
-                  completeTodo={this.completeTodo} 
-                  removeTodo={this.removeTodo}
-        />
+          <TodoList data={this.state.todos} 
+                    completeTodo={this.completeTodo} 
+                    removeTodo={this.removeTodo}
+          />
+        </div>
+        <div>
+          <TodoForm addTodo={this.addTodo} />
         </div>
       </div>
     );
