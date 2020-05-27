@@ -18,9 +18,31 @@ DONE
 
 */
 
+class BackendHandler {
+  // constructor(url) {
+  //     this.backendUrl = url;
+  // }
+
+  test_get = () => {
+      const params = {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+      };
+
+      fetch('http://localhost:3001/todo-backend/test1', params)
+          .then(response => response.json())
+          .then(data => {
+              console.log(data);
+          });
+  }
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
+
+    const handler = new BackendHandler();
+    handler.test_get();
 
     this.state = {
       todos: [
