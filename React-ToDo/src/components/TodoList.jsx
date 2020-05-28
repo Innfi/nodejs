@@ -7,7 +7,7 @@ class TodoList extends Component {
       const { data, completeTodo, removeTodo} = this.props;
       const todoList = data.map(
         (item, index) => (
-          <TodoItem key = {index} 
+          <TodoItem key={index} 
             index={index} todo={item} 
             completeTodo={completeTodo} removeTodo={removeTodo}
           />

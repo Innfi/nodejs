@@ -23,26 +23,23 @@ class BackendHandler {
   //     this.backendUrl = url;
   // }
 
-  test_get = () => {
+  test_get = (callback) => {
       const params = {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
       };
 
       fetch('http://localhost:3001/todo-backend/test1', params)
-          .then(response => response.json())
-          .then(data => {
-              console.log(data);
-          });
+      .then(response => response.json())
+      .then(data => {
+          callback(data);
+      });
   }
 }
 
 class App extends Component {
   constructor(props) {
     super(props);
-
-    const handler = new BackendHandler();
-    handler.test_get();
 
     this.state = {
       todos: [
@@ -59,6 +56,27 @@ class App extends Component {
       ],
       todoIndex: 2
     }
+  }
+
+  componentDidMount() {
+    console.log("App instance mounted ");
+    const handler = new BackendHandler();
+    handler.test_get((data) => {
+      const loadedTodos = data.map(item => {
+        const todo = {
+          todoId: item.TodoId,
+          text: item.TodoText,
+          isCompleted: item.Completed === 0
+        };
+
+        return todo;
+      });
+
+      console.log(loadedTodos);
+      this.setState({
+        todos: [...this.state.todos, ...loadedTodos]
+      });
+    });
   }
 
   addTodo = (newItem) => {
