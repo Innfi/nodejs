@@ -10,11 +10,11 @@ TODO
 - timeout for backend api call 
 - throttling response from backend
 * login 
-* database: rdb to dynamodb 
 * build webapp
 
 DONE
 -------------------------------------------------------------------------------
+* database: rdb to dynamodb 
 
 */
 
@@ -24,16 +24,31 @@ class BackendHandler {
   // }
 
   test_get = (callback) => {
-      const params = {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-      };
+    const params = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+    };
 
-      fetch('http://localhost:3001/todo-backend/test1', params)
-      .then(response => response.json())
-      .then(data => {
-          callback(data);
-      });
+    fetch('http://localhost:3001/todo-backend/test1', params)
+    .then(response => response.json())
+    .then(data => {
+        callback(data);
+    });
+  }
+
+  test_post = (todo, callback) => {
+    const params = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(todo)
+    };
+
+    fetch('http://localhost:3001/todo-backend/test1', params)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      callback(data);
+    });
   }
 }
 
