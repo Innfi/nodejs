@@ -109,21 +109,24 @@ function readTodos(userId, callback) {
 }
 
 router.post("/:userId", (req, res, next) => {
-    const userId = req.params.userId;
-    const todo = req.body.todo;
+    console.log(req.body);
+    res.sendStatus(200);
     
-    const insertParams = {
-        TableName: tableName, 
-        Item: {
-            'UserId': {S: userId},
-            'TodoId': {N: todo.todoId},
-            'TodoText': {S: todo.text},
-            'Completed': {N: todo.isCompleted}
-        }
-    };
-    insertTodoItem(insertParams, (data) => {
-        res.sendStatus(200);
-    });    
+    // const userId = req.params.userId;
+    // const todo = req.body.todo;
+    
+    // const insertParams = {
+    //     TableName: tableName, 
+    //     Item: {
+    //         'UserId': {S: userId},
+    //         'TodoId': {N: todo.todoId},
+    //         'TodoText': {S: todo.text},
+    //         'Completed': {N: todo.isCompleted}
+    //     }
+    // };
+    // insertTodoItem(insertParams, (data) => {
+    //     res.sendStatus(200);
+    // });    
 });
 
 function insertTodoItem(insertParams, callback) {

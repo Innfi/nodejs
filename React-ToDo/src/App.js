@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
+import TodoSave from './components/TodoSave';
 
 /*
 TODO
@@ -23,7 +24,7 @@ class BackendHandler {
   //     this.backendUrl = url;
   // }
 
-  test_get = (callback) => {
+  loadTodos = (callback) => {
     const params = {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
@@ -36,17 +37,16 @@ class BackendHandler {
     });
   }
 
-  test_post = (todo, callback) => {
+  saveTodos = (todos, callback) => {
     const params = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(todo)
+      body: JSON.stringify(todos)
     };
 
     fetch('http://localhost:3001/todo-backend/test1', params)
     .then(response => response.json())
     .then(data => {
-      console.log(data);
       callback(data);
     });
   }
@@ -69,17 +69,16 @@ class App extends Component {
           isCompleted: false
         }
       ],
-      todoIndex: 2
+      todoIndex: 2,
+      backendHandler: new BackendHandler()
     }
   }
 
   componentDidMount() {
-    console.log("App instance mounted ");
-    const handler = new BackendHandler();
-    handler.test_get((data) => {
+    this.state.backendHandler.loadTodos((data) => {
       const loadedTodos = data.map(item => {
         const todo = {
-          todoId: item.TodoId,
+          todoId: Number(item.TodoId),
           text: item.TodoText,
           isCompleted: item.Completed === 0
         };
@@ -87,7 +86,6 @@ class App extends Component {
         return todo;
       });
 
-      console.log(loadedTodos);
       this.setState({
         todos: [...this.state.todos, ...loadedTodos]
       });
@@ -130,9 +128,9 @@ class App extends Component {
                     completeTodo={this.completeTodo} 
                     removeTodo={this.removeTodo}
           />
-        </div>
-        <div>
           <TodoForm addTodo={this.addTodo} />
+          <TodoSave todos={this.state.todos} 
+            saveTodos={this.state.backendHandler.saveTodos} />
         </div>
       </div>
     );

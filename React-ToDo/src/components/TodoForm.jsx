@@ -28,7 +28,8 @@ class TodoForm extends Component {
   
     render() {
       return (
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit} className="todo">
+          <label>Add new todo!</label>&nbsp;
           <input type="text" className="input" value={this.state.value} 
                      onChange={this.handleChange} />
         </form>
