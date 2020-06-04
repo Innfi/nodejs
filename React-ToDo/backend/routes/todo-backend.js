@@ -110,6 +110,16 @@ function readTodos(userId, callback) {
 
 router.post("/:userId", (req, res, next) => {
     console.log(req.body);
+
+    const todos = req.body.map(item => {
+        const todo = {            
+            TodoId: item.todoId,
+            TodoText: item.text,
+            Completed: item.isCompleted,
+        };
+        console.log(todo);
+    });
+
     res.sendStatus(200);
     
     // const userId = req.params.userId;
