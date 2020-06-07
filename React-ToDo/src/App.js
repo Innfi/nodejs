@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
-import TodoSave from './components/TodoSave';
+//import TodoSave from './components/TodoSave';
 
 /*
 TODO
@@ -37,18 +37,16 @@ class BackendHandler {
     });
   }
 
-  saveTodos = (todos, callback) => {
+  addTodo = (newTodo, callback) => {
     const params = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(todos)
+      body: JSON.stringify( {todo: newTodo })
     };
 
     fetch('http://localhost:3001/todo-backend/test1', params)
     .then(response => response.json())
-    .then(data => {
-      callback(data);
-    });
+    .then(callback());
   }
 }
 
@@ -57,19 +55,8 @@ class App extends Component {
     super(props);
 
     this.state = {
-      todos: [
-        {
-          todoId: 0,
-          text: "migrate backend DB from RDS to DynamoDB",
-          isCompleted: false
-        },
-        {
-          todoId: 1,
-          text: "create a new project",
-          isCompleted: false
-        }
-      ],
-      todoIndex: 2,
+      todos: [],
+      todoIndex: 0,
       backendHandler: new BackendHandler()
     }
   }
@@ -99,10 +86,13 @@ class App extends Component {
       isCompleted: false,
     };
 
-    this.setState({
-      todos: [...this.state.todos, newTodo],
-      todoIndex: this.state.todoIndex+1,
-    });
+    this.state.backendHandler.addTodo(newTodo, () => {
+      console.log('after saveTodo()');
+      this.setState({
+        todos: [...this.state.todos, newTodo],
+        todoIndex: this.state.todoIndex+1,
+      });
+    });    
   };
 
   completeTodo = (index) => {
@@ -128,9 +118,7 @@ class App extends Component {
                     completeTodo={this.completeTodo} 
                     removeTodo={this.removeTodo}
           />
-          <TodoForm addTodo={this.addTodo} />
-          <TodoSave todos={this.state.todos} 
-            saveTodos={this.state.backendHandler.saveTodos} />
+          <TodoForm addTodo={this.addTodo} />          
         </div>
       </div>
     );

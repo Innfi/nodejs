@@ -7,7 +7,6 @@ class TodoItem extends Component {
       
       return (
         <div className="todo" style={{ textDecoration: todo.isCompleted ? "line-through" : ""}}>
-          <div>{todo.todoId}</div>
           {todo.text}
           <div>
               <button onClick={() => completeTodo(index) }>Complete</button>
