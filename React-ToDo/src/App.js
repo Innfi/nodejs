@@ -7,6 +7,9 @@ import TodoList from './components/TodoList';
 /*
 TODO
 -------------------------------------------------------------------------------
+* delete item from db within App.removeTodo
+* refactoring BackendHandler: constructor / method parameters
+* fix todoId
 * error handling with fetch()
 - timeout for backend api call 
 - throttling response from backend
@@ -16,7 +19,7 @@ TODO
 DONE
 -------------------------------------------------------------------------------
 * database: rdb to dynamodb 
-
+* add item to db within App.addTodo 
 */
 
 class BackendHandler {
@@ -48,6 +51,18 @@ class BackendHandler {
     .then(response => response.json())
     .then(callback());
   }
+
+	removeTodo(targetTodoId, callback) => {
+		const params = {
+			method: 'DELETE',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify( { todoId: targetTodoId } )
+		};
+
+		fetch('http://localhost:3001/todo-backend/test1', params)
+		.then(response => response.json())
+		.then(callback());
+	}
 }
 
 class App extends Component {

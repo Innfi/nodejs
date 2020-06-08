@@ -126,6 +126,23 @@ router.post("/:userId", (req, res, next) => {
     });    
 });
 
+router.delete("/:userId", (req, res, next) => {
+	const userId = req.params.userId;
+	const todoId = req.body.todoId.toString();
+
+	const params = {
+		TableName: tableName,
+		Key: {
+			"UserId": userId,
+			"TodoId": todoId
+		}
+	};
+
+	//removeTodoItem(params, (data) => {
+	//	res.send({ result: "success" });
+	//});
+});
+
 function insertTodoItem(insertParams, callback) {
     dynamoDb.putItem(insertParams, (err, data) => {
         if(err) {
@@ -137,5 +154,9 @@ function insertTodoItem(insertParams, callback) {
         }
     });
 }
+
+//function removeTodoItem(removeParams, callback) {
+//	
+//}
 
 module.exports = router;
