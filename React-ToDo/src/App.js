@@ -7,7 +7,6 @@ import TodoList from './components/TodoList';
 /*
 TODO
 -------------------------------------------------------------------------------
-* delete item from db within App.removeTodo
 * refactoring BackendHandler: constructor / method parameters
 * fix todoId
 * error handling with fetch()
@@ -20,6 +19,7 @@ DONE
 -------------------------------------------------------------------------------
 * database: rdb to dynamodb 
 * add item to db within App.addTodo 
+* delete item from db within App.removeTodo
 */
 
 class BackendHandler {
@@ -52,7 +52,7 @@ class BackendHandler {
     .then(callback());
   }
 
-	removeTodo(targetTodoId, callback) => {
+	removeTodo = (targetTodoId, callback) => {
 		const params = {
 			method: 'DELETE',
 			headers: { 'Content-Type': 'application/json' },
@@ -71,7 +71,7 @@ class App extends Component {
 
     this.state = {
       todos: [],
-      todoIndex: 0,
+      todoIndex: 20,
       backendHandler: new BackendHandler()
     }
   }
@@ -82,7 +82,7 @@ class App extends Component {
         const todo = {
           todoId: Number(item.TodoId),
           text: item.TodoText,
-          isCompleted: item.Completed === 0
+          isCompleted: item.Completed === 1
         };
 
         return todo;
@@ -120,8 +120,13 @@ class App extends Component {
   };
 
   removeTodo = (index) => {
-    this.setState({
-      todos: this.state.todos.splice(index, 1)
+    const todoId = this.state.todos[index].todoId;
+    this.state.backendHandler.removeTodo(todoId, () => {
+      this.state.todos.splice(index, 1);
+
+      this.setState({
+        todos: this.state.todos
+      });
     });
   };
 

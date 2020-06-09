@@ -6,7 +6,8 @@ aws.config.update({
     endpoint: "http://localhost:8000"
 });
 
-let dynamoDb = new aws.DynamoDB();
+const dynamoDb = new aws.DynamoDB();
+const docClient = new aws.DynamoDB.DocumentClient();
 
 const tableName = "TodoHistory";
 
@@ -74,10 +75,10 @@ router.get("/:userId", (req, res, next) => {
     readTodos(userId, (items) => {
         const todos = items.map(item => {
             const todo = {
-                UserId: item.UserId.S,
-                TodoId: item.TodoId.N,
-                TodoText: item.TodoText.S,
-                Completed: item.Completed.N
+                UserId: item.UserId,
+                TodoId: item.TodoId,
+                TodoText: item.TodoText,
+                Completed: item.Completed
             };
         
             return todo;
@@ -92,13 +93,16 @@ function readTodos(userId, callback) {
 
     const params = {
         TableName: tableName,
-        KeyConditionExpression: 'UserId = :userId',
+        KeyConditionExpression: '#uid = :userId',
+        ExpressionAttributeNames: {
+            "#uid" : "UserId"
+        },
         ExpressionAttributeValues: {
-            ':userId': { S: userId}
+            ':userId': userId
         }
     };
 
-    dynamoDb.query(params, (err, data) => {
+    docClient.query(params, (err, data) => {
         if(err) {
             console.error("readTodos: ", JSON.stringify(err, null, 2));
             throw err;
@@ -114,37 +118,22 @@ router.post("/:userId", (req, res, next) => {
     const insertParams = {
         TableName: tableName, 
         Item: {
-            'UserId': {S: userId},
-            'TodoId': {N: todo.todoId.toString()},
-            'TodoText': {S: todo.text},
-            'Completed': {N: todo.isCompleted ? "1" : "0" }
+            'UserId': userId,
+            'TodoId': todo.todoId,
+            'TodoText': todo.text,
+            'Completed': todo.isCompleted
         }
     };
+
+    console.log("insertParams: ", insertParams);
 
     insertTodoItem(insertParams, (data) => {
         res.send({ result: "success" });
     });    
 });
 
-router.delete("/:userId", (req, res, next) => {
-	const userId = req.params.userId;
-	const todoId = req.body.todoId.toString();
-
-	const params = {
-		TableName: tableName,
-		Key: {
-			"UserId": userId,
-			"TodoId": todoId
-		}
-	};
-
-	//removeTodoItem(params, (data) => {
-	//	res.send({ result: "success" });
-	//});
-});
-
 function insertTodoItem(insertParams, callback) {
-    dynamoDb.putItem(insertParams, (err, data) => {
+    docClient.put(insertParams, (err, data) => {
         if(err) {
             console.log("insertTodoItem error: ", err);
             throw err;
@@ -155,8 +144,30 @@ function insertTodoItem(insertParams, callback) {
     });
 }
 
-//function removeTodoItem(removeParams, callback) {
-//	
-//}
+router.delete("/:userId", (req, res, next) => {
+	const params = {
+		TableName: tableName,
+		Key: {
+			"UserId": req.params.userId,
+			"TodoId": req.body.todoId,
+		}
+	};
+
+    console.log("params: ", params);
+	removeTodoItem(params, () => {
+		res.send({ result: "success" });
+	});
+});
+
+function removeTodoItem(removeParams, callback) {
+	docClient.delete(removeParams, (err, data) => {
+        if(err) {
+            console.log("removeTodoItem error: ", err);
+            throw err;
+        } else {
+            callback(data);
+        } 
+    });
+}
 
 module.exports = router;
