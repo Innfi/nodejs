@@ -3,11 +3,11 @@ import './App.css';
 import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
 //import TodoSave from './components/TodoSave';
+import BackendHandler from './BackendHandler';
 
 /*
 TODO
 -------------------------------------------------------------------------------
-* refactoring BackendHandler: constructor / method parameters
 * fix todoId
 * error handling with fetch()
 - timeout for backend api call 
@@ -20,50 +20,11 @@ DONE
 * database: rdb to dynamodb 
 * add item to db within App.addTodo 
 * delete item from db within App.removeTodo
+* refactoring BackendHandler: constructor / method parameters
+
 */
 
-class BackendHandler {
-  // constructor(url) {
-  //     this.backendUrl = url;
-  // }
-
-  loadTodos = (callback) => {
-    const params = {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-    };
-
-    fetch('http://localhost:3001/todo-backend/test1', params)
-    .then(response => response.json())
-    .then(data => {
-        callback(data);
-    });
-  }
-
-  addTodo = (newTodo, callback) => {
-    const params = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify( {todo: newTodo })
-    };
-
-    fetch('http://localhost:3001/todo-backend/test1', params)
-    .then(response => response.json())
-    .then(callback());
-  }
-
-	removeTodo = (targetTodoId, callback) => {
-		const params = {
-			method: 'DELETE',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify( { todoId: targetTodoId } )
-		};
-
-		fetch('http://localhost:3001/todo-backend/test1', params)
-		.then(response => response.json())
-		.then(callback());
-	}
-}
+const backendUrl = 'http://localhost:3001/todo-backend/test1';
 
 class App extends Component {
   constructor(props) {
@@ -72,11 +33,15 @@ class App extends Component {
     this.state = {
       todos: [],
       todoIndex: 20,
-      backendHandler: new BackendHandler()
+      backendHandler: new BackendHandler(backendUrl)
     }
   }
 
   componentDidMount() {
+    this.loadTodo();
+  }
+
+  loadTodo = () => {
     this.state.backendHandler.loadTodos((data) => {
       const loadedTodos = data.map(item => {
         const todo = {
@@ -84,6 +49,7 @@ class App extends Component {
           text: item.TodoText,
           isCompleted: item.Completed === 1
         };
+        console.log(todo);
 
         return todo;
       });
@@ -92,7 +58,7 @@ class App extends Component {
         todos: [...this.state.todos, ...loadedTodos]
       });
     });
-  }
+  };
 
   addTodo = (newItem) => {
     const newTodo = {
@@ -117,6 +83,12 @@ class App extends Component {
     this.setState({
       todos: newTodos
     });
+
+    // this.state.backendHandler.updateTodo(newTodos[index], () => {
+    //   this.setState({
+    //     todos: newTodos
+    //   });
+    // });
   };
 
   removeTodo = (index) => {

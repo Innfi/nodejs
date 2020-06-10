@@ -121,7 +121,7 @@ router.post("/:userId", (req, res, next) => {
             'UserId': userId,
             'TodoId': todo.todoId,
             'TodoText': todo.text,
-            'Completed': todo.isCompleted
+            'Completed': todo.isCompleted === true
         }
     };
 
