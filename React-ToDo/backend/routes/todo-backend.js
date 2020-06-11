@@ -121,11 +121,9 @@ router.post("/:userId", (req, res, next) => {
             'UserId': userId,
             'TodoId': todo.todoId,
             'TodoText': todo.text,
-            'Completed': todo.isCompleted === true
+            'Completed': todo.isCompleted === true ? 1 : 0
         }
     };
-
-    console.log("insertParams: ", insertParams);
 
     insertTodoItem(insertParams, (data) => {
         res.send({ result: "success" });
@@ -139,6 +137,40 @@ function insertTodoItem(insertParams, callback) {
             throw err;
         } else {
             console.log("insertTodoItem: ", data);
+            callback(data);
+        }
+    });
+}
+
+router.put("/:userId", (req, res, next) => {
+    const todo = req.body.todo;
+
+    const updateParams = {
+        TableName: tableName,
+        Key: {
+            "UserId": req.params.userId,
+			"TodoId": todo.todoId,
+        },
+        UpdateExpression: "set Completed = :c, TodoText = :t",
+        ExpressionAttributeValues: {
+            ":c": todo.isCompleted === true ? 1 : 0,
+            ":t": todo.text
+        },
+        ReturnValues:"UPDATED_NEW"
+    };
+
+    updateTodoItem(updateParams, (data) => {
+        console.log("data: ", data);
+        res.send({ result: "success"});
+    });
+});
+
+function updateTodoItem(updateParams, callback) {
+    docClient.update(updateParams, (err, data) => {
+        if(err) {
+            console.log("updateTodoItem error: ", err);
+            throw err;
+        } else {
             callback(data);
         }
     });

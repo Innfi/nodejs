@@ -49,7 +49,6 @@ class App extends Component {
           text: item.TodoText,
           isCompleted: item.Completed === 1
         };
-        console.log(todo);
 
         return todo;
       });
@@ -68,7 +67,6 @@ class App extends Component {
     };
 
     this.state.backendHandler.addTodo(newTodo, () => {
-      console.log('after saveTodo()');
       this.setState({
         todos: [...this.state.todos, newTodo],
         todoIndex: this.state.todoIndex+1,
@@ -80,15 +78,11 @@ class App extends Component {
     const newTodos = [...this.state.todos];
     newTodos[index].isCompleted = true;
 
-    this.setState({
-      todos: newTodos
+    this.state.backendHandler.updateTodo(newTodos[index], () => {
+      this.setState({
+        todos: newTodos
+      });
     });
-
-    // this.state.backendHandler.updateTodo(newTodos[index], () => {
-    //   this.setState({
-    //     todos: newTodos
-    //   });
-    // });
   };
 
   removeTodo = (index) => {

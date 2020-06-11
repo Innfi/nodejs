@@ -31,8 +31,8 @@ class BackendHandler {
     }
   
     updateTodo = (todo, callback) => {
-      const params = {
-          method: 'POST',
+        const params = {
+            method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify( {todo: todo })
         };
