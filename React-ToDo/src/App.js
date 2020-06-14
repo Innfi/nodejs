@@ -8,7 +8,7 @@ import BackendHandler from './BackendHandler';
 /*
 TODO
 -------------------------------------------------------------------------------
-* fix todoId
+* rewrite code with unit tests
 * error handling with fetch()
 - timeout for backend api call 
 - throttling response from backend
@@ -21,6 +21,7 @@ DONE
 * add item to db within App.addTodo 
 * delete item from db within App.removeTodo
 * refactoring BackendHandler: constructor / method parameters
+* fix todoId
 
 */
 
@@ -32,7 +33,7 @@ class App extends Component {
 
     this.state = {
       todos: [],
-      todoIndex: 20,
+      todoIndex: 0,
       backendHandler: new BackendHandler(backendUrl)
     }
   }
@@ -53,15 +54,21 @@ class App extends Component {
         return todo;
       });
 
+      let newTodoIndex = 0;
+      if(loadedTodos.length > 0) {
+        newTodoIndex = loadedTodos.slice(-1)[0].todoId;
+      }
+   
       this.setState({
-        todos: [...this.state.todos, ...loadedTodos]
+        todos: [...loadedTodos],
+        todoIndex: newTodoIndex
       });
     });
   };
 
   addTodo = (newItem) => {
     const newTodo = {
-      todoId: this.state.todoIndex,
+      todoId: this.state.todoIndex+1,
       text: newItem, 
       isCompleted: false,
     };
