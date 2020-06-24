@@ -37,4 +37,14 @@ describe('TodoItem Component', () => {
 
         expect(completeTodo).toBeCalledWith(mockTodo.todoId);
     });
+
+    it('Calls removeTodo', () => {
+        const removeTodo = jest.fn();
+        const methodProps = { removeTodo };
+        const { getByText } = render(<TodoItem {...props} {...methodProps}/>);
+        const buttonRemove = getByText('x');
+        fireEvent.click(buttonRemove);
+
+        expect(removeTodo).toBeCalledWith(mockTodo.todoId);
+    });
 });
