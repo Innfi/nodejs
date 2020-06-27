@@ -30,7 +30,7 @@ class TodoForm extends Component {
       return (
         <form onSubmit={this.handleSubmit} className="todo">
           <label>Add new todo!</label>&nbsp;
-          <input type="text" className="input" value={this.state.value} 
+          <input type="text" className="input" value={this.state.value} aria-label="todo-input" 
                      onChange={this.handleChange} />
         </form>
       );
