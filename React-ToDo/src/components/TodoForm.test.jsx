@@ -22,4 +22,19 @@ describe ('TodoForm Component', () => {
         expect(handleChange).toBeTruthy();
     });
     
+    it('clears out input after submit', () => {
+        const addTodo = jest.fn();
+        const methodprops = { addTodo };
+        const result = render(<TodoForm {...methodprops} />);
+        const input = result.getByLabelText('todo-input');
+        const button = result.getByText('add todo');
+
+        expect(button).toBeTruthy();
+
+        fireEvent.change(input, { target: { value: 'submit todo' } });
+        fireEvent.click(button);
+
+        expect(addTodo).toBeCalledWith('submit todo');
+        expect(input).toHaveAttribute('value', '');
+    });
 });
