@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
-//import TodoSave from './components/TodoSave';
 import BackendHandler from './BackendHandler';
 
 /*
