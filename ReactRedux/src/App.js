@@ -11,13 +11,13 @@ class ExampleComponent extends Component {
         { title: "Typescript Tutorial for Beginners", id: 2}
       ]
     };
+  }
 
-    this.render() {
-      const { articles } = this.state;
-      return <ul>
-        {articles.map(el => <li key={el.id}>{el.title}</li>)}
-      </ul>;
-    }
+  render() {
+    const { articles } = this.state;
+    return <ul>
+      {articles.map(el => <li key={el.id}>{el.title}</li>)}
+    </ul>;
   }
 }
 
