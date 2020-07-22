@@ -7,7 +7,11 @@ import BackendHandler from './BackendHandler';
 /*
 TODO
 -------------------------------------------------------------------------------
-* rewrite code with unit tests
+* implement kanban
+- topic status (todo, in-progress, done, etc )
+- additional data (date, priority, sharing peers)
+- drag & drop ui
+
 * error handling with fetch()
 - timeout for backend api call 
 - throttling response from backend
@@ -21,6 +25,7 @@ DONE
 * delete item from db within App.removeTodo
 * refactoring BackendHandler: constructor / method parameters
 * fix todoId
+* rewrite code with unit tests
 
 */
 
