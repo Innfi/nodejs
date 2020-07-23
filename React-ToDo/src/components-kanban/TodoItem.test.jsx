@@ -7,7 +7,8 @@ describe('TodoItem(kanban) Component', () => {
     const mockTodo = {
         todoId: 1,
         text: 'implement kanban',
-        todoStatus: 0
+        todoStatus: 0,
+        author: 'Innfi'
     };
 
     const props = {
@@ -15,18 +16,22 @@ describe('TodoItem(kanban) Component', () => {
         todo: mockTodo
     };
 
-    //it('call TodoItem', () => {
-    //    const result = render(<TodoItem />);
-    //});
+    it('call TodoItem', () => {
+        const result = render(<TodoItem />);
+        expect(result).toBeTruthy();
+    });
 
-    //it('TodoItem has text', () => {
-    //    const { getByText } = render(<TodoItem {...props} />);
+    it('TodoItem has text', () => {
+        const { getByText } = render(<TodoItem {...mockTodo} />);
 
-    //    const text = getByText(mockTodo.text);
-    //    expect(text).toBeTruthy();
-    //}); 
+        const todo = getByText(mockTodo.text);
+        expect(todo).toBeTruthy();
+    }); 
 
-    //it('TodoItem has initial status', () => {
+    //it('TodoItem has author', () => {
+    //    const { getByText, findAllByText } = render(<TodoItem {...mockTodo} />);
 
+    //    const todo = findAllByText(mockTodo.author + "someinvalidtexts");
+    //    expect(todo).toBe({});
     //});
 });
