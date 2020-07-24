@@ -16,22 +16,34 @@ describe('TodoItem(kanban) Component', () => {
         todo: mockTodo
     };
 
-    it('call TodoItem', () => {
-        const result = render(<TodoItem />);
-        expect(result).toBeTruthy();
-    });
-
     it('TodoItem has text', () => {
-        const { getByText } = render(<TodoItem {...mockTodo} />);
+        const { getByText } = render(<TodoItem todo={mockTodo} />);
 
         const todo = getByText(mockTodo.text);
         expect(todo).toBeTruthy();
     }); 
 
-    //it('TodoItem has author', () => {
-    //    const { getByText, findAllByText } = render(<TodoItem {...mockTodo} />);
+    it('TodoItem has author', () => {
+        const dom = render(<TodoItem todo={mockTodo} />);
 
-    //    const todo = findAllByText(mockTodo.author + "someinvalidtexts");
-    //    expect(todo).toBe({});
+        const anotherTodo = dom.container.firstElementChild;
+
+        const todo = dom.getByText(mockTodo.author);
+        expect(todo).toBeInTheDocument();
+        expect(todo).toHaveClass('Author');
+    });
+
+    it('Calls removeTodo', () => {
+        const removeTodo = jest.fn();
+
+        const dom  = render(<TodoItem todo={mockTodo} removeTodo={removeTodo} />);
+        const buttonRemove = dom.getByText('Remove Todo');
+
+        fireEvent.click(buttonRemove);
+        expect(removeTodo).toBeCalledWith(mockTodo.todoId);
+    });
+
+    //it('call changeTodoStatus', () => {
+
     //});
 });
