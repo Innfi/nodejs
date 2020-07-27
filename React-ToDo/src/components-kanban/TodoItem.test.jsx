@@ -1,19 +1,14 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import TodoItem from './TodoItem';
 
 
-describe('TodoItem(kanban) Component', () => {
+describe('TodoItem(kanban)', () => {
     const mockTodo = {
         todoId: 1,
         text: 'implement kanban',
         todoStatus: 0,
         author: 'Innfi'
-    };
-
-    const props = {
-        index: 1,
-        todo: mockTodo
     };
 
     it('call TodoItem', () => {
@@ -28,10 +23,10 @@ describe('TodoItem(kanban) Component', () => {
         expect(todo).toBeTruthy();
     }); 
 
-    //it('TodoItem has author', () => {
-    //    const { getByText, findAllByText } = render(<TodoItem {...mockTodo} />);
+    it('TodoItem has author', () => {
+        const { getByText, findAllByText } = render(<TodoItem {...mockTodo} />);
 
-    //    const todo = findAllByText(mockTodo.author + "someinvalidtexts");
-    //    expect(todo).toBe({});
-    //});
+        const todo = findAllByText(mockTodo.author);
+        expect(todo).toBeTruthy();
+    });
 });
