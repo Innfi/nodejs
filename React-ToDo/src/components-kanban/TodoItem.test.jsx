@@ -10,14 +10,8 @@ describe('TodoItem(kanban)', () => {
         todoStatus: 0,
         author: 'Innfi'
     };
-
-    it('call TodoItem', () => {
-        const result = render(<TodoItem />);
-        expect(result).toBeTruthy();
-    });
-
     it('TodoItem has text', () => {
-        const { getByText } = render(<TodoItem {...mockTodo} />);
+        const { getByText } = render(<TodoItem todo={mockTodo} />);
 
         const todo = getByText(mockTodo.text);
         expect(todo).toBeTruthy();

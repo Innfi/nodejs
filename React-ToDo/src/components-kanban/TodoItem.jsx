@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 
 
-let TodoItem = (props) => {
-    const [todo, setTodo] = useState(props);
+let TodoItem = ({todo, removeTodo}) => {
+    //const [todo, setTodo] = useState(todo);
 
     return (
-        <div>
+        <div className='upper-class'>
             {todo.text}
             <div className='Author'>
                 {todo.author}
             </div>
+            <button onClick={ () => removeTodo(todo.todoId) }>Remove Todo</button>
         </div>
     );
 }
