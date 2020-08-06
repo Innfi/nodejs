@@ -18,7 +18,7 @@ describe('TodoItem(kanban)', () => {
     }); 
 
     it('TodoItem has author', () => {
-        const { getByText, findAllByText } = render(<TodoItem {...mockTodo} />);
+        const { getByText, findAllByText } = render(<TodoItem todo={mockTodo} />);
 
         const todo = findAllByText(mockTodo.author);
         expect(todo).toBeTruthy();

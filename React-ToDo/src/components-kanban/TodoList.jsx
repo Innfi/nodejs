@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 
-let TodoList = (props) => {
-    return (<div></div>);
+
+let TodoList = ({todoType}) => {
+    return (
+        <div>
+            <a>{todoType}</a>
+        </div>
+    );
 }
 
 export default TodoList;

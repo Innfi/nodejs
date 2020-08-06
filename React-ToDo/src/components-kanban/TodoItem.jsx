@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 
 
 let TodoItem = ({todo, removeTodo}) => {
-    //const [todo, setTodo] = useState(todo);
-
     return (
         <div className='upper-class'>
             {todo.text}
