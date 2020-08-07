@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 
-let TodoItem = ({todo, removeTodo}) => {
+let TodoItem = ({todo, index, removeTodo}) => {
     return (
         <div className='upper-class'>
             {todo.text}
             <div className='Author'>
                 {todo.author}
             </div>
-            <button onClick={ () => removeTodo(todo.todoId) }>Remove Todo</button>
+            <button onClick={ () => removeTodo(index) }>Remove Todo</button>
         </div>
     );
 }

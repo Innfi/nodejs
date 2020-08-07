@@ -1,10 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
+import TodoItem from './TodoItem';
 
 
-let TodoList = ({todoType}) => {
+let TodoList = ({todoType, props}) => {
+    const filteredTodos = props.todos
+        .filter(todo => todo.todoType === todoType)
+        .map((item, index) => (
+            <TodoItem todo={item} index={index} 
+                removeTodo={props.removeTodo} />
+        ));
+
     return (
         <div>
-            <a>{todoType}</a>
+            <div>
+                <p>{todoType}</p>
+            </div>
+            <div>
+                {filteredTodos}
+            </div>
         </div>
     );
 }
