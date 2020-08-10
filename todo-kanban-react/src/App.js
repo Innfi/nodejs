@@ -5,9 +5,16 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Paper from '@material-ui/core/Paper';
 import { Typography } from '@material-ui/core';
 
+
 const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
   icon: {
     marginRight: theme.spacing(2),
   },
@@ -37,6 +44,11 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6),
   },
+  paper: {
+    padding: theme.spacing(2),
+    margin: 'auto', 
+    maxWidth: 500,
+  }
 }));
 
 
@@ -70,23 +82,29 @@ let KanbanApp = () => {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Container className={classes.cardGrid} maxWidth="md">
-        <Grid container spacing={4}>
-          {todos.map((todo, index) => (
-            <Grid item key={todo} xs={12} sm={6}>
-              <Typography variant="h5" component="h2">
-                {todo.text}
-              </Typography>
-              <Typography variant="h5" component="h2">
-                Author: {todo.author}
-              </Typography>
+      <main>
+        <br />
+        <Grid container className={classes.root} spacing={2}>
+          <Grid item xs={12}>
+            <Grid container justify="center" spacing={3} direction="row">
+              {todos.map((todo, index) => (
+                <Grid key={todo} item xs={3}>
+                <Paper elevation={3} variant="outlined" className={classes.paper}>
+                  <Typography variant="p" component="p" color="primary">
+                    {todo.text}
+                  </Typography>
+                  <Typography variant="p" component="p">
+                    Author: {todo.author}
+                  </Typography>
+                </Paper>
+                </Grid>
+              ))}
             </Grid>
-          ))}
+          </Grid>
         </Grid>
-      </Container>
+      </main>
     </React.Fragment>
   );
 }
-
 
 export default KanbanApp;
