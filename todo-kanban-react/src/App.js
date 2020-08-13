@@ -47,7 +47,8 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     margin: 'auto', 
-    maxWidth: 500,
+    width: 500,
+    height: 400
   }
 }));
 
@@ -72,6 +73,8 @@ let KanbanApp = () => {
     }
   ]);
 
+  const todoTypes = ['Todo', 'On-Progress', 'Done'];
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -87,17 +90,8 @@ let KanbanApp = () => {
         <Grid container className={classes.root} spacing={2}>
           <Grid item xs={12}>
             <Grid container justify="center" spacing={3} direction="row">
-              {todos.map((todo, index) => (
-                <Grid key={todo} item xs={3}>
-                <Paper elevation={3} variant="outlined" className={classes.paper}>
-                  <Typography variant="p" component="p" color="primary">
-                    {todo.text}
-                  </Typography>
-                  <Typography variant="p" component="p">
-                    Author: {todo.author}
-                  </Typography>
-                </Paper>
-                </Grid>
+              {todoTypes.map((todoType) => (
+                <KanbanUnit todos={todos} classes={classes} todoType={todoType} key={todoType} />
               ))}
             </Grid>
           </Grid>
@@ -105,6 +99,29 @@ let KanbanApp = () => {
       </main>
     </React.Fragment>
   );
+}
+
+let KanbanUnit = ({todos, classes, todoType}) => {
+  console.log('todoType: ', todoType);
+
+  return (
+      todos.filter(todo => todo.todoType === todoType).map((todo, index) => (
+      <Grid key={todo} item sm={3}>
+        <Paper elevation={3} variant="outlined" className={classes.paper}>
+          <Typography variant="body1" color="primary">
+            {todo.text}
+          </Typography>
+          <Typography variant="body1" >
+            Author: {todo.author}
+          </Typography>
+        </Paper>
+      </Grid>
+      ))
+  );
+}
+
+let KanbanForm = () => {
+  
 }
 
 export default KanbanApp;
