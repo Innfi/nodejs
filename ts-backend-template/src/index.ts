@@ -1,11 +1,24 @@
 import express from 'express';
 
-const app = express();
+class MainClass {
+    private name: String = "Entry Class";
+    private express: any;
+    private port: number = 3000;
 
-app.get('/', (req: express.Request, res: express.Response) => {
-    res.send('Hello world');
-});
+    constructor() {
+        this.express = express();
+        this.express.listen(this.port, () => {
+            console.log(this.name, 'listening on port', this.port);
+        });
+    }
 
-app.listen(3000, () => {
-    console.log('listening');
-});
+    run(): void {
+        this.express.get('/', (req: express.Request, res: express.Response) => {
+            res.send('text response');
+        });
+    }
+}
+
+const mainEntry = new MainClass();
+
+mainEntry.run();
