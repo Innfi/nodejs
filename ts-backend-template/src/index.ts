@@ -1,4 +1,5 @@
 import express from 'express';
+import userRouter from './routes/UserAccount';
 
 class MainClass {
     private name: String = "Entry Class";
@@ -7,6 +8,8 @@ class MainClass {
 
     constructor() {
         this.express = express();
+        this.express.use('/users', userRouter);
+
         this.express.listen(this.port, () => {
             console.log(this.name, 'listening on port', this.port);
         });
