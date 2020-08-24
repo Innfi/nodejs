@@ -17,14 +17,19 @@ describe("User", () => {
 });
 
 describe('UserRepository', () => {
-    it('insert / load User entity', () => {
+    it('insert / load User entity', async () => {
         const userRepository = new MockUserRepository();
         const testUser = new User('innfi', 'innfi.world@gmail.com');
 
-        assert.equal(userRepository.insertUserEntity(testUser), true); 
+        const loadUserResult = await userRepository.insertUserEntity(testUser);
+        assert.equal(loadUserResult, true); 
 
-        let resultUser = userRepository.loadUserEntity(testUser.id);
+        const resultUser = await userRepository.loadUserEntity(testUser.id);
         assert.equal(testUser.equals(resultUser), true);
+    });
+
+    it('timeout for insert / load User entity ', async() => {
+
     });
 });
 

@@ -5,27 +5,28 @@ import User from '../model/UserEntity';
 export class MockUserRepository implements UserRepository {
     private users: User[] = [];
 
-    loadUserEntity(id: string) {
-        let resultUser = new User();
+    public async loadUserEntity(id: string): Promise<User> {
+        return new Promise((resolve, reject) => {
+            const index = this.findUserIndex(id);
+            if(index === -1) reject('no user');
 
-        this.users.forEach(user => {
-            console.log('user: ', user.id);
-            if(user.id === id) {
-                resultUser = user;
-                return;
-            }
+            resolve(this.users[index]);
         });
-
-        return resultUser;
     }
 
-    insertUserEntity(newUser: User) {
-        const resultUser = this.users.find(user => user.id === newUser.id);
-        if(resultUser !== undefined) return false;
+    public async insertUserEntity(newUser: User): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            const index = this.findUserIndex(newUser.id);
+            if(index !== -1) reject('user exists');
 
-        this.users.push(newUser);
+            this.users.push(newUser);
 
-        return true;
+            resolve(true);
+        });
+    }
+
+    protected findUserIndex(id: string): number {
+        return this.users.findIndex(user => user.id === id);
     }
 }
 
