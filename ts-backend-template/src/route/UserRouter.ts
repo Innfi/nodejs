@@ -1,23 +1,41 @@
 import express from 'express';
+import UserManager from '../UserManager';
+import { MockUserRepository } from '../persistence/MockUserRepostory';
 
 const userRouter = express.Router();
 
 userRouter.get('/:userId', (req: express.Request, res: express.Response) => {
-    console.log('userId: ', req.params.userId);
+    const userId = req.params.userId;
 
-    res.send('user account response here');
+    try {
+        const manager = new UserManager(new MockUserRepository());
+        manager.loadUser(userId)
+        .then((user) => {
+            res.send(user);
+        });
+    } catch(e) {
+        console.log(e);
+        res.status(400).send('error from GET');
+    } finally {
+        res.status(500).send('server unavailable');
+    }
 });
 
 userRouter.put('/:userId', (req: express.Request, res: express.Response) => {
     console.log('PUT /users/', req.params.userId);
 
-    const createDate: string = Date.now().toString();
-    const createUserResult = {
-        userId: req.params.userId,
-        cDate: createDate,
-    };
-
-    res.send(createUserResult);
+    try {
+        const manager = new UserManager(new MockUserRepository());
+        manager.createUser(req.params.userId)
+        .then(user => {
+            res.send(user);
+        });
+    } catch(e) {
+        console.log(e);
+        res.status(400).send('error from PUT');
+    } finally {
+        res.status(500).send('server unavailable');
+    }
 });
 
 export default userRouter;

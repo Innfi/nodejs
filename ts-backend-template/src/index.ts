@@ -1,5 +1,7 @@
 import express from 'express';
 import userRouter from './route/UserRouter';
+import todoRouter from './route/TodoRouter';
+
 
 class MainClass {
     private name: String = "Entry Class";
@@ -9,6 +11,7 @@ class MainClass {
     constructor() {
         this.express = express();
         this.express.use('/users', userRouter);
+        this.express.use('/todo', todoRouter);
 
         this.express.listen(this.port, () => {
             console.log(this.name, 'listening on port', this.port);

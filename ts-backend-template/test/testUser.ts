@@ -1,6 +1,6 @@
 import assert from 'assert';
 import User from '../src/model/UserEntity';
-import UserManager from '../src/model/UserManager';
+import UserManager from '../src/UserManager';
 import { MockUserRepository } from '../src/persistence/MockUserRepostory';
 
 
@@ -27,21 +27,15 @@ describe('UserRepository', () => {
         const resultUser = await userRepository.loadUserEntity(testUser.id);
         assert.equal(testUser.equals(resultUser), true);
     });
-
-    it('timeout for insert / load User entity ', async() => {
-
-    });
 });
 
-/*
+
 describe('UserManager', () => {
-    it('creates User entity', () => {
-        const userManager = new UserManager();
-
+    it('creates User entity', async () => {
+        const userManager = new UserManager(new MockUserRepository());
         const id: string = 'innfi';
-        const entity = userManager.createUser(id);
 
-        assert.equal(entity.id, id);
+        const user = await userManager.createUser(id);
+        assert.equal(user.id, id);
     });
 });
-*/

@@ -35,7 +35,7 @@ let KanbanApp = () => {
 
 let SetupProps = () => {
   const classes = useTheme();
-  const [todos, setTodos] = useState([
+  const defaultTodos = [
     {
       text: 'implement kanban',
       author: 'innfi',
@@ -51,7 +51,8 @@ let SetupProps = () => {
       author: 'innfi',
       todoType: 'Done'
     }
-  ]);
+  ];
+  const [todos, setTodos] = useState(defaultTodos);
   const todoTypes = ['Todo', 'On-Progress', 'Done'];
 
   return {
