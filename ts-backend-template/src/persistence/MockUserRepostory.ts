@@ -3,7 +3,7 @@ import User from '../model/UserEntity';
 
 
 export class MockUserRepository implements UserRepository {
-    private users: User[] = [];
+    protected users: User[] = [];
 
     public async loadUserEntity(id: string): Promise<User> {
         return new Promise((resolve, reject) => {
