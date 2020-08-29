@@ -9,13 +9,13 @@ class UserManager {
         this.userRepo = repo;
     }
 
-    async createUser(id: string): Promise<User> {
-        this.userRepo.insertUserEntity(new User(id));
-
+    async loadUser(id: string): Promise<User> {
         return await this.userRepo.loadUserEntity(id);
     }
 
-    async loadUser(id: string): Promise<User> {
+    async createUser(id: string): Promise<User> {
+        this.userRepo.insertUserEntity(new User(id));
+
         return await this.userRepo.loadUserEntity(id);
     }
 }
