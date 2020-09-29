@@ -3,10 +3,13 @@ const assert = require('assert');
 const express = require('express');
 const passport = require('passport');
 const passportLocal = require('passport-local');
+const flash = require('connect-flash');
+
 
 const app = express();
 app.use(passport.initialize());
 app.use(express.json());
+app.use(flash());
 
 passport.use('local', new passportLocal.Strategy({
     usernameField: 'username',
@@ -27,7 +30,7 @@ passport.serializeUser(function(user, done) {
 });
 
 app.post('/login', 
-    passport.authenticate('local', { failureMessage: { message: 'fail' }}), 
+    passport.authenticate('local', { failureFlash: true }), 
     function(req, res) {
         res.send({
             message: 'success'
@@ -36,7 +39,7 @@ app.post('/login',
 );
 
 
-describe('Passport', () => {
+describe('PassportLocal', () => {
     it('authenticate success', (done) => {
         request(app)
         .post('/login')
@@ -51,10 +54,9 @@ describe('Passport', () => {
     it('authenticate fail', (done) => {
         request(app)
         .post('/login')
-        .send({username: 'innfi', password: '12345'})
-        .expect(200)
+        .send({username: 'innfi', password: 'invalild'})
+        .expect(401)
         .end((err, result) => {
-            assert.strictEqual(result.body.message, 'success');
             done();
         });
     });
