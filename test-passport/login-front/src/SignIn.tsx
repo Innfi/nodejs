@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Copyright } from '@material-ui/icons';
+import { Link as RouterLink } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -70,7 +71,7 @@ export default function SignIn() {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="https://google.com" variant="body2">
+              <Link component={RouterLink} to="/signup" variant="body2"> 
                 No account? Sign up
               </Link>
             </Grid>
