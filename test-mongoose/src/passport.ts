@@ -2,6 +2,7 @@ import passport from 'passport';
 import passportJwt from 'passport-jwt';
 import mongoose from 'mongoose';
 
+
 const User = mongoose.model('users');
 
 const opts: passportJwt.StrategyOptions = {
