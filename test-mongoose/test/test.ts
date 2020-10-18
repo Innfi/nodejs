@@ -1,6 +1,14 @@
 import assert from "assert";
 import mongoose from 'mongoose';
+import isEmpty from 'is-empty';
 
+
+describe('is-empty', () => {
+    it('is working on string', () => {
+        assert.strictEqual(isEmpty(''), true);
+        assert.strictEqual(isEmpty('not empty'), false);
+    });
+});
 
 describe('Mongoose', () => {
     //const dbpath = 'mongodb://127.0.0.1/my_database';

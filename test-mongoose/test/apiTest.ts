@@ -16,12 +16,35 @@ mongoose
     .catch(err => console.log(err));
 
 describe('api test', () => {
-    it('get /', () => {
+    const dummyName: string = 'innfi';
+    const dummyEmail: string = 'innfi@test.com';
+    const dummyPw: string = 'p4ssw0rd';
+
+    //it('post /api/users/register', async () => {
+    //    request(app)
+    //    .post('/api/users/register')
+    //    .send({ name: dummyName, email: dummyEmail, password: dummyPw, password2: dummyPw })
+    //    .set('Accept', 'application/json')
+    //    .expect(200)
+    //    .end((err: any, res: request.Response) => {
+    //        if(err) {
+    //            mongoose.disconnect();
+    //            throw err;
+    //        }
+    //    });
+    //});
+
+    it('post /api/users/login', async () => {
         request(app)
-        .get('/')
+        .post('/api/users/login')
+        .send({ email: dummyEmail, password: dummyPw })
+        .set('Accept', 'application/json')
         .expect(200)
         .end((err: any, res: request.Response) => {
-            if(err) throw err;
+            if(err) {
+                mongoose.disconnect();
+                throw err;
+            }
         });
     });
 });

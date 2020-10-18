@@ -1,16 +1,9 @@
 import Validator from 'validator';
 import isEmpty from 'is-empty';
-import { ValidationResult, ValidationErrors } from './result';
+import { ValidationInput, ValidationResult, ValidationErrors } from './result';
 
 
-class DummyData {
-    name: string = '';
-    email: string = '';
-    password: string = '';
-    password2: string = '';
-}
-
-const validateRegisterInput = (data: DummyData): ValidationResult => {
+const validateRegisterInput = (data: ValidationInput): ValidationResult => {
     let errors = new ValidationErrors();
 
     data.name= !isEmpty(data.name) ? data.name : '';
@@ -32,7 +25,7 @@ const validateRegisterInput = (data: DummyData): ValidationResult => {
 
     let result = new ValidationResult(); //FIXME
     result.errors = errors;
-    result.isValid = isEmpty(errors);
+    result.isValid = errors.isValid();
 
     return result;
 }
