@@ -59,7 +59,6 @@ class Register extends Component<RegisterState> {
                             <div className="input-field col s12">
                                 <input onChange={this.onChange} 
                                         value={this.state.name} 
-                                        error={errors.name} 
                                         id="name" 
                                         type="text" />
                                 <label htmlFor="name">Name</label>
@@ -67,7 +66,6 @@ class Register extends Component<RegisterState> {
                             <div className="input-field col s12">
                                 <input onChange={this.onChange} 
                                         value={this.state.email} 
-                                        error={errors.email} 
                                         id="email" 
                                         type="email" />
                                 <label htmlFor="email">Email</label>
@@ -75,7 +73,6 @@ class Register extends Component<RegisterState> {
                             <div className="input-field col s12">
                                 <input onChange={this.onChange} 
                                         value={this.state.password} 
-                                        error={errors.password} 
                                         id="password" 
                                         type="password" />
                                 <label htmlFor="password">Password</label>
@@ -83,7 +80,6 @@ class Register extends Component<RegisterState> {
                             <div className="input-field col s12">
                                 <input onChange={this.onChange} 
                                         value={this.state.password2} 
-                                        error={errors.password2} 
                                         id="password2" 
                                         type="password" />
                                 <label htmlFor="password">Confirm Password</label>
