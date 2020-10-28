@@ -1,5 +1,6 @@
 import React, { Component, MouseEvent, ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 
 interface RegisterState {
@@ -100,4 +101,16 @@ class Register extends Component<RegisterState> {
     }
 }
 
-export default Register;
+const mapStateToProps = (state: any) => ({
+    auth: state.auth,
+    errors: state.errors
+});
+
+Register.propTypes = {
+    
+};
+
+export default connect(
+    mapStateToProps, { registerUser },
+    (withRouter(Register))
+);
