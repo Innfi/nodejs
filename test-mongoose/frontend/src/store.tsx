@@ -20,3 +20,5 @@ const store = createStore(
         (window as any).__REDUX_DEVTOOLS_EXTENSION__()
     )
 );
+
+export default store;
