@@ -4,7 +4,17 @@ import { connect } from 'react-redux';
 import { logoutUser } from '../../actions/authActions';
 
 
-class Dashboard extends Component {
+interface DashboardProps {
+    logoutUser: () => void,
+    auth: object
+};
+
+class Dashboard extends Component<DashboardProps> {
+    static propTypes = {
+        logoutUser: PropTypes.func.isRequired,
+        auth: PropTypes.object.isRequired
+    };
+
     onLogoutClick = (e: any) => {
         e.preventDefault();
         this.props.logoutUser();
@@ -39,11 +49,6 @@ class Dashboard extends Component {
         );
     }
 }
-
-Dashboard.propTypes = {
-    logoutUser: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired
-};
 
 const mapStateToProps = (state: any) =>({
     auth: state.auth

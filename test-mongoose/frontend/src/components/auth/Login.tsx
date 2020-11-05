@@ -6,18 +6,30 @@ import { loginUser } from '../../actions/authActions';
 import classnames from 'classnames';
 
 
+interface LoginProps {
+    auth: object, 
+    history: string[]
+}
+
 interface LoginState {
     email: string;
     password: string;
     errors: any;
 }
 
-class Login extends Component<LoginState> {
+class Login extends Component<LoginProps, LoginState> {
     state: LoginState = {
         email: '',
         password: '',
         errors: {}
     };
+   
+    propTypes = {
+        loginUser: PropTypes.func.isRequired,
+        auth: PropTypes.object.isRequired,
+        errors: PropTypes.object.isRequired
+    };
+
 
     componentDidMount() {
         if(this.props.auth.isAuthenticated) {
@@ -119,12 +131,6 @@ class Login extends Component<LoginState> {
     }
 }
 
-Login.propTypes = {
-    loginUser: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired,
-    errors: PropTypes.object.isRequired
-};
-
 const mapStateToProps = (state: LoginState) => ({
     auth: state.auth,
     errors: state.errors
@@ -133,4 +139,4 @@ const mapStateToProps = (state: LoginState) => ({
 export default connect(
     mapStateToProps, 
     { loginUser }
-);
+) (Login);
