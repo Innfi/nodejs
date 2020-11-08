@@ -6,6 +6,12 @@ import { registerUser } from '../../actions/authActions';
 import classnames from 'classnames';
 
 
+interface RegisterProps {
+    auth: object, 
+    history: string[],
+    errors: any
+}
+
 interface RegisterState {
     name: string;
     email: string;
@@ -14,7 +20,7 @@ interface RegisterState {
     errors: any;
 }
 
-class Register extends Component<RegisterState> {
+class Register extends Component<RegisterProps, RegisterState> {
     state: RegisterState = {
         name: '',
         email: '',
@@ -23,13 +29,19 @@ class Register extends Component<RegisterState> {
         errors: {}
     };
 
+    propTypes = {
+       registerUser: PropTypes.func.isRequired,
+       auth: PropTypes.object.isRequired,
+       errors: PropTypes.object.isRequired 
+    };
+
     componentDidMount() {
         if(this.props.auth.isAuthenticated) {
             this.props.history.push("/dashboard");
         }
     }
 
-    componentWillReceiveProps(nextProps: RegisterState) {
+    componentWillReceiveProps(nextProps: RegisterProps) {
         if(nextProps.errors) {
             this.setState({
                 errors: nextProps.errors
@@ -129,12 +141,6 @@ class Register extends Component<RegisterState> {
     }
 }
 
-Register.propTypes = {
-   registerUser: PropTypes.func.isRequired,
-   auth: PropTypes.object.isRequired,
-   errors: PropTypes.object.isRequired 
-};
-
 const mapStateToProps = (state: any) => ({
     auth: state.auth,
     errors: state.errors
@@ -142,4 +148,4 @@ const mapStateToProps = (state: any) => ({
 
 export default connect(
     mapStateToProps, { registerUser },
-    ) (withRouter(Register));
+    ) (Register);

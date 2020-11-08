@@ -19,7 +19,7 @@ import Dashboard from './components/dashboard/Dashboard';
 if(localStorage.jwtToken) {
   const token = localStorage.jwtToken;
   setAuthToken(token);
-  const decoded = jwt_decode(token);
+  const decoded: any = jwt_decode(token);
   store.dispatch(setCurrentUser(decoded));
 
   const currentTime = Date.now() / 1000;
