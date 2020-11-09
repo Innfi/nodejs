@@ -9,6 +9,7 @@ interface DashboardProps {
     auth: object
 };
 
+/*
 class Dashboard extends Component<DashboardProps> {
     static propTypes = {
         logoutUser: PropTypes.func.isRequired,
@@ -58,3 +59,5 @@ export default connect(
     mapStateToProps,
     { logoutUser }
 ) (Dashboard);
+
+*/

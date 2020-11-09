@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 
+/*
 const PrivateRoute = ({ component: Component, auth, ...rest }) => (
     <Route 
         {...rest}
@@ -24,3 +25,4 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps) (PrivateRoute);
+*/

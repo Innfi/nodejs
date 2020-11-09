@@ -19,7 +19,7 @@ interface RegisterState {
     password2: string;
     errors: any;
 }
-
+/*
 class Register extends Component<RegisterProps, RegisterState> {
     state: RegisterState = {
         name: '',
@@ -149,3 +149,4 @@ const mapStateToProps = (state: any) => ({
 export default connect(
     mapStateToProps, { registerUser },
     ) (Register);
+*/

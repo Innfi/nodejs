@@ -17,6 +17,7 @@ interface LoginState {
     errors: any;
 }
 
+/*
 class Login extends Component<LoginProps, LoginState> {
     state: LoginState = {
         email: '',
@@ -140,3 +141,4 @@ export default connect(
     mapStateToProps, 
     { loginUser }
 ) (Login);
+*/
