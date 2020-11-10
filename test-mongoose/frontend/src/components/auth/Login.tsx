@@ -17,7 +17,7 @@ interface LoginState {
     errors: any;
 }
 
-/*
+
 class Login extends Component<LoginProps, LoginState> {
     state: LoginState = {
         email: '',
@@ -25,18 +25,18 @@ class Login extends Component<LoginProps, LoginState> {
         errors: {}
     };
    
-    propTypes = {
+    static propTypes = {
         loginUser: PropTypes.func.isRequired,
         auth: PropTypes.object.isRequired,
         errors: PropTypes.object.isRequired
     };
 
 
-    componentDidMount() {
-        if(this.props.auth.isAuthenticated) {
-            this.props.history.push("/dashboard");
-        }
-    }
+    //componentDidMount() {
+    //    if(this.props.auth.isAuthenticated) {
+    //        this.props.history.push("/dashboard");
+    //    }
+    //}
 
     componentWillReceiveProps(nextProps: any) {
         if(nextProps.auth.isAuthenticated) {
@@ -49,19 +49,21 @@ class Login extends Component<LoginProps, LoginState> {
     }
 
     onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({ [e.target.id]: e.target.value });
+        //this.setState({ [e.target.id]: e.target.value });
     };
 
     onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const userData = {
-            email: this.state.email,
-            password: this.state.password
-        };
+        console.log(this.state.email);
+        console.log(this.state.password);
+        //const userData = {
+        //    email: this.state.email,
+        //    password: this.state.password
+        //};
 
-        //console.log(userData);
-        this.props.loginUser(userData);
+        ////console.log(userData);
+        //this.props.loginUser(userData);
     };
 
     render() {
@@ -133,12 +135,11 @@ class Login extends Component<LoginProps, LoginState> {
 }
 
 const mapStateToProps = (state: LoginState) => ({
-    auth: state.auth,
-    errors: state.errors
+    //auth: state.auth,
+    //errors: state.errors
 });
 
 export default connect(
     mapStateToProps, 
     { loginUser }
 ) (Login);
-*/
