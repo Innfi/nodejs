@@ -19,7 +19,7 @@ interface RegisterState {
     password2: string;
     errors: any;
 }
-/*
+
 class Register extends Component<RegisterProps, RegisterState> {
     state: RegisterState = {
         name: '',
@@ -35,11 +35,11 @@ class Register extends Component<RegisterProps, RegisterState> {
        errors: PropTypes.object.isRequired 
     };
 
-    componentDidMount() {
-        if(this.props.auth.isAuthenticated) {
-            this.props.history.push("/dashboard");
-        }
-    }
+    //componentDidMount() {
+    //    if(this.props.auth.isAuthenticated) {
+    //        this.props.history.push("/dashboard");
+    //    }
+    //}
 
     componentWillReceiveProps(nextProps: RegisterProps) {
         if(nextProps.errors) {
@@ -49,11 +49,14 @@ class Register extends Component<RegisterProps, RegisterState> {
         }
     }
 
-    onChange = (e: any) => {
-        this.setState({ [e.target.id]: e.target.value });
+    onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState(
+            { [e.target.id]: e.target.value} as 
+            { [K in keyof RegisterState] : RegisterState[K]}
+        );
     };
 
-    onSubmit = (e: any) => { 
+    onSubmit = (e: React.FormEvent<HTMLFormElement>) => { 
         e.preventDefault();
 
         const newUser: object = {
@@ -63,8 +66,8 @@ class Register extends Component<RegisterProps, RegisterState> {
             password2: this.state.password2
         };
 
-        //console.log(newUser);
-        this.props.registerUser(newUser, this.props.history);
+        console.log(newUser);
+        //this.props.registerUser(newUser, this.props.history);
     }
 
     render(): ReactNode {
@@ -149,4 +152,3 @@ const mapStateToProps = (state: any) => ({
 export default connect(
     mapStateToProps, { registerUser },
     ) (Register);
-*/

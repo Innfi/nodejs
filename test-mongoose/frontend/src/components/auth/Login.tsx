@@ -49,7 +49,10 @@ class Login extends Component<LoginProps, LoginState> {
     }
 
     onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        //this.setState({ [e.target.id]: e.target.value });
+        this.setState(
+            { [e.target.id]: e.target.value} as 
+            { [K in keyof LoginState] : LoginState[K]}
+        );
     };
 
     onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
