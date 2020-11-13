@@ -10,7 +10,26 @@ import {
     USER_LOADING
 } from './types';
 
-export const registerUser = (userData: object, history: any) => (dispatch: Dispatch) => {
+export interface RegisterProps {
+    isAuthenticated: boolean;
+    history: string[];
+    errors: any;
+    registerUser(userData: object, history: string[]): void;
+}
+
+export interface RegisterState {
+    name: string;
+    email: string;
+    password: string;
+    password2: string;
+    errors: any;
+    isAuthenticated: boolean;
+}
+
+export const registerUser = (userData: object, history: string[]) => (dispatch: Dispatch) => {
+    console.log('userData: ', userData);
+    console.log('history: ', history);
+
     axios
     .post('/api/users/register', userData)
     .then((res: AxiosResponse) => history.push('/login'))

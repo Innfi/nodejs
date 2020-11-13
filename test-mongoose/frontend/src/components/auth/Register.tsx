@@ -1,24 +1,11 @@
-import React, { Component, MouseEvent, ReactNode } from 'react';
+import React, { Component, ReactNode } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { registerUser } from '../../actions/authActions';
+import { RegisterProps, RegisterState, registerUser } from '../../actions/authActions';
 import classnames from 'classnames';
+import { Dispatch, bindActionCreators } from 'redux';
 
-
-interface RegisterProps {
-    auth: object, 
-    history: string[],
-    errors: any
-}
-
-interface RegisterState {
-    name: string;
-    email: string;
-    password: string;
-    password2: string;
-    errors: any;
-}
 
 class Register extends Component<RegisterProps, RegisterState> {
     state: RegisterState = {
@@ -26,20 +13,21 @@ class Register extends Component<RegisterProps, RegisterState> {
         email: '',
         password: '',
         password2: '',
-        errors: {}
+        errors: {},
+        isAuthenticated: false
     };
 
-    propTypes = {
+    static propTypes = {
        registerUser: PropTypes.func.isRequired,
-       auth: PropTypes.object.isRequired,
+       isAuthenticated: PropTypes.bool.isRequired,
        errors: PropTypes.object.isRequired 
     };
 
-    //componentDidMount() {
-    //    if(this.props.auth.isAuthenticated) {
-    //        this.props.history.push("/dashboard");
-    //    }
-    //}
+    componentDidMount() {
+        if(this.props.isAuthenticated) {
+            this.props.history.push("/dashboard");
+        }
+    }
 
     componentWillReceiveProps(nextProps: RegisterProps) {
         if(nextProps.errors) {
@@ -51,7 +39,7 @@ class Register extends Component<RegisterProps, RegisterState> {
 
     onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState(
-            { [e.target.id]: e.target.value} as 
+            { [e.target.id]: e.target.value } as unknown as 
             { [K in keyof RegisterState] : RegisterState[K]}
         );
     };
@@ -67,7 +55,7 @@ class Register extends Component<RegisterProps, RegisterState> {
         };
 
         console.log(newUser);
-        //this.props.registerUser(newUser, this.props.history);
+        this.props.registerUser(newUser, this.props.history);
     }
 
     render(): ReactNode {
@@ -144,11 +132,17 @@ class Register extends Component<RegisterProps, RegisterState> {
     }
 }
 
-const mapStateToProps = (state: any) => ({
-    auth: state.auth,
-    errors: state.errors
-});
+const mapStateToProps = (state: RegisterState) => {
+    return {
+        isAuthenticated: state.isAuthenticated,
+        errors: state.errors
+    }
+};
 
-export default connect(
-    mapStateToProps, { registerUser },
-    ) (Register);
+const mapDispatchToProps = (dispatch: Dispatch) => {
+    return bindActionCreators({
+        registerUser
+    }, dispatch)
+};
+
+export default connect(mapStateToProps, mapDispatchToProps) (Register);
