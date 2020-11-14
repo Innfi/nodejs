@@ -41,6 +41,20 @@ export const registerUser = (userData: object, history: string[]) => (dispatch: 
     });
 };
 
+
+export interface LoginProps {
+    isAuthenticated: boolean;
+    history: string[];
+    loginUser(userData: object): void;
+}
+
+export interface LoginState {
+    email: string;
+    password: string;
+    errors: any;
+    isAuthenticated: boolean;
+}
+
 export const loginUser = (userData: object) => (dispatch: Dispatch) => {
     axios.post('/api/users/login', userData)
     .then((res: AxiosResponse) => {
