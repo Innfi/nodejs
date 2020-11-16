@@ -14,7 +14,11 @@ class Register extends Component<RegisterProps, RegisterState> {
         password: '',
         password2: '',
         errors: {},
-        isAuthenticated: false
+        auth: {
+            isAuthenticated: false,
+            user: {},
+            loading: false
+        }
     };
 
     static propTypes = {
@@ -24,7 +28,7 @@ class Register extends Component<RegisterProps, RegisterState> {
     };
 
     componentDidMount() {
-        if(this.props.isAuthenticated) {
+        if(this.props.auth.isAuthenticated) {
             this.props.history.push("/dashboard");
         }
     }
@@ -134,7 +138,7 @@ class Register extends Component<RegisterProps, RegisterState> {
 
 const mapStateToProps = (state: RegisterState) => {
     return {
-        isAuthenticated: state.isAuthenticated,
+        isAuthenticated: state.auth.isAuthenticated,
         errors: state.errors
     }
 };

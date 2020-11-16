@@ -12,7 +12,11 @@ class Login extends Component<LoginProps, LoginState> {
         email: '',
         password: '',
         errors: {},
-        isAuthenticated: false
+        auth: {
+            isAuthenticated: false,
+            user: {},
+            loading: false
+        }
     };
    
     static propTypes = {
@@ -22,7 +26,7 @@ class Login extends Component<LoginProps, LoginState> {
     };
 
     componentDidMount() {
-        if(this.props.isAuthenticated) {
+        if(this.props.auth.isAuthenticated) {
             this.props.history.push("/dashboard");
         }
     }
@@ -125,7 +129,7 @@ class Login extends Component<LoginProps, LoginState> {
 
 const mapStateToProps = (state: LoginState) => {
     return {
-        isAuthenticated: state.isAuthenticated,
+        isAuthenticated: state.auth.isAuthenticated,
         errors: state.errors
     }
 };

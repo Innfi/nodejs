@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { Dispatch } from 'redux';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from '../utils/setAuthToken';
+import { UserState } from '../model';
 
 
 import {
@@ -11,7 +12,7 @@ import {
 } from './types';
 
 export interface RegisterProps {
-    isAuthenticated: boolean;
+    auth: UserState;
     history: string[];
     errors: any;
     registerUser(userData: object, history: string[]): void;
@@ -23,13 +24,10 @@ export interface RegisterState {
     password: string;
     password2: string;
     errors: any;
-    isAuthenticated: boolean;
+    auth: UserState;
 }
 
 export const registerUser = (userData: object, history: string[]) => (dispatch: Dispatch) => {
-    console.log('userData: ', userData);
-    console.log('history: ', history);
-
     axios
     .post('/api/users/register', userData)
     .then((res: AxiosResponse) => history.push('/login'))
@@ -43,7 +41,7 @@ export const registerUser = (userData: object, history: string[]) => (dispatch: 
 
 
 export interface LoginProps {
-    isAuthenticated: boolean;
+    auth: UserState;
     history: string[];
     loginUser(userData: object): void;
 }
@@ -52,7 +50,7 @@ export interface LoginState {
     email: string;
     password: string;
     errors: any;
-    isAuthenticated: boolean;
+    auth: UserState;
 }
 
 export const loginUser = (userData: object) => (dispatch: Dispatch) => {
