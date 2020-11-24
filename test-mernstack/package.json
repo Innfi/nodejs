@@ -1,7 +1,7 @@
 {
-  "name": "test-mongoose",
+  "name": "test-mernstack",
   "version": "1.0.0",
-  "description": "mongoose",
+  "description": "mern stack",
   "main": "index.js",
   "scripts": {
     "test": "mocha -r ts-node/register test/**/*.ts",

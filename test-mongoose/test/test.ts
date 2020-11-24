@@ -1,27 +1,26 @@
-import assert from "assert";
 import mongoose from 'mongoose';
-import isEmpty from 'is-empty';
+import assert from 'assert';
+import { IUserInfo, UserSchema } from '../src/model';
 
 
-describe('is-empty', () => {
-    it('is working on string', () => {
-        assert.strictEqual(isEmpty(''), true);
-        assert.strictEqual(isEmpty('not empty'), false);
+describe('mongoose test', () => {
+    it('init client', async () => {
+        await mongoose.connect('mongodb://localhost', 
+            { useNewUrlParser: true, useUnifiedTopology: true});
+
+        assert.strictEqual(mongoose.connection.readyState, 
+            mongoose.STATES.connected);
     });
-});
 
-describe('Mongoose', () => {
-    //const dbpath = 'mongodb://127.0.0.1/my_database';
+    it('init model', async () => {
+        await mongoose.connect('mongodb://localhost', 
+            { useNewUrlParser: true, useUnifiedTopology: true});
 
-    //it('test connect', () => {
-    //    mongoose.connect(dbpath, {useNewUrlParser: true, useUnifiedTopology: true})
-    //    .then((result) => {
-    //        console.log('connections ', result.connection.collections);
-    //    });
+        const userModel = mongoose.model<IUserInfo>('user', UserSchema);
+    });
 
-    //    const db = mongoose.connection;
-    //    db.on('err', () => {
-    //        console.log('connection error');
-    //    });
-    //});
+    // create / update / delete 
+    // read: projection
+    // population
+
 });

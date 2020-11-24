@@ -43,6 +43,7 @@ export const registerUser = (userData: object, history: string[]) => (dispatch: 
 export interface LoginProps {
     auth: UserState;
     history: string[];
+    errors: any;
     loginUser(userData: object): void;
 }
 
