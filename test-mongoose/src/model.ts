@@ -8,6 +8,7 @@ export interface IUserInfo extends Document {
     created: Date;
     loggedIn: Date;
     loggedOut: Date;
+    inventory: object;
 };
 
 export const UserSchema = new Schema({
@@ -17,4 +18,5 @@ export const UserSchema = new Schema({
     created: { type: Number },
     loggedIn: { type: Number },
     loggedOut: { type: Number },
+    inventory: { type: Object }
 }, { collection: 'User'});
