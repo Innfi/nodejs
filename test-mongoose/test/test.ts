@@ -33,6 +33,19 @@ describe('mongoose test', () => {
         });
     });
 
+    it('multi connection with createConnection', async () => {
+        const conn: mongoose.Connection = await mongoose.createConnection(
+            'mongodb://localhost/userdb', { useNewUrlParser: true, useUnifiedTopology: true} );
+        assert.strictEqual(conn.readyState, mongoose.STATES.connected);
+        assert.deepStrictEqual(conn.models, {});
+
+        const userModel: mongoose.Model<IUserInfo> = conn.model<IUserInfo>('user', UserSchema);
+
+        assert.strictEqual(conn.models['user'] != undefined, true);
+    });
+
+    //multi connection with paginate middleware
+
     // population
 
     // create / update / delete 
