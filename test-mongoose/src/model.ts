@@ -1,22 +1,18 @@
 import { Schema, Document } from "mongoose";
 
 
-export interface IUserInfo extends Document {
-    _id: string;
+export interface IUserAccount extends Document {
     nickname: string;
     email: string;
     created: Date;
-    loggedIn: Date;
-    loggedOut: Date;
-    inventory: object;
+    loggedIn?: Date;
+    loggedOut?: Date;
 };
 
-export const UserSchema = new Schema({
-    _id: { type: String },
+export const UserAccountSchema = new Schema({
     nickname: { type: String }, 
-    email: { type: String },
+    email: { type: String, index: true },
     created: { type: Number },
     loggedIn: { type: Number },
     loggedOut: { type: Number },
-    inventory: { type: Object }
 }, { collection: 'User'});
