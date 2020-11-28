@@ -1,10 +1,12 @@
 import mongoose, { ConnectionOptions } from 'mongoose';
 import assert from 'assert';
-import { IUserAccount, UserAccountSchema } from '../src/model';
+import { IUserAccount, UserAccountSchema, IInventory, InventorySchema } 
+    from '../src/model';
 
 
 describe('mongoose test', () => {
     const dbUrl: string = 'mongodb://192.168.1.171/users';
+    const invenDbUrl: string = 'mongodb://192.168.1.171/invens';
     const options: ConnectionOptions = {
         useNewUrlParser: true, useUnifiedTopology: true
     };
@@ -43,7 +45,7 @@ describe('mongoose test', () => {
         assert.strictEqual(findResult[0].nickname, 'innfi');
     });
 
-    it('current: find with projection', async () => {
+    it('find with projection', async () => {
         userModel = mongoose.model<IUserAccount>(
                collectionUserAccount, UserAccountSchema);
        
@@ -69,21 +71,24 @@ describe('mongoose test', () => {
         assert.strictEqual(result?.created, undefined);
     });
 
-    /*
-    it('multi connection with createConnection', async () => {
-        const conn: mongoose.Connection = await mongoose.createConnection(
-            'mongodb://localhost/userdb', { useNewUrlParser: true, useUnifiedTopology: true} );
-        assert.strictEqual(conn.readyState, mongoose.STATES.connected);
-        assert.deepStrictEqual(conn.models, {});
+    it('current: multi connection with createConnection', async() => {
+        const accountConnection: mongoose.Connection = await mongoose.createConnection(
+            dbUrl, options);
+        const invenConnection: mongoose.Connection = await mongoose.createConnection(
+            invenDbUrl, options);
 
-        const userModel: mongoose.Model<IUserInfo> = conn.model<IUserInfo>('user', UserSchema);
+        assert.strictEqual(accountConnection.readyState, mongoose.STATES.connected);
+        assert.strictEqual(invenConnection.readyState, mongoose.STATES.connected);
 
-        assert.strictEqual(conn.models['user'] != undefined, true);
+        userModel = accountConnection.model<IUserAccount, mongoose.Model<IUserAccount>>(
+            collectionUserAccount, UserAccountSchema);
+        const invenModel = invenConnection.model<IInventory, mongoose.Model<IInventory>>(
+            'inventory', InventorySchema);
+        assert.strictEqual(accountConnection.models['inventory'], undefined);
+        assert.strictEqual(invenConnection.models['userAccount'], undefined);
     });
-    */
-    //multi connection with paginate middleware
+    
+    //pagination
 
     // population
-
-    // create / update / delete 
 });

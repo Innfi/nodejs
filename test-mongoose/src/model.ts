@@ -15,4 +15,18 @@ export const UserAccountSchema = new Schema({
     created: { type: Number },
     loggedIn: { type: Number },
     loggedOut: { type: Number },
-}, { collection: 'User'});
+}, { collection: 'userAccount'});
+
+export interface IInventory extends Document {
+    email: string;
+    testElement1: number;
+    testElement2: string;
+    testElement3: number;
+};
+
+export const InventorySchema = new Schema({
+    email: { type: String, index: true },
+    testElement1: { type: Number }, 
+    testElemen12: { type: String },
+    testElement3: { type: Number }
+}, { collection: 'inventory'});
