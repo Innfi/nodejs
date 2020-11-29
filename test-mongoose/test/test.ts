@@ -1,7 +1,8 @@
-import mongoose, { ConnectionOptions } from 'mongoose';
+import mongoose, { ConnectionOptions, PaginateModel,
+    PaginateOptions, FilterQuery } from 'mongoose';
 import assert from 'assert';
-import { IUserAccount, UserAccountSchema, IInventory, InventorySchema } 
-    from '../src/model';
+import { IUserAccount, UserAccountSchema, IInventory, InventorySchema,
+    InvenPaginateSchema } from '../src/model';
 
 
 describe('mongoose test', () => {
@@ -88,7 +89,31 @@ describe('mongoose test', () => {
         assert.strictEqual(invenConnection.models['userAccount'], undefined);
     });
     
-    //pagination
+    it('current: pagination', async () => {
+        const invenConnection: mongoose.Connection = await mongoose.createConnection(
+            dbUrl, options);
+        const invenModel: PaginateModel<IInventory> = 
+            invenConnection.model<IInventory, PaginateModel<IInventory>>('inventory', 
+            InvenPaginateSchema);
+
+        const paginateQuery: FilterQuery<IInventory> = {
+            $or: [
+                { testElement1: { $gt: 0} },
+                { testElement3: { $lt: 0} }
+            ]
+        };
+        const paginateOptions: PaginateOptions = {
+            page: 1,
+            limit: 20
+        };
+
+        const findResult: mongoose.PaginateResult<IInventory> = 
+            await invenModel.paginate(paginateQuery, paginateOptions);
+        assert.strictEqual(findResult.hasNextPage, true);
+
+        const docs: IInventory[] = findResult.docs;
+        assert.strictEqual(docs.length, paginateOptions.limit);
+    });
 
     // population
 });
