@@ -2,7 +2,8 @@ import mongoose, { ConnectionOptions, PaginateModel,
     PaginateOptions, FilterQuery } from 'mongoose';
 import assert from 'assert';
 import { IUserAccount, UserAccountSchema, IInventory, InventorySchema,
-    InvenPaginateSchema } from '../src/model';
+    InvenPaginateSchema, IFriends, FriendsSchema } from '../src/model';
+import { Types } from 'mongoose';
 
 
 describe('mongoose test', () => {
@@ -72,7 +73,7 @@ describe('mongoose test', () => {
         assert.strictEqual(result?.created, undefined);
     });
 
-    it('current: multi connection with createConnection', async() => {
+    it('multi connection with createConnection', async() => {
         const accountConnection: mongoose.Connection = await mongoose.createConnection(
             dbUrl, options);
         const invenConnection: mongoose.Connection = await mongoose.createConnection(
@@ -89,7 +90,7 @@ describe('mongoose test', () => {
         assert.strictEqual(invenConnection.models['userAccount'], undefined);
     });
     
-    it('current: pagination', async () => {
+    it('pagination', async () => {
         const invenConnection: mongoose.Connection = await mongoose.createConnection(
             dbUrl, options);
         const invenModel: PaginateModel<IInventory> = 
@@ -115,5 +116,18 @@ describe('mongoose test', () => {
         assert.strictEqual(docs.length, paginateOptions.limit);
     });
 
-    // population
+    it('current: population', async() => {
+        const friendConnection: mongoose.Connection = await mongoose.createConnection(
+            dbUrl, options);
+        const friendModel: mongoose.Model<IFriends> = 
+            friendConnection.model<IFriends>('friends', FriendsSchema);
+
+        await friendModel.findOne({ name: 'innfi' }).populate('friends')
+        .then((value: IFriends) => {
+            if(value.friends instanceof Types.ObjectId) {
+                assert.fail();
+            } else {
+            }
+        });
+    });
 });

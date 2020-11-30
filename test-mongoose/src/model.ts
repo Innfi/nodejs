@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+import { Types } from "mongoose";
 import { Schema, Document } from "mongoose";
 import mongoosePaginate from 'mongoose-paginate-v2';
 
@@ -33,3 +35,13 @@ export const InventorySchema = new Schema<IInventory>({
 }, { collection: 'inventory'});
 
 export const InvenPaginateSchema = InventorySchema.plugin(mongoosePaginate);
+
+export interface IFriends extends Document {
+    email: string;
+    friends: Types.ObjectId[] | IUserAccount[];
+};
+
+export const FriendsSchema = new Schema<IFriends>({
+    email: { type: String, index: true },
+    friends: [ { type: Types.ObjectId, ref: 'userAccount' }]
+}, { collection: 'friends'});
