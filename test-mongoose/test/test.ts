@@ -1,32 +1,31 @@
 import mongoose, { ConnectionOptions, PaginateModel,
-    PaginateOptions, FilterQuery } from 'mongoose';
+    PaginateOptions, FilterQuery, Types } from 'mongoose';
 import assert from 'assert';
 import { IUserAccount, UserAccountSchema, IInventory, InventorySchema,
     InvenPaginateSchema, IFriends, FriendsSchema } from '../src/model';
-import { Types } from 'mongoose';
 
 
 describe('mongoose test', () => {
-    const dbUrl: string = 'mongodb://192.168.1.171/users';
-    const invenDbUrl: string = 'mongodb://192.168.1.171/invens';
+    const dbUrl: string = 'mongodb://192.168.1.151/users';
+    const invenDbUrl: string = 'mongodb://192.168.1.151/invens';
     const options: ConnectionOptions = {
         useNewUrlParser: true, useUnifiedTopology: true
     };
     const collectionUserAccount: string = 'userAccount';
     let userModel: mongoose.Model<IUserAccount, {}>;
 
-    before(async () => {
-        await mongoose.connect(dbUrl, options);
-    });
+    //before(async () => {
+    //    await mongoose.connect(dbUrl, options);
+    //});
 
-    after(async() => {
-        try {
-            mongoose.deleteModel('userModel');
-            await mongoose.connection.dropCollection(collectionUserAccount);
-        } catch (err) {
+    //after(async() => {
+    //    try {
+    //        mongoose.deleteModel('userModel');
+    //        await mongoose.connection.dropCollection(collectionUserAccount);
+    //    } catch (err) {
 
-        }
-    });
+    //    }
+    //});
 
     it('basic create / find', async () => {
         assert.strictEqual(mongoose.connection.readyState, 
@@ -116,18 +115,54 @@ describe('mongoose test', () => {
         assert.strictEqual(docs.length, paginateOptions.limit);
     });
 
-    it('current: population', async() => {
+    it('insert userAccounts', async () => {
+        const accountConnection: mongoose.Connection = 
+            await mongoose.createConnection(dbUrl, options);
+
+        userModel = accountConnection.model<IUserAccount>(
+            collectionUserAccount, UserAccountSchema);
+        await userModel.create({
+            nickname: 'innfi',
+            email: 'innfi@test.com',
+            created: new Date()
+        });
+        await userModel.create({
+            nickname: 'ennfi',
+            email: 'ennfi@test.com',
+            created: new Date()
+        });
+        await userModel.create({
+            nickname: 'milli',
+            email: 'milli@test.com',
+            created: new Date()
+        });
+    });
+
+    it('insert friends', async () => {
         const friendConnection: mongoose.Connection = await mongoose.createConnection(
             dbUrl, options);
         const friendModel: mongoose.Model<IFriends> = 
             friendConnection.model<IFriends>('friends', FriendsSchema);
 
-        await friendModel.findOne({ name: 'innfi' }).populate('friends')
-        .then((value: IFriends) => {
-            if(value.friends instanceof Types.ObjectId) {
-                assert.fail();
-            } else {
-            }
+        await friendModel.create({
+            email: 'innfi@test.com',
+            friends: [ Types.ObjectId("5fc63ec68a6c191c78d982fa"),
+                Types.ObjectId("5fc63ec68a6c191c78d982fb") ]
         });
+    });
+
+    it('population', async() => {
+        //const friendConnection: mongoose.Connection = await mongoose.createConnection(
+        //    dbUrl, options);
+        //const friendModel: mongoose.Model<IFriends> = 
+        //    friendConnection.model<IFriends>('friends', FriendsSchema);
+
+        //await friendModel.findOne({ name: 'innfi' }).populate('friends')
+        //.then((value: IFriends) => {
+        //    if(value.friends instanceof Types.ObjectId) {
+        //        assert.fail();
+        //    } else {
+        //    }
+        //});
     });
 });

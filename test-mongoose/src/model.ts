@@ -38,7 +38,7 @@ export const InvenPaginateSchema = InventorySchema.plugin(mongoosePaginate);
 
 export interface IFriends extends Document {
     email: string;
-    friends: Types.ObjectId[] | IUserAccount[];
+    friends: Types.ObjectId[];
 };
 
 export const FriendsSchema = new Schema<IFriends>({
