@@ -6,8 +6,8 @@ import { IUserAccount, UserAccountSchema, IInventory, InventorySchema,
 
 
 describe('mongoose test', () => {
-    const dbUrl: string = 'mongodb://192.168.1.151/users';
-    const invenDbUrl: string = 'mongodb://192.168.1.151/invens';
+    const dbUrl: string = 'mongodb://192.168.1.85/users';
+    const invenDbUrl: string = 'mongodb://192.168.1.85/invens';
     const options: ConnectionOptions = {
         useNewUrlParser: true, useUnifiedTopology: true
     };
@@ -138,31 +138,20 @@ describe('mongoose test', () => {
         });
     });
 
-    it('insert friends', async () => {
+    it('population', async() => {
+        const userAccountModel = mongoose.model<IUserAccount>(
+               collectionUserAccount, UserAccountSchema);
         const friendConnection: mongoose.Connection = await mongoose.createConnection(
             dbUrl, options);
         const friendModel: mongoose.Model<IFriends> = 
             friendConnection.model<IFriends>('friends', FriendsSchema);
+            
+        const findOneResult = await friendModel.findOne({ email: 'innfi@test.com' })
+            .populate('friends');
+        const friendData = findOneResult?.friends;
 
-        await friendModel.create({
-            email: 'innfi@test.com',
-            friends: [ Types.ObjectId("5fc63ec68a6c191c78d982fa"),
-                Types.ObjectId("5fc63ec68a6c191c78d982fb") ]
+        friendData?.forEach((value: Types.ObjectId & IUserAccount) => {
+            console.log('element: ', value);
         });
-    });
-
-    it('population', async() => {
-        //const friendConnection: mongoose.Connection = await mongoose.createConnection(
-        //    dbUrl, options);
-        //const friendModel: mongoose.Model<IFriends> = 
-        //    friendConnection.model<IFriends>('friends', FriendsSchema);
-
-        //await friendModel.findOne({ name: 'innfi' }).populate('friends')
-        //.then((value: IFriends) => {
-        //    if(value.friends instanceof Types.ObjectId) {
-        //        assert.fail();
-        //    } else {
-        //    }
-        //});
     });
 });
