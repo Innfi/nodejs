@@ -1,30 +1,51 @@
 import express from 'express';
+import fs from 'fs';
+import https from 'https';
 import userRouter from './route/UserRouter';
 import todoRouter from './route/TodoRouter';
 
 
-class MainClass {
-    private name: String = "Entry Class";
-    private express: any;
-    private port: number = 3000;
+const credentials: object = {
+    key: fs.readFileSync(__dirname + '\\cert\\server.key'),
+    cert: fs.readFileSync(__dirname + '\\cert\\server.cert')
+};
 
-    constructor() {
-        this.express = express();
-        this.express.use('/users', userRouter);
-        this.express.use('/todo', todoRouter);
+const app = express();
+app.use('/users', userRouter);
+app.use('/todo', todoRouter);
 
-        this.express.listen(this.port, () => {
-            console.log(this.name, 'listening on port', this.port);
-        });
-    }
+app.get('/', (req: express.Request, res: express.Response) => {
+    res.send('text response').end();
+});
 
-    run(): void {
-        this.express.get('/', (req: express.Request, res: express.Response) => {
-            res.send('text response');
-        });
-    }
-}
+https
+.createServer(credentials, app)
+.listen(8080, () => {
+    console.log('listening on port 8080');
+});
 
-const mainEntry = new MainClass();
-
-mainEntry.run();
+//class MainClass {
+//    private name: String = "Entry Class";
+//    private express: any;
+//    private port: number = 3000;
+//
+//    constructor() {
+//        this.express = express();
+//        this.express.use('/users', userRouter);
+//        this.express.use('/todo', todoRouter);
+//
+//        this.express.listen(this.port, () => {
+//            console.log(this.name, 'listening on port', this.port);
+//        });
+//    }
+//
+//    run(): void {
+//        this.express.get('/', (req: express.Request, res: express.Response) => {
+//            res.send('text response');
+//        });
+//    }
+//}
+//
+//const mainEntry = new MainClass();
+//
+//mainEntry.run();
