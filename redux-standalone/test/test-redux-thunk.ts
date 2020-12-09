@@ -64,14 +64,27 @@ const rootReducer = (state: ManagingState = initialState,
     }
 };
 
-const tryIncrement = ({}) => {
-    return dispatch => {
+const tryIncrement = async ({}) => {
+    console.log('tryIncrement called');
+
+    //const response: AxiosResponse<string> = 
+    //    await axios.get('http://localhost:3000/users/123');
+    //console.log('response: ', response.data);
+
+    //return (dispatch: (arg0: () => IncAction) => any) => (dispatch(incSuccess));
+    return (dispatch: 
+        (
+            arg0: { 
+                (): IncAction | IncFailAction
+            }, 
+            arg1: number 
+        ) => void) => {
         axios.get('http://localhost:3000/users/123')
         .then((value: AxiosResponse<string> ) => {
             console.log('axios response: ', value);
-            dispatch(incSuccess);
+            dispatch(incSuccess, 1);
         })
-        .catch((reason: any) => { dispatch(incFail); });
+        .catch((reason: any) => { dispatch(incFail, 1); });
     };
 };
 
@@ -85,6 +98,15 @@ describe('test thunk', () => {
         assert.strictEqual(store.getState().value, 0);
     });
 
-    it('call async', async () => {
+    it('incSuccess', () => {
+        const result = incSuccess();
+        store.dispatch(result);
+
+        assert.strictEqual(store.getState().value, result.payload.value);
+    });
+
+    it('tryIncrement', async () => {
+        const firstResult = await tryIncrement({});
+        //store.dispatch();
     });
 });
