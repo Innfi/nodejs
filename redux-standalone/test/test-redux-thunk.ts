@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { createStore, applyMiddleware, Dispatch } from 'redux';
-import thunk from "redux-thunk";
+import thunk, { ThunkAction, ThunkDispatch } from "redux-thunk";
 import axios, { AxiosResponse } from 'axios';
 
 
@@ -26,7 +26,6 @@ interface DecAction {
     type: typeof DECREMENT,
     payload: ManagingState
 };
-
 
 const incSuccess = (): IncAction => ({
     type: 'INCREMENT',
@@ -64,27 +63,22 @@ const rootReducer = (state: ManagingState = initialState,
     }
 };
 
-const tryIncrement = async ({}) => {
-    console.log('tryIncrement called');
+type RootState = ReturnType<typeof rootReducer>;
 
-    //const response: AxiosResponse<string> = 
-    //    await axios.get('http://localhost:3000/users/123');
-    //console.log('response: ', response.data);
+const asyncFunction = async (): Promise<string> => {
+    const result: AxiosResponse<string> = 
+        await axios.get('http://localhost:3000/users/123');
+    return result.data;
+};
 
-    //return (dispatch: (arg0: () => IncAction) => any) => (dispatch(incSuccess));
-    return (dispatch: 
-        (
-            arg0: { 
-                (): IncAction | IncFailAction
-            }, 
-            arg1: number 
-        ) => void) => {
-        axios.get('http://localhost:3000/users/123')
-        .then((value: AxiosResponse<string> ) => {
-            console.log('axios response: ', value);
-            dispatch(incSuccess, 1);
-        })
-        .catch((reason: any) => { dispatch(incFail, 1); });
+const incrementNewThunk = (): ThunkAction<void, RootState, null, 
+    IncAction> => {
+    return async dispatch => {
+        const result = asyncFunction();
+        dispatch({
+            type: INCREMENT,
+            payload: { value: 15 }
+        });
     };
 };
 
@@ -94,19 +88,9 @@ const store = createStore(
 );
 
 describe('test thunk', () => {
-    it('store: initial', async () => {
-        assert.strictEqual(store.getState().value, 0);
-    });
+    it('tryIncrement', async () => {            
+        const result = await incrementNewThunk();
 
-    it('incSuccess', () => {
-        const result = incSuccess();
-        store.dispatch(result);
-
-        assert.strictEqual(store.getState().value, result.payload.value);
-    });
-
-    it('tryIncrement', async () => {
-        const firstResult = await tryIncrement({});
-        //store.dispatch();
+        console.log(result.name);
     });
 });
