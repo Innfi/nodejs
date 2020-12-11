@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { createStore, applyMiddleware, Dispatch } from 'redux';
-import thunk, { ThunkAction, ThunkDispatch } from "redux-thunk";
+import thunk, { ThunkAction, ThunkDispatch, ThunkMiddleware } from "redux-thunk";
 import axios, { AxiosResponse } from 'axios';
 
 
@@ -72,24 +72,37 @@ const asyncFunction = async (): Promise<string> => {
 };
 
 const incrementNewThunk = (): ThunkAction<void, RootState, null, 
-    IncAction> => {
-    return async dispatch => {
-        const result = asyncFunction();
+    IncAction> => async dispatch => {
+    const result = asyncFunction();
+    dispatch({
+        type: INCREMENT,
+        payload: { value: 15 }
+    });
+};
+
+type ThunkResult<R> = ThunkAction<R, ManagingState, undefined, ManagingActionTypes>;
+
+const anotherIncrementThunk = (): ThunkResult<string> => {
+    return (dispatch, getState) => {
         dispatch({
             type: INCREMENT,
             payload: { value: 15 }
         });
+        return 'hello';
     };
 };
 
 const store = createStore(
     rootReducer, 
-    applyMiddleware(thunk)
+    applyMiddleware(thunk as ThunkMiddleware<ManagingState, ManagingActionTypes>)
 );
+
 
 describe('test thunk', () => {
     it('tryIncrement', async () => {            
-        const result = await incrementNewThunk();
+        const result = incrementNewThunk();
+
+        store.dispatch(result.);
 
         console.log(result.name);
     });
