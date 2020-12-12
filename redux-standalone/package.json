@@ -4,7 +4,7 @@
   "description": "redux",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -r ts-node/register -w --watch-files src/reducks.ts,test/*.ts test/test-redux-thunk.ts"
+    "test": "mocha -r ts-node/register -w --watch-files src/reducks.ts,test/*.ts test/thunk-ts.ts"
   },
   "author": "",
   "license": "ISC",

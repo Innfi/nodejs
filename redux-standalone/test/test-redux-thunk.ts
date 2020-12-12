@@ -102,7 +102,7 @@ describe('test thunk', () => {
     it('tryIncrement', async () => {            
         const result = incrementNewThunk();
 
-        store.dispatch(result.);
+        //store.dispatch(result.);
 
         console.log(result.name);
     });
