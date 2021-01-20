@@ -138,7 +138,7 @@ describe('mongoose test', () => {
         });
     });
 
-    it('population', async() => {
+    it('population', async () => {
         const userAccountModel = mongoose.model<IUserAccount>(
                collectionUserAccount, UserAccountSchema);
         const friendConnection: mongoose.Connection = await mongoose.createConnection(
@@ -148,10 +148,28 @@ describe('mongoose test', () => {
             
         const findOneResult = await friendModel.findOne({ email: 'innfi@test.com' })
             .populate('friends');
-        const friendData = findOneResult?.friends;
+        const friendData = findOneResult.friends;
+        if(friendData instanceof Types.ObjectId) assert.fail();
 
-        friendData?.forEach((value: Types.ObjectId & IUserAccount) => {
-            console.log('element: ', value);
+        const friendAccounts: IUserAccount[] = friendData as IUserAccount[];
+        friendAccounts.forEach((value: IUserAccount) => {
+            //TODO assert friend data
         });
+    });
+
+    it('aggregation', async () => {
+        const invenConnection: mongoose.Connection = await mongoose.createConnection(
+            dbUrl, options);
+        const invenModel: PaginateModel<IInventory> = 
+            invenConnection.model<IInventory, PaginateModel<IInventory>>('inventory', 
+            InvenPaginateSchema);
+
+        invenModel.aggregate([
+            { $match: { email: 'innfi@test.com' }},
+            { $project: { testElement1: 1 }},
+            { $out: 'tempInven'}
+        ]);
+
+        //TODO assert tempInven collection created with testElement1
     });
 });
