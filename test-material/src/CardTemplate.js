@@ -2,7 +2,8 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, CardActionArea, CardActions, CardContent, CardMedia, 
     Button, Typography} from '@material-ui/core';
-
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import SimpleAccordion from './Accordion';
 
 const useStyles = makeStyles({
     root: { maxWidth: 345 },
@@ -35,6 +36,9 @@ export default function MediaCard() {
                 <Button size="small" color="primary">
                     Learn More
                 </Button>
+            </CardActions>
+            <CardActions>
+                <SimpleAccordion />
             </CardActions>
         </Card>
     );
