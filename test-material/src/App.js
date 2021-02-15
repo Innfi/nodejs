@@ -1,11 +1,12 @@
 import './App.css';
 import GridTemplate from './GridTemplate';
+import PersistentDrawerLeft from './DrawerTemplate';
 
 
 function App() {
   return (
     <div className="App">
-      <GridTemplate />
+      <PersistentDrawerLeft />
     </div>
   );
 }
