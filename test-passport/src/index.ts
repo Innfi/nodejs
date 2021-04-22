@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import passport from 'passport';
 import passportLocal from 'passport-local';
 import passportJwt from 'passport-jwt';
+import jwt from 'jsonwebtoken';
 
 import { IUserInfo, UserSchema, connectOptions }  from './users';
 
@@ -10,6 +11,8 @@ import { IUserInfo, UserSchema, connectOptions }  from './users';
 const LocalStrategy = passportLocal.Strategy;
 const JwtStrategy = passportJwt.Strategy;
 const ExtractJwt = passportJwt.ExtractJwt;
+
+const dummySecret: string = 'dont_try_this_on_prod';
 
 let model: mongoose.Model<any>;
 mongoose.createConnection ('mongodb://localhost/passdb', connectOptions)
@@ -26,16 +29,21 @@ passport.use(new LocalStrategy({
         return model.findOne({ email: email, passwd: passwd})
         .then((value: any) => {
             console.log(`after: ${value}`);
+            console.log(`after2: ${value._id}`);
 
             if(!value) return done(null, false, { msg: 'user not found'});
 
-            return done(null, value, { msg: 'login success'});
+            const testObject: object = {
+                email: value.email,
+                passwd: value.passwd
+            };
+
+            const token: string = jwt.sign(testObject, dummySecret); //FIXMEEE
+            return done(null, value, { msg: 'login success', token: token});
         })
         .catch((err: any) => done(err));
     })
 );
-
-const dummySecret = 'dont_try_this_on_prod';
 
 passport.use(new JwtStrategy({
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -66,32 +74,35 @@ defaultRouter.get('/error', (req: express.Request, res: express.Response) => {
     res.status(200).send({ msg: 'error page'}).end();
 });
 
+defaultRouter.post('/create', async (req: express.Request, res: express.Response) => {
+    const newUserdata: object = {
+        email: req.body.email,
+        passwd: req.body.passwd
+    };
+
+    const userData: IUserInfo = await model.findOne({ email: req.body.email });
+    if (userData !== null) {
+        res.status(500).send({ msg: 'duplicate'}).end();
+    } else {
+        model.create(newUserdata, (err: any) => {
+            if (err) {
+                console.log(`err: ${err}`);
+                res.status(500).send({ msg: 'server error'}).end();
+            } else {
+                res.status(200).send({ msg: 'ok'}).end();
+            }
+        });
+    }
+});
 
 defaultRouter.post('/login', passport.authenticate('local', {
         failureRedirect: '/error'
     }), (req: express.Request, res: express.Response) => {
-        res.redirect('/test');
+        console.log(req.authInfo);
+
+        res.status(200).send({ auth: req.authInfo}).end();
+        //res.redirect('/test');
     }
-
-    // async (req: express.Request, res: express.Response) => {
-    // const newUserdata: object = {
-    //     email: req.body.email,
-    //     passwd: req.body.passwd
-    // };
-
-    // const userData: IUserInfo = await model.findOne({ email: req.body.email });
-    // if (userData !== null) {
-    //     res.status(500).send({ msg: 'duplicate'}).end();
-    // } else {
-    //     model.create(newUserdata, (err: any) => {
-    //         if (err) {
-    //             console.log(`err: ${err}`);
-    //             res.status(500).send({ msg: 'server error'}).end();
-    //         } else {
-    //             res.status(200).send({ msg: 'ok'}).end();
-    //         }
-    //     });
-    // }
 );
 
 const app = express();
