@@ -4,6 +4,7 @@ import passport from 'passport';
 import passportLocal from 'passport-local';
 import passportJwt from 'passport-jwt';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
 import { IUserInfo, UserSchema, connectOptions }  from './users';
 
@@ -25,13 +26,14 @@ passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'passwd'
     }, (email: string, passwd: string, done: Function) => {
-        console.log(`email: ${email}, passwd: ${passwd}`);
-        return model.findOne({ email: email, passwd: passwd})
+        return model.findOne({ email: email})
         .then((value: any) => {
             console.log(`after: ${value}`);
             console.log(`after2: ${value._id}`);
 
             if(!value) return done(null, false, { msg: 'user not found'});
+
+            if(!bcrypt.compare(passwd, value.passwd)) return done(null, false, { msg: 'invalid passwd'});
 
             const testObject: object = {
                 email: value.email,
@@ -77,7 +79,7 @@ defaultRouter.get('/error', (req: express.Request, res: express.Response) => {
 defaultRouter.post('/create', async (req: express.Request, res: express.Response) => {
     const newUserdata: object = {
         email: req.body.email,
-        passwd: req.body.passwd
+        passwd: await bcrypt.hash(req.body.passwd, 10) //FIXME: salt
     };
 
     const userData: IUserInfo = await model.findOne({ email: req.body.email });
