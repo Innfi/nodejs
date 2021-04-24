@@ -1,13 +1,12 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import passport from 'passport';
 import passportLocal from 'passport-local';
 import passportJwt from 'passport-jwt';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
-import { IUserInfo, UserSchema, connectOptions }  from './users';
-
+import { IUserInfo }  from './users';
+import model from './db';
 
 const LocalStrategy = passportLocal.Strategy;
 const JwtStrategy = passportJwt.Strategy;
@@ -15,22 +14,12 @@ const ExtractJwt = passportJwt.ExtractJwt;
 
 const dummySecret: string = 'dont_try_this_on_prod';
 
-let model: mongoose.Model<any>;
-mongoose.createConnection ('mongodb://localhost/passdb', connectOptions)
-.then((connection: mongoose.Connection) => {
-    console.log('db connected');
-    model = connection.model('testusers', UserSchema);
-});
-
 passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'passwd'
     }, (email: string, passwd: string, done: Function) => {
         return model.findOne({ email: email})
         .then((value: any) => {
-            console.log(`after: ${value}`);
-            console.log(`after2: ${value._id}`);
-
             if(!value) return done(null, false, { msg: 'user not found'});
 
             if(!bcrypt.compare(passwd, value.passwd)) return done(null, false, { msg: 'invalid passwd'});
@@ -68,7 +57,8 @@ defaultRouter.get('/', async (req: express.Request, res: express.Response) => {
     res.status(200).send({ msg: 'ok'}).end();
 });
 
-defaultRouter.get('/test', (req: express.Request, res: express.Response) => {
+defaultRouter.get('/test', passport.authenticate('jwt', { session: false}), 
+    (req: express.Request, res: express.Response) => {
     res.status(200).send({ msg: 'success page'}).end();
 });
 
@@ -103,7 +93,6 @@ defaultRouter.post('/login', passport.authenticate('local', {
         console.log(req.authInfo);
 
         res.status(200).send({ auth: req.authInfo}).end();
-        //res.redirect('/test');
     }
 );
 
