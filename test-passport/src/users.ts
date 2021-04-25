@@ -13,9 +13,4 @@ export const UserSchema = new Schema({
     data: { type: String }
 }, { collection: 'testusers'});
 
-export const connectOptions: mongoose.ConnectionOptions = {
-    useNewUrlParser: true, 
-    useUnifiedTopology: true,
-    useFindAndModify: false
-};
 
