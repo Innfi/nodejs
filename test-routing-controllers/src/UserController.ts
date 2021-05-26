@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { Controller, UseBefore, Param, Body, Get, Post } from 'routing-controllers';
-import { Next } from 'koa';
+import { Context } from 'koa';
 
 interface UserData {
     userId: string;
@@ -8,10 +8,13 @@ interface UserData {
     email: string;
 }
 
-async function verifyLocal(req: Request, res: Response, next: Next): Promise<void> {
-    //todo: authentication
+function verifyLocal(context: Context, next: (err?: any) => Promise<any>): any {
+    const authToken: string = context.request.header['authorization'] as string;
 
-    return next();
+    if(authToken === 'Bearer tokenNeedsChange') return next();
+
+    context.status = 401;
+    context.message = 'authentication failed';
 }
 
 @Controller()
