@@ -1,5 +1,5 @@
 import { createKoaServer } from 'routing-controllers';
-import { UserController } from '../src/UserController';
+import { UserController } from '../src/UserControllerKoa';
 import supertest from 'supertest';
 import http from 'http';
 

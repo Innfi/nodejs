@@ -6,7 +6,7 @@ interface UserData {
     userId: string;
     nickname: string;
     email: string;
-}
+};
 
 function verifyLocal(context: Context, next: (err?: any) => Promise<any>): any {
     const authToken: string = context.request.header['authorization'] as string;
@@ -18,7 +18,7 @@ function verifyLocal(context: Context, next: (err?: any) => Promise<any>): any {
 }
 
 @Controller()
-export class UserController {
+export class UserControllerKoa {
     @Get('/user/:userId')
     @UseBefore(verifyLocal)
     loadUser(@Param('userId') userId: string) {

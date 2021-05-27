@@ -1,9 +1,9 @@
 import { createKoaServer } from 'routing-controllers';
-import { UserController } from './UserController';
+import { UserControllerKoa } from './UserControllerKoa';
 
 
 const app = createKoaServer({
-    controllers: [ UserController ]
+    controllers: [ UserControllerKoa ]
 });
 
 app.listen(1330, () => {
