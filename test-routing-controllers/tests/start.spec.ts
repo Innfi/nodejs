@@ -1,32 +1,18 @@
-import { createKoaServer } from 'routing-controllers';
-import { UserController } from '../src/UserControllerKoa';
-import supertest from 'supertest';
-import http from 'http';
+import 'reflect-metadata';
+import { Container } from 'typedi';
+import { UserModel } from '../src/UserModel';
+import { UserAdapterBase, UserAdapter } from '../src/UserAdapter';
+import { UserRepositoryService } from '../src/UserRepositoryService';
 
 
-const app = createKoaServer({
-    controllers: [ UserController]
-});
+describe('typedi test', () => {
+    it('instantiate concrete service', async () => {
+        const userRepo: UserRepositoryService = Container.get(UserRepositoryService);
 
-
-describe('routing controllers', () => {
-    let server: http.Server;
-    let apptest;
-
-    beforeAll((done) => {
-        server = http.createServer(app);
-        server.listen(done);
-        apptest = supertest(server);
-    });
-
-    afterAll(done => {
-        server.close(done);
-    });
-
-    it('simple get', () => {
-        apptest
-        .get('/user/1234')
-        .expect(200)
-        .end();
+        expect(await userRepo.createUser({
+            userId: 'innfi', 
+            email: 'innfi@test.com',
+            passwordHash: '#1234'
+        })).toBe(true);
     });
 });
