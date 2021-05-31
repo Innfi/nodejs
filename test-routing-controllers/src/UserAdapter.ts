@@ -10,6 +10,8 @@ export interface UserAdapterBase {
     loadUser(email: string): Promise<UserModel>;
 
     createUser(input: UserModel): Promise<boolean>;
+
+    getName(): string;
 }
 
 @Service() 
@@ -28,4 +30,25 @@ export class UserAdapter implements UserAdapterBase {
         this.userDict[input.email] = input;
         return true;
     }
+
+    getName(): string { return 'userAdapter'; }
+}
+
+@Service()
+export class MockUserAdapter implements UserAdapterBase {
+    constructor() {}
+    
+    async loadUser(email: string): Promise<UserModel> {
+        return {
+            userId: 'dummy',
+            email: email,
+            passwordHash: '#1234'
+        };
+    }
+
+    async createUser(input: UserModel): Promise<boolean> {
+        return false;
+    }
+
+    getName(): string { return 'mockUserAdapter'; }
 }
