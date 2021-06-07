@@ -1,8 +1,8 @@
 import assert  from 'assert';
 import { beforeEach } from 'mocha';
 import { createConnection, ConnectionOptions, Connection,
-    Repository } from 'typeorm';
-import { User } from '../src/user';
+    Repository, EntityManager } from 'typeorm';
+import { User, UserMetadata } from '../src/user';
 
 
 describe('typeorm', () => {
@@ -14,36 +14,44 @@ describe('typeorm', () => {
         type: 'mysql',
         database: 'ormTest',
         synchronize: true,
-        entities: [ User ]
+        entities: [ UserMetadata, User ]
     };
 
     let conn: Connection;
-    let repo: Repository<User>;
+    let repoUser: Repository<User>;
+    let repoUserMetadata: Repository<UserMetadata>;
     
 
     beforeEach(async () => {
         conn = await createConnection(connectionOption);
-        repo = conn.getRepository('user');
+        repoUser = conn.getRepository('user');
+        repoUserMetadata = conn.getRepository('user_metadata');
     });
 
-    afterEach(async () => {
-        await repo.query('delete from user');
-    });
-
-    it('basic create/select', async () => {
+    it('one to one join with transaction', async () => {
         const newUser = new User();
-        newUser.name = 'innfi';
-        newUser.email = 'test@test.com';
+        newUser.name = 'ennfi';
+        newUser.email = 'ennfi@test.com';
 
-        const createResult: User = await repo.save(newUser);
-        assert.strictEqual(createResult.id !== undefined, true);
+        const newMetadata: UserMetadata = await conn
+        .transaction('SERIALIZABLE', async (manager: EntityManager) => {
+            const userResult: User = await manager.save(newUser);
 
-        const findResult: User = await repo.findOne(createResult.id);
-        assert.strictEqual(findResult.name, newUser.name);
-        assert.strictEqual(findResult.email, newUser.email);
-    });
+            const metadata = new UserMetadata();
+            metadata.created = new Date();
+            metadata.stringData = 'data field for metadata';
+            metadata.userdata = userResult;
 
-    it('one to one join', async () => {
+            return await manager.save(metadata);
+        });
 
+        const findResult: UserMetadata = await repoUserMetadata.findOne(
+            {id: newMetadata.id}
+        );
+
+        assert.strictEqual(findResult.userdata.name, newUser.name);
+        assert.strictEqual(findResult.userdata.email, newUser.email);
+        assert.strictEqual(findResult.created, newMetadata.created);
+        assert.strictEqual(findResult.stringData, newMetadata.stringData);
     });
 });

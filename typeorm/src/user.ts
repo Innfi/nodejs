@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, 
+    OneToOne, JoinColumn } from 'typeorm';
 
 
-@Entity()
+@Entity({ database: 'ormTest', name: 'user' })
 export class User {
     @PrimaryGeneratedColumn()
     id: number;
@@ -10,16 +11,12 @@ export class User {
     name: string;
 
     @Column()
-    email: string;
-
-    @OneToOne(type => UserMetadata)
-    @JoinColumn()
-    metadata: UserMetadata;
+    email: string;    
 }
 
-@Entity() 
+@Entity({ database: 'ormTest', name: 'user_metadata'}) 
 export class UserMetadata {
-    //@PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn()
     id: number;
 
     @Column() 
@@ -27,4 +24,8 @@ export class UserMetadata {
 
     @Column()
     stringData: string;
+
+    @OneToOne(() => User, { eager: true })
+    @JoinColumn()
+    userdata: User;
 }
