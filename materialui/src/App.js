@@ -1,11 +1,11 @@
 import './App.css';
-import { MaterialPickers } from './Datetime';
-
+//import { MaterialPickers } from './Datetime';
+import { GridTemplate } from './GridTemplate';
 
 function App() {
   return (
     <div className="App">
-      <MaterialPickers />
+      <GridTemplate />
     </div>
   );
 }

@@ -18,7 +18,7 @@ export default function MediaCard() {
             <CardActionArea>
                 <CardMedia 
                     className={classes.media} 
-                    image="https://www.fujifilm.co.th/globalassets/digital_cameras/x/fujifilm_x20/sample_images/img/index/ff_x20_008.jpg"
+                    image="https://pbs.twimg.com/profile_images/1327514689648017411/sOk86MkN_400x400.jpg"
                     title="card image" />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
