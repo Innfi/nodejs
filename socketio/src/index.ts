@@ -75,10 +75,15 @@ class ChatMsgHandler {
 	}
 }
 
-const runner = Container.get(SocketIoRunner);
-const chatHandler = Container.get(ChatMsgHandler);
+function registerTest(runner: SocketIoRunner): void {
+	const chatHandler = Container.get(ChatMsgHandler);
 
-runner.registerEvent(ChatMsgHandler.chatMsgKey, chatHandler.handleChatMsg);
+	runner.registerEvent(ChatMsgHandler.chatMsgKey, chatHandler.handleChatMsg);	
+}
+
+const runner = Container.get(SocketIoRunner);
+
+registerTest(runner);
 
 runner.registerConnected();
 runner.listen();
