@@ -2,7 +2,8 @@ import 'reflect-metadata'
 import { Container, Service } from 'typedi';
 import express, { Request, Response } from 'express';
 import http from 'http';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
+import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 
 
 type MsgHandlerDict = { [id: string]: Function };
@@ -14,6 +15,7 @@ class SocketIoRunner {
 	protected io: Server;
 	protected port: number = 3000;
 	protected handlerDict: MsgHandlerDict = {};
+	protected socketIds: string[] = [];
 
 	public constructor() {
 		this.app = express();
@@ -30,9 +32,14 @@ class SocketIoRunner {
 	} 
 
 	public registerConnected(): void {
-		this.io.on('connection', (socket) => {
+		this.io.on('connection', (socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap>) => {
 			console.log('client connected');
 			const keys: string[] = Object.keys(this.handlerDict);
+			this.socketIds.push(socket.id);
+
+			this.socketIds.forEach((value: string) => {
+				console.log(`socketId: ${value}`);
+			});
 
 			for(const key of keys) {
 				socket.on(key, (msg) => {
