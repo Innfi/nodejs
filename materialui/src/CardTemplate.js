@@ -6,11 +6,11 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import SimpleAccordion from './Accordion';
 
 const useStyles = makeStyles({
-    root: { maxWidth: 345 },
+    root: { maxWidth: 345, marginBottom: 10},
     media: {height: 140},
 });
 
-export default function MediaCard() {
+export function MediaCard() {
     const classes = useStyles();
 
     return (
