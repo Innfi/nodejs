@@ -8,6 +8,13 @@ import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 
 type MsgHandlerDict = { [id: string]: Function };
 
+interface ChannelMsgInput {
+	roomId: string;
+	msg?: string;
+	userId?: string;
+};
+
+
 @Service()
 class SocketIoRunner {
 	protected app: any 
@@ -29,6 +36,10 @@ class SocketIoRunner {
 		this.app.get('/', (req: Request, res: Response) => {
 			res.sendFile(__dirname + '/index.html');
 		});
+		this.app.get('/room', (req: Request, res: Response) => {
+			res.sendFile(__dirname + '/channel.html');
+		});
+		
 	} 
 
 	public registerConnected(): void {
@@ -37,8 +48,19 @@ class SocketIoRunner {
 			const keys: string[] = Object.keys(this.handlerDict);
 			this.socketIds.push(socket.id);
 
-			this.socketIds.forEach((value: string) => {
-				console.log(`socketId: ${value}`);
+			socket.on('joinRoom', (data: ChannelMsgInput) => {
+				const roomId = data.roomId;
+				console.log(`joinRoom] roomId: ${roomId}`);
+				socket.join(roomId);
+			});
+
+			socket.on('roomMsg', (data: ChannelMsgInput) => {
+				const roomId = data.roomId;
+				console.log(`roomMsg] roomId: ${roomId}`);
+				this.io.sockets.in(roomId).emit('roomMsg', { 
+					userId: 'fill with userId by socket',
+					msg: data.msg 
+				});
 			});
 
 			for(const key of keys) {
