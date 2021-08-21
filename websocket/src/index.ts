@@ -12,6 +12,7 @@ class WsService {
     protected webServer: http.Server;
     protected wsServer: ws.Server;
     protected socketIds: Set<string>;
+    protected wsClients: ws.Server[] = [];
 
     public constructor() {
         this.init();
@@ -25,23 +26,30 @@ class WsService {
     }
 
     protected registerEvents(): void {
-        this.wsServer.on('connection', (socket: ExWebSocket) => {
+        this.wsServer.on('connection', (socket: ws) => {
             console.log('client connected');
             const newSocketId: string = v4();
             if(this.socketIds.has(newSocketId)) {
-                console.log('socketId duplicate. what to do?')
+                console.log('socketId duplicate. what to do?');
             }
 
             this.socketIds.add(newSocketId);
-            socket.id = newSocketId;
+            //socket.id = newSocketId;
             
             console.log(`socket size: ${this.socketIds.size}`);
-
+            console.log(`url: ${socket.url}`);
+            //console.log(`new socket: ${socket.id}`);
+            
             socket.on('message', (message: string) => {
                 console.log(`received: ${message}`);
         
                 socket.send(`reply: ${message}`);
             });
+
+            socket.on('close', (socket: ws) => {
+                console.log(`connection closed`);
+                console.log(`client size: ${this.wsServer.clients.size}`);
+            });            
         });
     }
 
