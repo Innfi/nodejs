@@ -5,14 +5,24 @@ import { v4 } from 'uuid';
 
 class ExWebSocket extends ws {
     public id: string;
+    protected channels: Set<string>;
 
+    public join(channel: string): void {
+        if(this.channels.has(channel)) return;
+
+        this.channels.add(channel);
+    }
+
+    public leave(channel: string): void {
+        if(!this.channels.has(channel)) return;
+
+        this.channels.delete(channel);
+    }
 };
 
 class WsService {
     protected webServer: http.Server;
     protected wsServer: ws.Server;
-    protected socketIds: Set<string>;
-    protected wsClients: ws.Server[] = [];
 
     public constructor() {
         this.init();
@@ -21,34 +31,28 @@ class WsService {
 
     protected init(): void {
         this.webServer = http.createServer();
-        this.wsServer = new ws.Server({ server: this.webServer });
-        this.socketIds = new Set<string>();
+        this.wsServer = new ws.Server({ 
+            server: this.webServer,
+            //clientTracking: true 
+        });
     }
 
     protected registerEvents(): void {
-        this.wsServer.on('connection', (socket: ws) => {
+        this.wsServer.on('connection', (socket: ExWebSocket) => {
             console.log('client connected');
-            const newSocketId: string = v4();
-            if(this.socketIds.has(newSocketId)) {
-                console.log('socketId duplicate. what to do?');
-            }
+            socket.id = v4();
+            
+            console.log(`new socket: ${socket.id}`);
 
-            this.socketIds.add(newSocketId);
-            //socket.id = newSocketId;
-            
-            console.log(`socket size: ${this.socketIds.size}`);
-            console.log(`url: ${socket.url}`);
-            //console.log(`new socket: ${socket.id}`);
-            
             socket.on('message', (message: string) => {
                 console.log(`received: ${message}`);
         
                 socket.send(`reply: ${message}`);
             });
 
-            socket.on('close', (socket: ws) => {
+            socket.on('close', (closedSocket: ws) => {
                 console.log(`connection closed`);
-                console.log(`client size: ${this.wsServer.clients.size}`);
+                console.log(`id: ${socket.id}`);
             });            
         });
     }
