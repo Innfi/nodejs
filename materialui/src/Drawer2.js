@@ -23,22 +23,16 @@ export const TemporaryDrawer = (props) => {
 
     const anchor='left';
 
-    const toggleDrawer = (anchor, open) => (event) => {
-        if(event.type === 'keydown' && 
-            (event.key === 'Tab' || event.key === 'Shift')) return;
-
-        setState({ ...state, [anchor]: open });
+    const onClickListItem = (e, text, index) => {
+        e.preventDefault();
+        console.log(`text: ${text}`);
     };
 
     const list = (anchor) => (
-        <div className={clsx(classes.list, {
-            [classes.fullList]: anchor === 'top' || anchor === 'bottom' })}
-            role="presentation" 
-            onClick={toggleDrawer(anchor, false)} 
-            onKeyDown={toggleDrawer(anchor, false)}>
+        <div>
             <List>
                 {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                    <ListItem button key={text}>
+                    <ListItem button key={text} onClick={(e) => onClickListItem(e, text)}>
                         <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />} </ListItemIcon>
                         <ListItemText primary={text} />
                     </ListItem>
@@ -59,7 +53,7 @@ export const TemporaryDrawer = (props) => {
     return (
         <div>
             <React.Fragment key={anchor}>
-                <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)} >
+                <Drawer anchor={anchor} open={true} variant="permanent">
                     {list(anchor)}
                 </Drawer>
             </React.Fragment>
