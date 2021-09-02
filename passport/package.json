@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --delay 1 dist/index.js",
+    "localsession": "nodemon --exec ts-node src/localWithSession.ts",
     "test": "mocha --exit -r ts-node/register test/*.ts",
     "build": "tsc --build"
   },
@@ -13,12 +14,15 @@
   "dependencies": {
     "@types/bcrypt": "^3.0.1",
     "@types/express": "^4.17.9",
+    "@types/express-session": "^1.17.4",
     "@types/mocha": "^8.0.4",
     "@types/node": "^14.14.9",
     "@types/passport": "^1.0.6",
     "@types/passport-jwt": "^3.0.5",
+    "@types/passport-local": "^1.0.34",
     "bcrypt": "^5.0.1",
     "express": "^4.17.1",
+    "express-session": "^1.17.2",
     "jsonwebtoken": "^8.5.1",
     "mocha": "^8.2.1",
     "mongoose": "^5.10.11",
@@ -26,6 +30,7 @@
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
+    "passport-session": "^1.0.2",
     "ts-mongoose": "0.0.21",
     "ts-node": "^9.0.0",
     "typescript": "^4.1.2",
