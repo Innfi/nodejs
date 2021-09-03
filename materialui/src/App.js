@@ -6,11 +6,12 @@ import { TemporaryDrawer } from './Drawer2';
 //import { TestGridNoWrap } from './GridTemplate2';
 //import { Grid } from '@material-ui/core';
 //import { MediaCard } from './CardTemplate';
+import { FormPropsTextFields } from './TextForm';
 
 function App() {
   return (
     <div className="App">
-      <TemporaryDrawer />
+      <FormPropsTextFields />
     </div>
   );
 }
