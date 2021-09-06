@@ -7,6 +7,9 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import { MoreVert } from '@material-ui/icons';
+import { IconButton } from '@material-ui/core';
+
 
 const useStyles = makeStyles({
     table: { minWidth: 650 }
@@ -35,6 +38,7 @@ export default function BasicTable() {
                         <TableCell align="right">fat</TableCell>
                         <TableCell align="right">carb</TableCell>
                         <TableCell align="right">protein</TableCell>
+                        <TableCell></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -47,6 +51,11 @@ export default function BasicTable() {
                             <TableCell align="right">{row.fat}</TableCell>
                             <TableCell align="right">{row.carbs}</TableCell>
                             <TableCell align="right">{row.protein}</TableCell>
+                            <TableCell>  
+                                <IconButton>  
+                                    <MoreVert />
+                                </IconButton>
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
