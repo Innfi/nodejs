@@ -1,53 +1,30 @@
-import React, { useRef, FormEvent } from 'react';
-import ReactS3Client from 'react-aws-s3-typescript';
-import dotenv from 'dotenv';
+import React from 'react';
+import axios, { AxiosResponse } from 'axios';
 
-
-dotenv.config();
-
-export type UploadResponse = {
-  bucket: string;
-  key: string;
-  location: string;
-  status: number;
-};
 
 export const UploadForm = () => {
-  console.log(`access key id: ${process.env.REACT_APP_AKID}`);
-  console.log(`secret key: ${process.env.REACT_APP_SECRET_KEY}`);
 
-  const fileRef = useRef<HTMLInputElement & File>(null);
-
-  const uploadFileToS3 = () => {
-    const s3Config = {
-      bucketName: 'pics', 
-      region: 'ap-northeast-2',
-      accessKeyId: '',
-      secretAccessKey: '',
-    };
-    const s3Client = new ReactS3Client(s3Config);
-    const file = fileRef.current;
-    s3Client.uploadFile(file as File);
-    // .then((value: UploadResponse) => {
-
-    // });
-  };
-
-  const handleClick = (e: FormEvent) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('handleClick called');
-    uploadFileToS3();
+    const data = new FormData(e.target as HTMLFormElement);
+
+    axios.post('http://localhost:1330', data)
+    .then((value: AxiosResponse<any>) => {
+      console.log(`status: ${value.status}`);
+    })
+    .catch((err: any) => {
+      console.log(`err: ${err}`);
+    });
   };
 
   return (
-    <div>
-      <form onSubmit={(e: FormEvent) => handleClick(e)}>
-        <label>
-          image: 
-          <input type="file" ref={fileRef} />
-        </label>
-        <button type="submit">upload</button>
-      </form>
-    </div>
+  <div>
+    <form action="info" method="post" encType="multipart/form-data" 
+      onSubmit={(e) => onSubmit(e)}>
+    <label htmlFor="file">file</label>
+    <input type="file" name="file" id="file" required />
+    <input type="submit" />
+    </form>
+  </div>
   );
 };
