@@ -2,11 +2,11 @@
 provider "aws" {
 	region = "ap-northeast-2"
 	shared_credentials_file = "~/.aws/credentials"
-	profile = "default"
+	profile = "InnfisDev"
 }
 
-resource "aws_s3_bucket" "image_bucket" {
-	bucket = "image_bucket" 
+resource "aws_s3_bucket" "image-bucket" {
+	bucket = "image-storage-innfi" 
 	acl = "public-read-write"
 
 	cors_rule {

@@ -1,10 +1,14 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-import multer from 'multer';
+//import multer from 'multer';
+import dotenv from 'dotenv'
+
+import { s3Upload } from './s3Upload';
 
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+dotenv.config();
+
+const bucketName: string = process.env.BUCKET_NAME!;
 
 const app = express();
 app.use(cors());
@@ -16,7 +20,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.post('/', 
-    upload.single("file"),
+    s3Upload(bucketName).single("file"),
     (req: Request, res: Response) => {
 
     const file: Express.Multer.File = req.file!;

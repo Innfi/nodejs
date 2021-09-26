@@ -22,8 +22,6 @@ const keyFunction = (
 };
 
 export const s3Upload = (bucketName: string): multer.Multer => {
-    //const bucketName = 'image-storage';
-
     const multerStorage: multer.StorageEngine = multerS3({
         s3: new AWS.S3({
             apiVersion: '2006-03-01',
