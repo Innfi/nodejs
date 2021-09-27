@@ -9,12 +9,12 @@ export const UploadForm = () => {
     const data = new FormData(e.target as HTMLFormElement);
 
     axios.post('http://localhost:1330', data)
-    .then((value: AxiosResponse<any>) => {
-      console.log(`status: ${value.status}`);
-    })
-    .catch((err: any) => {
-      console.log(`err: ${err}`);
-    });
+      .then((value: AxiosResponse<any>) => {
+        console.log(`status: ${value.status}`);
+      })
+      .catch((err: any) => {
+        console.log(`err: ${err}`);
+      });
   };
 
   return (

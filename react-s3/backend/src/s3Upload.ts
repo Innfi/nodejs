@@ -2,13 +2,21 @@ import multer from 'multer';
 import multerS3 from 'multer-s3';
 import AWS from 'aws-sdk';
 import path from 'path';
+import dotenv from 'dotenv';
 
+
+dotenv.config();
+const accessKeyId: string = process.env.AKID!;
+const secretAccessKey: string = process.env.SECRET!;
+
+console.log(`akid: ${accessKeyId}`);
+console.log(`secret: ${secretAccessKey}`);
 
 AWS.config.update({
     region: 'ap-northeast-2',
     credentials: new AWS.Credentials({
-        accessKeyId: process.env.AKID!,
-        secretAccessKey: process.env.SECRET!
+        accessKeyId: accessKeyId,
+        secretAccessKey: secretAccessKey
     })
 });
 

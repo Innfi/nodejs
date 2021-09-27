@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 //import multer from 'multer';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 
 import { s3Upload } from './s3Upload';
 
