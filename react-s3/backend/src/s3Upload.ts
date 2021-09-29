@@ -3,6 +3,7 @@ import multerS3 from 'multer-s3';
 import AWS from 'aws-sdk';
 import path from 'path';
 import dotenv from 'dotenv';
+import { uuid } from 'uuidv4';
 
 
 dotenv.config();
@@ -25,8 +26,12 @@ const keyFunction = (
     file: Express.Multer.File, 
     callback: (error: any, key?: string | undefined) => void
 ): void => {
+    const filename = file.filename;
     const extension = path.extname(file.originalname);
-    callback(null, `userImage/${extension}`);
+
+    const randomName = uuid();
+    
+    callback(null, `userImage/${randomName}`);
 };
 
 export const s3Upload = (bucketName: string): multer.Multer => {
