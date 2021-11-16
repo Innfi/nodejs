@@ -1,5 +1,6 @@
 import { ChartData, ScatterDataPoint } from 'chart.js';
-import { Line } from 'react-chartjs-2'
+import { Line } from 'react-chartjs-2';
+import { Grid } from '@material-ui/core';
 
 
 const data: ChartData<"line", (number | ScatterDataPoint | null)[], unknown> = {
@@ -23,15 +24,15 @@ const options = {
 
 const LineChart = () => {
   return (
-    <>
-      <div className='header'>
-        <h1 className='title'>Linechart</h1>
-        <div className='links'>
-          <a className='btn btn-gh'> github source </a>
-        </div>
-      </div>
-      <Line data={data} options={options} />
-    </>
+    <div>
+      <Grid container spacing={2}>
+        <Grid item xs={2} />
+        <Grid item xs={6}> 
+          <Line data={data} options={options} />
+          <Line data={data} options={options} />
+        </Grid>
+      </Grid>
+    </div>
   );
 };
 
