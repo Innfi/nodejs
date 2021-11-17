@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 // import App from './App';
 // import reportWebVitals from './reportWebVitals';
-import LineChart from './component/Line';
-import StackedBar from './component/Bar';
-
+//import LineChart from './component/Line';
+//import StackedBar from './component/Bar';
+import TestChart from './component/Candlesticks';
 
 ReactDOM.render(
   <React.StrictMode>
-    <StackedBar />
+    <TestChart />
   </React.StrictMode>,
   document.getElementById('root')
 );
