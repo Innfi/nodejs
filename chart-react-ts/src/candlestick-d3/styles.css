@@ -1,0 +1,50 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.sidebar {
+  background-color: #171742;
+}
+
+.content {
+  background: rgb(26, 30, 80);
+  background: gray;
+  color: white;
+}
+
+.chart {
+  background-color: black;
+  color: white;
+}
+
+.candle {
+  stroke-width: 1;
+}
+
+.candleup {
+  fill: #81dfc4;
+  stroke: #81dfc4;
+}
+
+.candledown {
+  fill: #d75b6d;
+  stroke: #d75b6d;
+}
+
+.wick {
+  stroke-width: 1.5;
+}
+
+.wickup {
+  stroke: #81dfc4;
+}
+
+.wickdown {
+  stroke: #d75b6d;
+}
+
+.crosshair {
+  stroke: magenta;
+  stroke-dasharray: 3;
+}
