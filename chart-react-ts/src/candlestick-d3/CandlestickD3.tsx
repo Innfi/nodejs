@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import d3 from 'd3';
+import * as d3 from 'd3';
 import classNames from 'classnames';
+import "./styles.css";
 
 
 interface StockUnit {
