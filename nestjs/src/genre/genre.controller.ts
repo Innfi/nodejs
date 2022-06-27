@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from "@nestjs/common";
-import { CreateGenreDto } from "src/user/dto/create-genre.dto";
 
+import { CreateGenreDto } from "../user/dto/create-genre.dto";
 import { GenreService } from "./genre.service";
 
 @Controller('genre')

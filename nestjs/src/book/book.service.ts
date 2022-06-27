@@ -1,7 +1,7 @@
-import { BookEntity } from "src/db/book.entity";
-import { GenreEntity } from "src/db/genre.entity";
-import { UserEntity } from "src/db/user.entity";
-import { CreateBookDto } from "src/user/dto/create-book.dto";
+import { BookEntity } from "../db/book.entity";
+import { GenreEntity } from "../db/genre.entity";
+import { UserEntity } from "../db/user.entity";
+import { CreateBookDto } from "../user/dto/create-book.dto";
 
 
 export class BookService {
