@@ -7,22 +7,24 @@ describe('AppController', () => {
   let appService: AppService;
 
   beforeEach(async () => {
-    const app: TestingModule = await Test.createTestingModule({
+    const moduleRef: TestingModule = await Test.createTestingModule({
       controllers: [AppController],
-      providers: [AppService],
+      providers: [
+        AppService,
+      ]
     }).compile();
 
-    appController = app.get<AppController>(AppController);
-    appService = app.get<AppService>(AppService);
+    appController = moduleRef.get<AppController>(AppController);
+    appService = moduleRef.get<AppService>(AppService);
   });
 
   describe('root', () => {
-    it('controller should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+    it('controller should return "Hello World!"', async () => {
+      expect(await appController.getHello()).toBe('Hello World!');
     });
 
-    it('service should return as same', () => {
-      expect(appService.getHello()).toBe('Hello World!');
+    it('service returns same as controller', async () => {
+      expect(await appService.getHello()).toBe('Hello World!');
     });
   });
 });

@@ -1,10 +1,9 @@
 import { Response } from 'express';
-import { Body, Controller, Get, ParseIntPipe, Post, Res,
-} from "@nestjs/common";
+import { Body, Controller, Get, ParseIntPipe, Post, Res } from '@nestjs/common';
 
 import { UserEntity } from '../db/user.entity';
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UserService } from "./user.service";
+import { CreateUserDto } from './dto/create-user.dto';
+import { UserService } from './user.service';
 
 @Controller('users')
 export class UserController {

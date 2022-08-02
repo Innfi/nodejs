@@ -1,8 +1,7 @@
-import { BookEntity } from "../db/book.entity";
-import { GenreEntity } from "../db/genre.entity";
-import { UserEntity } from "../db/user.entity";
-import { CreateBookDto } from "../user/dto/create-book.dto";
-
+import { BookEntity } from '../db/book.entity';
+import { GenreEntity } from '../db/genre.entity';
+import { UserEntity } from '../db/user.entity';
+import { CreateBookDto } from '../user/dto/create-book.dto';
 
 export class BookService {
   async insert(bookDetail: CreateBookDto): Promise<BookEntity> {
@@ -12,7 +11,7 @@ export class BookService {
     book.user = await UserEntity.findOne({ where: { id: userId } });
 
     for (const genreId of genreIds) {
-      const genre = await GenreEntity.findOne({ where: { id: genreId} });
+      const genre = await GenreEntity.findOne({ where: { id: genreId } });
       book.genres.push(genre);
     }
 

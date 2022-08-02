@@ -32,7 +32,7 @@ describe('AppController (e2e)', () => {
       .post('/users')
       .send({
         name: 'innfi',
-        books: ['this', 'is', 'list']
+        books: ['this', 'is', 'list'],
       })
       .expect(200);
   });
