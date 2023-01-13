@@ -5,8 +5,10 @@ const url = 'amqp://localhost';
 type Desc = 'desc1' | 'desc2' | 'desc3';
 
 interface Payload {
-  payloadType: Desc;
-  data: string;
+  //payloadType: Desc;
+  //data: string;
+  symbol: string;
+  request_user: string;
 }
 
 amqp.connect(url, (err: any, connection: amqp.Connection) => {
@@ -23,10 +25,10 @@ amqp.connect(url, (err: any, connection: amqp.Connection) => {
       throw channelErr;
     }
 
-    const queue = 'first_queue';
+    const queue = 'trady_stock_register';
     const payload: Payload = {
-      payloadType: 'desc2',
-      data: 'dummy data',
+      symbol: 'TWTR',
+      request_user: 'innfi',
     };
     const buffer: Buffer = Buffer.from(JSON.stringify(payload));
 
