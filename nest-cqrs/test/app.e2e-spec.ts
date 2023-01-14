@@ -21,4 +21,20 @@ describe('AppController (e2e)', () => {
       .expect(200)
       .expect('Hello World!');
   });
+
+  it('/user ', () => {
+    const result = request(app.getHttpServer()).post('/user').send({
+      email: 'test@innfi.com',
+      company: 'ennfisnode',
+    });
+    result.expect({
+      id: 1,
+      email: 'test@innfi.com',
+      company: 'ennfisnode',
+    });
+
+    // return request(app.getHttpServer())
+    //   .get('/user')
+    //   .expect
+  });
 });
