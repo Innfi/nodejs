@@ -5,12 +5,9 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   UpdateDateColumn,
-  ManyToOne,
 } from 'typeorm';
 
-import { Order } from './order.entity';
-
-@Entity()
+@Entity({ name: 'products' })
 export class Product {
   @PrimaryGeneratedColumn()
   id: number;
@@ -18,8 +15,8 @@ export class Product {
   @Column()
   name: string;
 
-  @ManyToOne(() => Order, (order) => order.products)
-  order: Order;
+  @Column()
+  comment: string;
 
   @CreateDateColumn()
   created: Date;
