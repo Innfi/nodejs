@@ -3,7 +3,7 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { ProductDto } from './dto';
 
-import { Order } from './order.entity';
+import { Order, OrderItem } from './order.entity';
 import { Product } from './product.entity';
 
 @Injectable()
@@ -37,4 +37,14 @@ export class OrderService {
   }
 
   // async addOrder()
+
+  async getOrder(id: Readonly<number>): Promise<Readonly<Order>> {
+    const selectQuery = this.dataSource
+      .createQueryBuilder(Order, 'order')
+      .addSelect(['order.id', 'order.name'])
+      .innerJoinAndSelect(OrderItem, 'items')
+      .where('order.id = :id', {id});
+    
+    return await selectQuery.getOne();
+  }
 }
