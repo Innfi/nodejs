@@ -63,3 +63,5 @@ export class OrderItem {
   @DeleteDateColumn()
   deletedAt?: Date;
 }
+
+export const ORDER_WRITE_EVENT = 'Order.Write';

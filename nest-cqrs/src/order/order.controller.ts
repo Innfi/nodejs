@@ -1,7 +1,6 @@
-import { Controller, Get, Param } from "@nestjs/common";
-import { Order } from "./order.entity";
-import { OrderService } from "./order.service";
-
+import { Controller, Get, Param } from '@nestjs/common';
+import { Order } from './order.entity';
+import { OrderService } from './order.service';
 
 @Controller('order')
 export class OrderController {

@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UseInterceptors } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { ProductDto } from './dto';
 
 import { Order, OrderItem } from './order.entity';
+import { OrderInterceptor } from './order.interceptor';
 import { Product } from './product.entity';
 
 @Injectable()
@@ -38,13 +39,14 @@ export class OrderService {
 
   // async addOrder()
 
+  @UseInterceptors(OrderInterceptor)
   async getOrder(id: Readonly<number>): Promise<Readonly<Order>> {
     const selectQuery = this.dataSource
       .createQueryBuilder(Order, 'order')
       .addSelect(['order.id', 'order.name'])
       .innerJoinAndSelect(OrderItem, 'items')
-      .where('order.id = :id', {id});
-    
+      .where('order.id = :id', { id });
+
     return await selectQuery.getOne();
   }
 }
