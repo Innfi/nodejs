@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
@@ -26,6 +27,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       entities: [__dirname + '/**/*.entity.{js,ts}'],
       synchronize: false,
     }),
+    MongooseModule.forRoot('mongodb://localhost:27017'), //FIXME: forRootAsync
   ],
 })
 export class PersistenceModule {}

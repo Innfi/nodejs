@@ -8,8 +8,10 @@ import {
   OneToMany,
   ManyToOne,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 
+import { User } from 'src/user/user.entity';
 import { Product } from './product.entity';
 
 @Entity({ name: 'orders' })
@@ -53,6 +55,13 @@ export class OrderItem {
   @OneToMany(() => Product, (product) => product.id)
   @JoinColumn([{ name: 'productId', referencedColumnName: 'id' }])
   product: Product;
+
+  @Column()
+  userId: number;
+
+  @OneToOne(() => User, (user) => user.id)
+  @JoinColumn([ { name: 'userId', referencedColumnName: 'id' } ])
+  user: User;
 
   @CreateDateColumn()
   created: Date;
