@@ -27,7 +27,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       entities: [__dirname + '/**/*.entity.{js,ts}'],
       synchronize: false,
     }),
-    MongooseModule.forRoot('mongodb://localhost:27017'), //FIXME: forRootAsync
+    MongooseModule.forRootAsync({
+      useFactory: () => ({
+        url: 'mongodb://localhost:27017',
+      })
+    }),
   ],
 })
 export class PersistenceModule {}
