@@ -11,7 +11,7 @@ import {
   OneToOne,
 } from 'typeorm';
 
-import { User } from 'src/user/user.entity';
+import { User } from '../user/user.entity';
 import { Product } from './product.entity';
 
 @Entity({ name: 'orders' })
