@@ -1,14 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
+import { Injectable, Inject } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 import { Order, ORDER_WRITE_EVENT } from './order.entity';
+import { OrderDoc, OrderDocument } from './test.schema';
 
 @Injectable()
 export class OrderEventService {
-  constructor() {}
+  constructor(
+    @InjectModel(OrderDoc.name) private orderDocModel: OrderDocument
+  ) {}
 
   @OnEvent(ORDER_WRITE_EVENT, { async: true })
   async handleEvent(payload: Readonly<Order>): Promise<void> {
-    // TODO
+    console.log(`OrderEventService.handleEvent] ${JSON.stringify(payload)}`);
+
+    
   }
 }
