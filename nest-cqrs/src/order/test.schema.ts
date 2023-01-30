@@ -15,6 +15,5 @@ export class OrderDoc {
   //TODO: add orderItem
 }
 
-export const OrderDocumentSchema = SchemaFactory.createForClass(OrderDoc);
-
 export type OrderDocument = HydratedDocument<OrderDoc>;
+export const OrderDocumentSchema = SchemaFactory.createForClass(OrderDoc);

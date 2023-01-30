@@ -1,17 +1,20 @@
 import { Injectable, UseInterceptors } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import { InjectDataSource } from '@nestjs/typeorm';
+import { Model } from 'mongoose';
 import { DataSource } from 'typeorm';
-import { ProductDto } from './dto';
 
+import { ProductDto } from './dto';
+import { Product } from './product.entity';
 import { Order, OrderItem } from './order.entity';
 import { OrderInterceptor } from './order.interceptor';
-import { Product } from './product.entity';
+import { OrderDoc, OrderDocument } from './test.schema';
 
 @Injectable()
 export class OrderService {
   constructor(
-    @InjectDataSource()
-    private readonly dataSource: DataSource,
+    @InjectDataSource() private readonly dataSource: DataSource,
+    @InjectModel(OrderDoc.name) private orderDocModel: Model<OrderDocument>,
   ) {}
 
   async addProduct(dto: Readonly<ProductDto>): Promise<Product> {
@@ -37,8 +40,6 @@ export class OrderService {
     return await selectQuery.getOne();
   }
 
-  // async addOrder()
-
   @UseInterceptors(OrderInterceptor)
   async getOrder(id: Readonly<number>): Promise<Readonly<Order>> {
     const selectQuery = this.dataSource
@@ -48,5 +49,10 @@ export class OrderService {
       .where('order.id = :id', { id });
 
     return await selectQuery.getOne();
+  }
+
+  // test method
+  async getOrderDocument(name: Readonly<string>): Promise<OrderDoc> {
+    return await this.orderDocModel.findOne({ name }).lean();
   }
 }
