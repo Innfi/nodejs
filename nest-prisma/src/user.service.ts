@@ -44,4 +44,36 @@ export class UserService {
     const { where, data } = params;
     return this.prisma.user.update({ data, where });
   }
+
+  async userTransaction1(params: {
+    userWhere: Prisma.UserWhereUniqueInput;
+    userData: Prisma.UserUpdateInput;
+    productWhere: Prisma.ProductWhereUniqueInput;
+    productData: Prisma.ProductUpdateInput;
+  }): Promise<any> {
+    const { userWhere, userData, productWhere, productData } = params;
+
+    return await this.prisma.$transaction([
+      // no await inside transaction?
+      this.prisma.user.update({ where: userWhere, data: userData }),
+      this.prisma.product.update({ where: productWhere, data: productData}),
+    ]);
+  }
+
+  async userTransaction2(params: {
+    userWhere: Prisma.UserWhereUniqueInput;
+    userData: Prisma.UserUpdateInput;
+    productWhere: Prisma.ProductWhereUniqueInput;
+    productData: Prisma.ProductUpdateInput;
+  }): Promise<any> {
+    const { userWhere, userData, productWhere, productData } = params;
+
+    return await this.prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+      const updateResult = await this.prisma.user.update({ where: userWhere, data: userData });
+
+      if (!updateResult) return;
+
+      await this.prisma.product.update({ where: productWhere, data: productData});
+    });
+  }
 }
