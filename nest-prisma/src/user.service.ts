@@ -13,7 +13,19 @@ interface FindManyParam {
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) {
+    this.initLogging();
+  }
+
+  private initLogging() {
+    // TODO: how to set log param?
+
+    // this.prisma.$on('query', (e) => {
+    //   console.log('Query: ' + e.query)
+    //   console.log('Params: ' + e.params)
+    //   console.log('Duration: ' + e.duration + 'ms')
+    // });
+  }
 
   async findOne(
     input: Prisma.UserWhereUniqueInput,
@@ -76,4 +88,12 @@ export class UserService {
       await this.prisma.product.update({ where: productWhere, data: productData});
     });
   }
+
+  async deleteUserByRawQuery(params: {
+    userWhere: Prisma.UserDeleteArgs;
+  }): Promise<void> {
+    await this.prisma.$executeRaw `delete from User where id=${params.userWhere.where}`;
+  }
+
+
 }
