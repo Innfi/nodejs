@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 
 import { UserDto } from './user.dto';
 import { User } from './user.entity';
+import { TestUserDecorator } from './user.decorator';
 
 @Injectable()
 export class UserService {
@@ -33,5 +34,10 @@ export class UserService {
       .where('user.email = :email', { email });
 
     return await selectQuery.getOne();
+  }
+
+  @TestUserDecorator()
+  runDeco(email: string): string {
+    return `email: ${email}`;
   }
 }

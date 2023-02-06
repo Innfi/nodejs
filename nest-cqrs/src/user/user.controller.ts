@@ -17,4 +17,9 @@ export class UserController {
   async getUser(@Param('email') email: Readonly<string>): Promise<User> {
     return await this.userService.getUser(email);
   }
+
+  @Get('/deco')
+  runDeco(@Param('email') email: string): string {
+    return this.userService.runDeco(email);
+  }
 }
