@@ -12,7 +12,7 @@ import { OrderModule } from './order/order.module';
     EventEmitterModule.forRoot(),
     PersistenceModule,
     UserModule,
-    OrderModule,
+    // OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],
