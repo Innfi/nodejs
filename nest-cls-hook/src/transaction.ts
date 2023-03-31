@@ -1,11 +1,13 @@
-import { DataSource, getConnection, getManager } from 'typeorm';
+import { EntityManager } from 'typeorm';
 import { createNamespace } from 'cls-hooked';
+import { defaultDataSource } from './database/database.providers';
+
 
 const ENTITY_MANAGER = 'namespaces/entity-manager';
 
 const transactionNs = createNamespace('transaction');
-export const transactionHandle = (): DataSource => 
-  transactionNs.active ? transactionNs.get(ENTITY_MANAGER) : getManager();
+ export const transactionHandle = (): EntityManager => 
+   transactionNs.active ? transactionNs.get(ENTITY_MANAGER) : defaultDataSource.manager;
 
 export const Transactional = (): MethodDecorator => {
   return function (target: any, _propertyKey: string, descriptor: PropertyDescriptor): void {
@@ -18,12 +20,12 @@ export const Transactional = (): MethodDecorator => {
         const entityManager = transactionNs.get(ENTITY_MANAGER);
 
         if (!entityManager) {
-          const dataSource = getConnection();
+          const dataSource = defaultDataSource;
           const queryRunner = dataSource.createQueryRunner();
 
           await queryRunner.connect();
           await queryRunner.startTransaction();
-
+          console.log(`before transaction] `);
           try {
             transactionNs.set(ENTITY_MANAGER, queryRunner.manager);
 
@@ -31,9 +33,11 @@ export const Transactional = (): MethodDecorator => {
 
             await queryRunner.commitTransaction();
           } catch (err) {
+            console.log(`rollback transaction] `);
             queryRunner.rollbackTransaction();
             throw err;
           } finally {
+            console.log(`after transaction] `);
             queryRunner.release();
           }
 

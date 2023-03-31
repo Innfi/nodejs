@@ -1,19 +1,21 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 
-import { AppService } from './app.service';
-import { User } from './user.entity';
+import { PhotoService } from './photo/photo.service';
+import { Photo } from './photo/photo.entity';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  // constructor(private readonly appService: AppService) {}
+ 
+  constructor(private readonly photoService: PhotoService) {}
 
   @Post()
-  async addUser(@Body() payload: Partial<User>): Promise<Partial<User>> {
-    return await this.appService.create(payload);
+  async postPhoto(@Body() payload: Partial<Photo>): Promise<any> {
+    return await this.photoService.createPhoto(payload);
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number): Promise<User> {
-    return await this.appService.findOne(id);
+  async getPhoto(@Param('id') id: number): Promise<Photo> {
+    return await this.photoService.findOne(id);
   }
 }
