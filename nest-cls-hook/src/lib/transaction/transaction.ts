@@ -1,6 +1,6 @@
 import { EntityManager } from 'typeorm';
 import { createNamespace } from 'cls-hooked';
-import { defaultDataSource } from './database/database.providers';
+import { defaultDataSource } from '../../database/database.providers';
 
 
 const ENTITY_MANAGER = 'namespaces/entity-manager';

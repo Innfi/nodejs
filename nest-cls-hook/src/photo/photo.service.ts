@@ -1,8 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 
+import { Transactional, transactionHandle } from '@app/transaction/transaction';
 import { defaultDataSource } from 'src/database/database.providers';
-import { Transactional, transactionHandle } from 'src/transaction';
 import { Photo } from './photo.entity';
 
 @Injectable()
