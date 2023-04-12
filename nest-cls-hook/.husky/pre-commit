@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+targets=""
+for file in $(git diff --cached --name-only|grep -E '\.ts$')
+do
+  if [ ! -f $file ]; then
+    continue
+  fi
+  targets = "${targets} ${file}"
+done
+
+if [$targets = ""]; then
+  exit 0
+fi
+npx prettier --write $targets
+npx eslint -c .eslintrc --fix $targets
+git add $targets
