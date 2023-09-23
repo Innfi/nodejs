@@ -1,5 +1,7 @@
 import { DataGrid, GridColDef, GridRowSelectionModel, GridValueGetterParams } from '@mui/x-data-grid';
-import { FC } from 'react';
+import { FormatBold, FormatItalic, FormatUnderlined } from '@mui/icons-material';
+import { FC, MouseEvent, SyntheticEvent } from 'react';
+import { TextField } from '@mui/material';
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -38,21 +40,46 @@ const HandleItemSelect = (item: GridRowSelectionModel) => {
   console.log(`id: ${item}`);
 };
 
+
+
 export const Table: FC = () => {
+
+
+  const handleClickEvent = (e: MouseEvent) => {
+    console.log(e);
+  };
+
+  const handleSelectEvent = (e: SyntheticEvent<HTMLDivElement, Event>) => {
+    console.log(`target: ${e.target}`);
+  };
+
   return (
-    <div style={{ height: 400, width: '100%' }}>
-      <DataGrid rows={rows} columns={columns} 
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }}
+    <>
+      <div>
+        <FormatBold onClick={(e) => handleClickEvent(e)} />
+        <FormatItalic />
+        <FormatUnderlined />
+      </div>
+      <div>
+        <TextField 
+          fullWidth 
+          onSelectCapture={(e) => handleSelectEvent(e)}
+        />
+      </div>
+      <div style={{ height: 400, width: '100%' }}>
+        <DataGrid rows={rows} columns={columns} 
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
 
-        pageSizeOptions={[5, 10]}
-        checkboxSelection
+          pageSizeOptions={[5, 10]}
+          checkboxSelection
 
-        onRowSelectionModelChange={(props) => HandleItemSelect(props)}
-      />
-    </div>
+          onRowSelectionModelChange={(props) => HandleItemSelect(props)}
+        />
+      </div>
+    </>
   );
 };
