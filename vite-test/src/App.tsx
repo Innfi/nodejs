@@ -1,11 +1,12 @@
-import * as React from 'react';
+// import * as React from 'react';
 
-import { Table } from './Table';
+// import { Table } from './Table';
+import { SimpleInput } from "./SimpleInput";
 
 function App() {
   return (
     <>
-      <Table />
+      <SimpleInput />
     </>
   );
 }
