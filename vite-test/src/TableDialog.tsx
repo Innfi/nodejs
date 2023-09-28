@@ -1,4 +1,4 @@
-import { Dialog } from '@mui/material';
+import { Button, Dialog, DialogContent, DialogTitle, Paper, TextField } from '@mui/material';
 import { DataGrid, GridColDef, GridRowSelectionModel, GridValueGetterParams } from '@mui/x-data-grid';
 import { FC, useState } from 'react';
 
@@ -49,11 +49,21 @@ export interface DialogProps {
 };
 
 export const SimpleDialog = (props: DialogProps) => {
-  const { open, rowData, onClose }  = props;
+  const { open, rowData, onClose }  = props; //need state not props
 
   return (
     <Dialog onClose={onClose} open={open}>
-      {rowData?.firstName} - {rowData?.lastName}
+      <DialogTitle>{"test dialog"}</DialogTitle>
+      <DialogContent>
+        <TextField label="first name" value={rowData?.firstName} />
+        <TextField label="last name" value={rowData?.lastName} />
+
+        <Button variant="contained" color="primary">edit</Button>
+        <Button 
+          variant="contained" 
+          color="secondary"
+        >close</Button>
+      </DialogContent>
     </Dialog>
   );
 };
@@ -66,7 +76,9 @@ export const Table: FC = () => {
     if (!props) return;
     console.log(`handleSelect: ${props[0]}`);
 
-    setTargetRow(rows[props[0] as number]);
+    const row = rows.find((unit) => unit.id === props[0]);
+
+    setTargetRow(row);
     setOpen(true);
   };
 
@@ -84,7 +96,6 @@ export const Table: FC = () => {
         }}
 
         pageSizeOptions={[5, 10]}
-        checkboxSelection
 
         onRowSelectionModelChange={(props) => handleSelect(props) }
       />
