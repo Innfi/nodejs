@@ -50,15 +50,36 @@ export interface DialogProps {
 
 export const SimpleDialog = (props: DialogProps) => {
   const { open, rowData, onClose }  = props; //need state not props
+  const [edit, setEdit] = useState(true);
+
+  const onClick = () => {
+    setEdit(true);
+  };
 
   return (
     <Dialog onClose={onClose} open={open}>
       <DialogTitle>{"test dialog"}</DialogTitle>
       <DialogContent>
-        <TextField label="first name" value={rowData?.firstName} />
-        <TextField label="last name" value={rowData?.lastName} />
+        <TextField 
+          label="first name" 
+          value={rowData?.firstName} 
+          InputProps={{
+            readOnly: edit
+          }}
+        />
+        <TextField 
+          label="last name" 
+          value={rowData?.lastName} 
+          InputProps={{
+            readOnly: edit
+          }}
+        />
 
-        <Button variant="contained" color="primary">edit</Button>
+        <Button 
+          variant="contained" 
+          color="primary"
+          onClick={() => onClick()}
+        >edit</Button>
         <Button 
           variant="contained" 
           color="secondary"
