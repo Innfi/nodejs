@@ -1,6 +1,6 @@
-import { Button, Dialog, DialogContent, DialogTitle, Paper, TextField } from '@mui/material';
+import { Button, Dialog, DialogContent, DialogTitle, Divider, InputProps, TextField } from '@mui/material';
 import { DataGrid, GridColDef, GridRowSelectionModel, GridValueGetterParams } from '@mui/x-data-grid';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -44,45 +44,60 @@ const rows: RowUnit[] = [
 
 export interface DialogProps {
   open: boolean;
+  setOpen: Function;
   rowData: RowUnit|undefined;
   onClose: () => void;
 };
 
 export const SimpleDialog = (props: DialogProps) => {
-  const { open, rowData, onClose }  = props; //need state not props
-  const [edit, setEdit] = useState(true);
+  const { open, setOpen, rowData, onClose }  = props; //need state not props
 
-  const onClick = () => {
-    setEdit(true);
+  const [inputProps, setInputProps] = useState<Partial<InputProps>>({
+    readOnly: true,
+  });
+
+  const toggleEdit = () => {
+    if (inputProps.readOnly === false) return;
+
+    setInputProps({
+      readOnly: false,
+    });
   };
 
   return (
-    <Dialog onClose={onClose} open={open}>
+    <Dialog 
+      onClose={onClose} 
+      open={open} 
+      sx={{ mx: 'auto', width: 500, height: 800}}
+    >
       <DialogTitle>{"test dialog"}</DialogTitle>
       <DialogContent>
         <TextField 
           label="first name" 
-          value={rowData?.firstName} 
-          InputProps={{
-            readOnly: edit
-          }}
+          variant='outlined'
+          defaultValue={rowData?.firstName} 
+          InputProps={inputProps}
+          sx={{ m: 2 }}
         />
         <TextField 
           label="last name" 
-          value={rowData?.lastName} 
-          InputProps={{
-            readOnly: edit
-          }}
+          variant='outlined'
+          defaultValue={rowData?.lastName} 
+          sx={{ m: 2 }}
+          InputProps={inputProps}
         />
-
+        <Divider />
         <Button 
           variant="contained" 
           color="primary"
-          onClick={() => onClick()}
+          onClick={() => toggleEdit()}
+          sx={{ m: 2 }}
         >edit</Button>
         <Button 
           variant="contained" 
           color="secondary"
+          onClick={() => setOpen(false)}
+          sx={{ m: 2 }}
         >close</Button>
       </DialogContent>
     </Dialog>
@@ -95,7 +110,6 @@ export const Table: FC = () => {
 
   const handleSelect = (props: GridRowSelectionModel) => {
     if (!props) return;
-    console.log(`handleSelect: ${props[0]}`);
 
     const row = rows.find((unit) => unit.id === props[0]);
 
@@ -122,6 +136,7 @@ export const Table: FC = () => {
       />
       <SimpleDialog 
         open={open} 
+        setOpen={setOpen}
         rowData={targetRow}
         onClose={handleClose}
       />
