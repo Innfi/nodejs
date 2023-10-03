@@ -70,7 +70,7 @@ export const SimpleDialog = (props: DialogProps) => {
       open={open} 
       sx={{ mx: 'auto', width: 500, height: 800}}
     >
-      <DialogTitle>{"test dialog"}</DialogTitle>
+      <DialogTitle>{"Row detail"}</DialogTitle>
       <DialogContent>
         <TextField 
           label="first name" 
@@ -123,7 +123,10 @@ export const Table: FC = () => {
 
   return (
     <div style={{ height: 400, width: '100%' }}>
-      <DataGrid rows={rows} columns={columns} 
+      <DataGrid 
+        rows={rows} 
+        columns={columns} 
+        sx={{ m: 2 }}
         initialState={{
           pagination: {
             paginationModel: { page: 0, pageSize: 5 },
@@ -131,7 +134,6 @@ export const Table: FC = () => {
         }}
 
         pageSizeOptions={[5, 10]}
-
         onRowSelectionModelChange={(props) => handleSelect(props) }
       />
       <SimpleDialog 
