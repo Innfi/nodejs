@@ -25,10 +25,12 @@ a:hover {
 
 body {
   margin: 0;
+  padding: 0.6em 1.2em;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  border: 10px solid #747bff;
 }
 
 h1 {
@@ -66,4 +68,8 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.awesome {
+  border: 5px solid #747bff;
 }

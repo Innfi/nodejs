@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogContent, DialogTitle, Divider, InputProps, TextField } from '@mui/material';
 import { DataGrid, GridColDef, GridRowSelectionModel, GridValueGetterParams } from '@mui/x-data-grid';
 import { FC, useState } from 'react';
-import { useQuery, useMutation } from '@tanstack/react-query';
+// import { useQuery, useMutation } from '@tanstack/react-query';
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -43,15 +43,15 @@ const rows: RowUnit[] = [
   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
 ];
 
-const postRow = async (newRow: RowUnit): Promise<RowUnit[]>=> {
-  const targetRow = rows.find((v) => v.id === newRow.id);
-
-  targetRow!.firstName = newRow.firstName;
-  targetRow!.lastName = newRow.lastName;
-  targetRow!.age = newRow.age;
-
-  return rows;
-}
+// const postRow = async (newRow: RowUnit): Promise<RowUnit[]>=> {
+//   const targetRow = rows.find((v) => v.id === newRow.id);
+// 
+//   targetRow!.firstName = newRow.firstName;
+//   targetRow!.lastName = newRow.lastName;
+//   targetRow!.age = newRow.age;
+// 
+//   return rows;
+// }
 
 export interface DialogProps {
   open: boolean;
@@ -61,7 +61,7 @@ export interface DialogProps {
 };
 
 export const SimpleDialog = (props: DialogProps) => {
-  const { mutate: editRow } = useMutation(postRow);
+  // const { mutate: editRow } = useMutation(postRow);
 
   const { open, setOpen, rowData, onClose }  = props; //need state not props
 
@@ -69,8 +69,8 @@ export const SimpleDialog = (props: DialogProps) => {
     readOnly: true,
   });
 
-  const toggleEdit = (e: MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    console.log(`target: ${ e.target}`);
+  const toggleEdit = () => {
+    // console.log(`target: ${ e.target}`);
 
     if (inputProps.readOnly === false) return;
 
@@ -79,10 +79,10 @@ export const SimpleDialog = (props: DialogProps) => {
     });
   };
 
-  const applyEdit = (newRow: RowUnit) => {
-    editRow(newRow);
-  };
-
+  // const applyEdit = (newRow: RowUnit) => {
+  //   editRow(newRow);
+  // };
+  
   return (
     <Dialog 
       onClose={onClose} 
@@ -92,6 +92,8 @@ export const SimpleDialog = (props: DialogProps) => {
       <DialogTitle>{"Row detail"}</DialogTitle>
       <DialogContent>
         <TextField 
+          // className='.awesome'
+          className="css.awesome"
           label="first name" 
           variant='outlined'
           defaultValue={rowData?.firstName} 
@@ -109,7 +111,7 @@ export const SimpleDialog = (props: DialogProps) => {
         <Button 
           variant="contained" 
           color="primary"
-          onClick={(e) => toggleEdit(e)}
+          onClick={() => toggleEdit()}
           sx={{ m: 2 }}
         >edit</Button>
         <Button 
@@ -127,10 +129,10 @@ export const Table: FC = () => {
   const [open, setOpen] = useState(false);
   const [targetRow, setTargetRow] = useState<RowUnit>();
 
-  const gameRows = useQuery({
-    queryKey: ['rows'],
-    initialData: rows,
-  });
+  // const gameRows = useQuery({
+  //   queryKey: ['rows'],
+  //   initialData: rows,
+  // });
 
   const handleSelect = (props: GridRowSelectionModel) => {
     if (!props) return;
@@ -148,7 +150,8 @@ export const Table: FC = () => {
   return (
     <div style={{ height: 400, width: '100%' }}>
       <DataGrid 
-        rows={gameRows.data} 
+        // rows={gameRows.data} 
+        rows={rows}
         columns={columns} 
         sx={{ m: 2 }}
         initialState={{
