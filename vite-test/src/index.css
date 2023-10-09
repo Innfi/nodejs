@@ -73,3 +73,19 @@ button:focus-visible {
 .awesome {
   border: 5px solid #747bff;
 }
+
+.initial-element{
+  align-items: center;
+}
+
+.table-dialog {
+  align-items: center;
+  background-color: aqua;
+}
+
+.my-element {
+  align-items: center;
+  height: 400;
+  width: '100%';
+  flex-wrap: wrap;
+}

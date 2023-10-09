@@ -7,9 +7,9 @@ import { Table } from "./TableDialog";
 
 function App() {
   return (
-    <>
+    <div className="table-dialog">
       <Table />
-    </>
+    </div>
   );
 }
 

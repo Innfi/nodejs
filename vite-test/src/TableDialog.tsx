@@ -148,8 +148,9 @@ export const Table: FC = () => {
   };
 
   return (
-    <div style={{ height: 400, width: '100%' }}>
+    <div>
       <DataGrid 
+        className="my-element"
         // rows={gameRows.data} 
         rows={rows}
         columns={columns} 
