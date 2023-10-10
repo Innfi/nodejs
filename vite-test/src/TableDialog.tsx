@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogContent, DialogTitle, Divider, InputProps, TextField } from '@mui/material';
+import { Button, Dialog, DialogContent, DialogTitle, Divider, Grid, InputProps, TextField } from '@mui/material';
 import { DataGrid, GridColDef, GridRowSelectionModel, GridValueGetterParams } from '@mui/x-data-grid';
 import { FC, useState } from 'react';
 // import { useQuery, useMutation } from '@tanstack/react-query';
@@ -149,21 +149,25 @@ export const Table: FC = () => {
 
   return (
     <div>
-      <DataGrid 
-        className="my-element"
-        // rows={gameRows.data} 
-        rows={rows}
-        columns={columns} 
-        sx={{ m: 2 }}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }}
+      <Grid container spacing={2}>
+        <Grid item xs={2} />
+        <Grid item xs={20}>
+          <DataGrid 
+            className="my-element"
+            // rows={gameRows.data} 
+            rows={rows}
+            columns={columns} 
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 },
+              },
+            }}
 
-        pageSizeOptions={[5, 10]}
-        onRowSelectionModelChange={(props) => handleSelect(props) }
-      />
+            pageSizeOptions={[5, 10]}
+            onRowSelectionModelChange={(props) => handleSelect(props) }
+          />
+        </Grid>
+      </Grid>
       <SimpleDialog 
         open={open} 
         setOpen={setOpen}
