@@ -1,35 +1,18 @@
-import { atom, useSetAtom, useAtomValue } from 'jotai';
+import { useSetAtom } from 'jotai';
 import { useCallback } from 'react';
 
-interface SubState {
-  id: number;
-  productTag: string;
-  memo: string;
-}
+import { current, ClientState } from './state/client-state';
+import { Display } from './display';
 
-interface ClientState {
-  id: number;
-  name: string;
-  attrs: SubState[];
-}
-
-const current = atom<ClientState>({
-  id: 0,
-  name: 'initial',
-  attrs: [],
-});
 let counter = 0;
 
 export const App = () => {
   const setClientState = useSetAtom(current);
 
   const handleClick = useCallback(() => {
-    console.log(`handleClick] `);
     counter++;
 
     setClientState((prev: ClientState) => {
-      console.log(`setClientState] `);
-
       return {
         ...prev,
         attrs: [
@@ -48,17 +31,6 @@ export const App = () => {
     <div>
       <button onClick={() => handleClick()}>add</button>
       <Display />
-    </div>
-  );
-};
-
-const Display = () => {
-  //const display = useAtomValue(priceAtom);
-  const display = useAtomValue(current);
-
-  return (
-    <div>
-      {JSON.stringify(display)}
     </div>
   );
 };
