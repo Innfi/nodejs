@@ -35,7 +35,7 @@ const DatePickerLocal = (param: DatePickerParam) => {
 };
 
 export const FormTestDialog = () => {
-  const [open, setOpen] = useState(false);
+  const [open, _setOpen] = useState(false);
 
   const {
     register,
