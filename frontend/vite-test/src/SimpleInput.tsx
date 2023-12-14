@@ -1,5 +1,5 @@
-import { Button, Grid } from "@mui/material";
-import { ChangeEvent, FC, useState } from "react";
+import { Button, Grid, Pagination } from "@mui/material";
+import { ChangeEvent, FC, MouseEvent, useState } from "react";
 
 
 export const SimpleInput: FC = () => {
@@ -17,7 +17,11 @@ export const SimpleInput: FC = () => {
 
 		reader.readAsDataURL(file);
 	};
-	
+
+	const handleClickPagination = (index: number) => {
+		console.log(`index: ${index}`);
+	};
+
 	return (
 		<>
 			<Grid container direction="column" alignItems="center">
@@ -31,6 +35,12 @@ export const SimpleInput: FC = () => {
 					<input accept="image/*" type="file" onChange={(e) => handleUploadImage(e)} />
 				</Button>
 			</div>
+			<Pagination 
+				sx={{ marginTop: "2px" }}
+				count={10} 
+				color="primary" 
+				onChange={(e, index) => handleClickPagination(index)} 
+			/>
 		</>
 	);
 };
