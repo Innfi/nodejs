@@ -19,7 +19,7 @@ import { SignInPayload, usePostSignIn } from './api/dummy';
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export const SignInSide = () => {
+export const SignInForm = () => {
   const signinMutation = usePostSignIn('/singin');
 
   const { register, handleSubmit } = useForm<SignInPayload>();
@@ -28,8 +28,11 @@ export const SignInSide = () => {
     const response = await signinMutation.mutateAsync(payload);
 
     if (!response) {
-
+      alert('no response from backend');
+      return;
     }
+
+    console.log(`response: ${JSON.stringify(response)}`);
   };
 
   return (
