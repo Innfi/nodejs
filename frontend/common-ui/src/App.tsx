@@ -13,6 +13,7 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 
 import { SignInPayload, usePostSignIn } from './api/dummy';
 
@@ -21,6 +22,7 @@ const defaultTheme = createTheme();
 
 export const SignInForm = () => {
   const signinMutation = usePostSignIn('/singin');
+  const navigate = useNavigate();
 
   const { register, handleSubmit } = useForm<SignInPayload>();
 
@@ -33,6 +35,12 @@ export const SignInForm = () => {
     }
 
     console.log(`response: ${JSON.stringify(response)}`);
+    const {accessToken, refreshToken} = response;
+
+    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("refreshToken", refreshToken);
+
+    navigate('/page1');
   };
 
   return (

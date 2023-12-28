@@ -16,6 +16,8 @@ export interface SignInPayload {
 
 export interface SignInResponse {
   username: string;
+  accessToken: string;
+  refreshToken: string;
 }
 
 export const usePostSignIn = (path: string) => {
