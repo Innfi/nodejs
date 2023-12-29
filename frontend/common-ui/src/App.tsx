@@ -21,7 +21,7 @@ import { SignInPayload, usePostSignIn } from './api/dummy';
 const defaultTheme = createTheme();
 
 export const SignInForm = () => {
-  const signinMutation = usePostSignIn('/singin');
+  const signinMutation = usePostSignIn();
   const navigate = useNavigate();
 
   const { register, handleSubmit } = useForm<SignInPayload>();

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useMutation } from 'react-query';
 
 const handle = axios.create({
-  baseURL: 'http://localhost:8080',
+  baseURL: 'http://localhost:3000',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json'
@@ -20,9 +20,9 @@ export interface SignInResponse {
   refreshToken: string;
 }
 
-export const usePostSignIn = (path: string) => {
+export const usePostSignIn = () => {
   return useMutation(async (payload: SignInPayload) => {
-    const response = await handle.post<SignInResponse>(path, payload);
+    const response = await handle.post<SignInResponse>('/user/signin', payload);
 
     return response.data;
   });
