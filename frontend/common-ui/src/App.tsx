@@ -14,8 +14,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 
 import { SignInPayload, usePostSignIn } from './api/dummy';
+import { initialClientState } from './states/client.state';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -25,6 +27,7 @@ export const SignInForm = () => {
   const navigate = useNavigate();
 
   const { register, handleSubmit } = useForm<SignInPayload>();
+  const setUserData = useSetRecoilState(initialClientState);
 
   const onSubmitHandler: SubmitHandler<SignInPayload> = async (payload) => {
     const response = await signinMutation.mutateAsync(payload);
@@ -39,6 +42,12 @@ export const SignInForm = () => {
 
     localStorage.setItem("accessToken", accessToken);
     localStorage.setItem("refreshToken", refreshToken);
+
+    setUserData({
+      email: payload.email,
+      accessToken,
+      refreshToken,
+    });
 
     navigate('/page1');
   };
