@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Logger, Post } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Get, Logger, Post } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 
 export interface User {
@@ -35,6 +35,34 @@ export class UserController {
     return {
       accessToken,
       refreshToken,
+    };
+  }
+
+  @Post('/signup')
+  async postSignUp(@Body() signinPayload: Readonly<User>): Promise<void> {
+    Logger.log(`signup] ${signinPayload.email}, ${signinPayload.pass}`);
+
+    const {email, pass} = signinPayload;
+
+    if (!email || !pass) {
+      throw new BadRequestException('invalid params');
+    }
+
+    // TODO: save to db
+  }
+
+  @Post('refresh')
+  async postRefreshToken(@Body() payload: Readonly<UserSession>): Promise<UserSession> {
+    const { accessToken, refreshToken } = payload;
+    Logger.log(`refresh] accessToken: ${accessToken}, refreshToken: ${refreshToken}`);
+
+    if (!accessToken) {
+      throw new BadRequestException('invalid accessToken');
+    }
+
+    return {
+      accessToken: 'newAccessToken', 
+      refreshToken: 'newRefreshToken',
     };
   }
 }
