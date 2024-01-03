@@ -20,10 +20,27 @@ export interface SignInResponse {
   refreshToken: string;
 }
 
+export interface UserSession {
+  accessToken: string;
+  refreshToken: string;
+}
+
 export const usePostSignIn = () => {
   return useMutation(async (payload: SignInPayload) => {
     const response = await handle.post<SignInResponse>('/user/signin', payload);
 
     return response.data;
+  });
+};
+
+export const usePostRefreshSession = () => {
+  return useMutation(async (payload: UserSession) => {
+    const response = await handle.post<UserSession>('/user/refresh', payload);
+
+    if (response.status === 200) {
+      return response.data;
+    }
+
+    // TODO: handler token refresh error
   });
 };

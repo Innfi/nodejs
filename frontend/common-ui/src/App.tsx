@@ -33,6 +33,7 @@ export const SignInForm = () => {
     const response = await signinMutation.mutateAsync(payload);
 
     if (!response) {
+      // FIXME: handle no response or invalid signin payload
       alert('no response from backend');
       return;
     }
