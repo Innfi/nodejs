@@ -4,6 +4,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { SignInForm } from "./App";
 import { SimplePageFirst } from "./pages/page1";
 import { SimplePageSecond } from "./pages/page2";
+import { SimpleHtmlEditor } from "./pages/editor";
 
 export const router = createBrowserRouter([
   {
@@ -21,5 +22,9 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <Typography>initial page</Typography>
+  },
+  {
+    path: '/editor',
+    element: <SimpleHtmlEditor />
   }
 ]);
