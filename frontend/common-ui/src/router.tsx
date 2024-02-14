@@ -5,6 +5,7 @@ import { SignInForm } from "./App";
 import { SimplePageFirst } from "./pages/page1";
 import { SimplePageSecond } from "./pages/page2";
 import { SimpleHtmlEditor } from "./pages/editor";
+import { EditorCK } from "./pages/editorCK";
 
 export const router = createBrowserRouter([
   {
@@ -26,5 +27,9 @@ export const router = createBrowserRouter([
   {
     path: '/editor',
     element: <SimpleHtmlEditor />
+  },
+  {
+    path: '/editorck',
+    element: <EditorCK />
   }
 ]);

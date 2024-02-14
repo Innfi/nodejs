@@ -11,6 +11,13 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding-left: 10px;
+}
+
+:editor {
+  width: 100%;
+  background-color: #1a1a1a;
+  padding-left: 20px;
 }
 
 a {
