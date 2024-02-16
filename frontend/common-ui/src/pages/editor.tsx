@@ -1,4 +1,4 @@
-import { Box, Card, Grid, Typography } from "@mui/material";
+import { Box, Card, Grid, TextField, Typography } from "@mui/material";
 import { useMemo, useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
@@ -32,6 +32,27 @@ export const SimpleHtmlEditor = () => {
   return (
     <Grid container spacing={2} sx={{ display: "flex" }}>
       <Grid item xs={6}>
+        <TextField sx={{
+          width: 800,
+          "& .MuiInputBase-root": {
+            height: 800,
+          }
+        }}
+        multiline 
+        rows={50}
+        onChange={(e) => onChange(e.target.value)}
+        value={data} 
+      />
+      </Grid>
+      <Grid item xs={6}>
+        <div dangerouslySetInnerHTML={{ __html: data }} />
+      </Grid>
+    </Grid>
+  );
+};
+
+/**
+      <Grid item xs={6}>
         <ReactQuill 
           ref={(element: ReactQuill) => {
             if (!element) return;
@@ -45,20 +66,5 @@ export const SimpleHtmlEditor = () => {
           onChange={(e) => onChange(e)}
         />
       </Grid>
-      <Grid item xs={6}>
-        <div dangerouslySetInnerHTML={{ __html: data }} />
-      </Grid>
-    </Grid>
-  );
-};
-
-/**
  * 
-        <Box sx={{ minWidth: 300, minHeight: 400}}>
-          <Card variant="outlined">
-            <Typography variant="body2" gutterBottom>
-              {data}
-            </Typography>
-          </Card>
-        </Box>
  */
