@@ -19,7 +19,6 @@ import { useSetRecoilState } from 'recoil';
 import { SignInPayload, usePostSignIn } from './api/dummy';
 import { initialClientState } from './states/client.state';
 
-// TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export const SignInForm = () => {
@@ -38,7 +37,6 @@ export const SignInForm = () => {
       return;
     }
 
-    console.log(`response: ${JSON.stringify(response)}`);
     const {accessToken, refreshToken} = response;
 
     localStorage.setItem("accessToken", accessToken);

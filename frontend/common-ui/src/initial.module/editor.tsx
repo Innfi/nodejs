@@ -50,21 +50,3 @@ export const SimpleHtmlEditor = () => {
     </Grid>
   );
 };
-
-/**
-      <Grid item xs={6}>
-        <ReactQuill 
-          ref={(element: ReactQuill) => {
-            if (!element) return;
-
-            quillRef.current = element;
-          }}
-          modules={quillModules} 
-          theme="snow"
-          placeholder="edit from here"
-          value={data}
-          onChange={(e) => onChange(e)}
-        />
-      </Grid>
- * 
- */
