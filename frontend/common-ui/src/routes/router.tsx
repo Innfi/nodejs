@@ -1,10 +1,10 @@
 import { Typography } from "@mui/material";
-import { createBrowserRouter } from "react-router-dom";
+import { RouteObject, useRoutes } from "react-router-dom";
 
-import { SignInForm } from "../App";
+import { SignInForm } from "../common/auth/signin";
 import { initialRoutes } from "../initial.module/routes";
 
-export const router = createBrowserRouter([
+export const routes: RouteObject[] = [
   {
     path: '/signin',
     element: <SignInForm />
@@ -14,4 +14,8 @@ export const router = createBrowserRouter([
     path: '/',
     element: <Typography>initial page</Typography>
   },
-]);
+];
+
+export function RenderRouter() {
+  return useRoutes(routes);
+}
