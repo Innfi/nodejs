@@ -4,6 +4,7 @@ import { RouteObject } from "react-router";
 import { SimpleHtmlEditor } from "./editor";
 import { SimplePageFirst } from "./page1";
 import { SimplePageSecond } from "./page2";
+import { AuthorizedPage } from "../common/auth/route.page";
 
 export const initialRoutes: RouteObject[] = [
   {
@@ -16,6 +17,10 @@ export const initialRoutes: RouteObject[] = [
   },
   {
     path: '/editor',
-    element: <SimpleHtmlEditor />,
+    element: (
+      <AuthorizedPage auth={true}>
+        <SimpleHtmlEditor />,
+      </AuthorizedPage>
+    ),
   },
 ];
