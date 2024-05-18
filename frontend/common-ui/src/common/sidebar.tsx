@@ -5,7 +5,7 @@ import { Outlet } from "react-router";
 
 export function SideBarPage() {
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', flexDirection: "row" }}>
       <Drawer variant="permanent" anchor="left" sx={{ 
           flexShrink: 0,
           '& .MuiDrawer-paper': { width: 240, boxSizing: 'border-box' },
@@ -32,7 +32,13 @@ export function SideBarPage() {
         </List>
         </Box>
       </Drawer>
-      <Box component="main">
+      <Box component="main" sx={{ 
+          flexGrow: 1, 
+          p: 3, 
+          zIndex: (theme) => theme.zIndex.appBar+1,
+          paddingLeft: "240px",
+          padding: "200px"
+      }}>
         <Outlet />
       </Box>
     </Box>
