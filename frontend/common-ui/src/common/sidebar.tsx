@@ -7,7 +7,11 @@ export function SideBarPage() {
     <Box sx={{ display: 'flex' }}>
       <Drawer variant="permanent" anchor="left" sx={{ 
           flexShrink: 0,
-          '& .MuiDrawer-paper': { width: 240, boxSizing: 'border-box' },
+          '& .MuiDrawer-paper': { 
+            position: 'relative',
+            width: 240, 
+            boxSizing: 'border-box'
+          },
       }}>
         <Toolbar />
         <Box sx={{ overflow: 'auto' }}>
@@ -36,7 +40,10 @@ export function SideBarPage() {
           height: "100vh",
           overflow: "auto",
           backgroundColor: "#f5f5f5",
+          marginLeft: "10px",
+          marginTop: "10px",
       }}>
+        <Toolbar />
         <Outlet />
       </Box>
     </Box>

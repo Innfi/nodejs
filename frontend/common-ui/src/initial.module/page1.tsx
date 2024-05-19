@@ -1,4 +1,4 @@
-import { Container, Grid, Toolbar, Typography } from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 
 export const SimplePageFirst = () => {
   console.log(`SimplePageFirst] `);
@@ -6,7 +6,6 @@ export const SimplePageFirst = () => {
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
     <Grid container spacing={3}>
-      <Toolbar />
       <Typography variant="h6" component="h6">
         Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
           eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
