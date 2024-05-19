@@ -1,10 +1,13 @@
-import { Toolbar, Typography } from "@mui/material";
+import { Container, Grid, Toolbar, Typography } from "@mui/material";
 
 export const SimplePageFirst = () => {
+  console.log(`SimplePageFirst] `);
+
   return (
-    <div>
+    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+    <Grid container spacing={3}>
       <Toolbar />
-      <Typography variant="h1" component="h2">
+      <Typography variant="h6" component="h6">
         Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
           eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
           neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra
@@ -17,6 +20,7 @@ export const SimplePageFirst = () => {
           eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
           posuere sollicitudin aliquam ultrices sagittis orci a.
       </Typography>
-    </div>
+    </Grid>
+    </Container>
   );
 };
