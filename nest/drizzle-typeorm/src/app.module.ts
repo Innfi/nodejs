@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 
-import { OrderModule } from './order/order.modules';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { PersistenceModule } from './persistence.module';
+import { OrderModule } from './order/order.modules';
 
 @Module({
-  imports: [OrderModule],
+  imports: [PersistenceModule, OrderModule],
   controllers: [AppController],
   providers: [AppService],
 })
