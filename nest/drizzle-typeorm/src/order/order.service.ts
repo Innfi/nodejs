@@ -14,10 +14,14 @@ import {
   UpdateOrderResult,
 } from './payload';
 import { PersistenceTypeOrm } from './persistence.typeorm';
+import { PersistenceDrizzleOrm } from './persistence.drizzle';
 
 @Injectable()
 export class OrderService {
-  constructor(private readonly persistence: PersistenceTypeOrm) {}
+  constructor(
+    private readonly persistence: PersistenceTypeOrm,
+    private readonly alternative: PersistenceDrizzleOrm,
+  ) {}
 
   async createOrder(payload: CreateOrderPayload): Promise<CreateOrderResult> {
     return {
@@ -45,6 +49,16 @@ export class OrderService {
 
   async findOrderDetail(id: number): Promise<FindOrderDetailResult> {
     const order = await this.persistence.findOrderDetail(id);
+    if (!order) throw new NotFoundException();
+
+    return {
+      result: 'ok',
+      order,
+    };
+  }
+
+  async findOrderDetail2(id: number) {
+    const order = await this.alternative.findOrderDetail(id);
     if (!order) throw new NotFoundException();
 
     return {

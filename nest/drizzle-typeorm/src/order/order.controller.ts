@@ -36,6 +36,11 @@ export class OrderController {
     return await this.service.findOrderDetail(orderId);
   }
 
+  @Get('/d/:orderId')
+  async findOrderDetailDrizzle(@Param('orderId') orderId: number) {
+    return await this.service.findOrderDetail2(orderId);
+  }
+
   @Patch(':orderId')
   async patchOrder(
     @Param('orderId') orderId: number,
