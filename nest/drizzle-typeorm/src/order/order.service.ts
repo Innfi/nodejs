@@ -1,7 +1,13 @@
-import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import {
   CreateOrderPayload,
   CreateOrderResult,
+  FindOrderDetailResult,
   FindOrderParams,
   FindOrdersResult,
   UpdateOrderPayload,
@@ -28,14 +34,23 @@ export class OrderService {
       return {
         result: 'ok',
         orders,
-        len
+        len,
       };
-
     } catch (err: unknown) {
       Logger.error((err as Error).stack);
 
       throw new InternalServerErrorException();
     }
+  }
+
+  async findOrderDetail(id: number): Promise<FindOrderDetailResult> {
+    const order = await this.persistence.findOrderDetail(id);
+    if (!order) throw new NotFoundException();
+
+    return {
+      result: 'ok',
+      order,
+    };
   }
 
   async updateOrder(orderId: number, payload: UpdateOrderPayload): Promise<UpdateOrderResult> {

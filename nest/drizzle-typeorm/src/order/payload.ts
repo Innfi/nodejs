@@ -1,4 +1,4 @@
-import { Order } from './order.entity';
+import { Order } from './entity/order.entity';
 
 export interface CreateOrderPayload {}
 
@@ -16,6 +16,11 @@ export interface FindOrdersResult {
   result: string;
   orders?: Order[];
   len: number;
+}
+
+export interface FindOrderDetailResult {
+  result: string;
+  order?: Order;
 }
 
 export interface UpdateOrderPayload {}

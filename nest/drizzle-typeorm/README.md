@@ -6,10 +6,10 @@
 
 # TODO
 # ------------------------------------------------------------------------------
-* setup a basic entity relation (1 - n - n will fit) in typeorm syntax
-* add a CRUD operations around the relation (through the api layer)
 * rewrite a drizzle orm version of database operations
 * compare the two methods result in the same output
 
 # DONE
 # ------------------------------------------------------------------------------
+* setup a basic entity relation (1 - n - n will fit) in typeorm syntax
+* add a CRUD operations around the relation (through the api layer)

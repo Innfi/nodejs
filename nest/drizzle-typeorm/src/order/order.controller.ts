@@ -3,6 +3,7 @@ import { Body, Controller, Get, Logger, Param, Patch, Post, Query } from '@nestj
 import {
   CreateOrderPayload,
   CreateOrderResult,
+  FindOrderDetailResult,
   FindOrderParams,
   FindOrdersResult,
   UpdateOrderPayload,
@@ -26,6 +27,13 @@ export class OrderController {
     Logger.log(`findOrders] query: ${JSON.stringify(query)}`);
 
     return await this.service.findOrders(query);
+  }
+
+  @Get(':orderId')
+  async findOrderDetail(@Param('orderId') orderId: number): Promise<FindOrderDetailResult> {
+    Logger.log(`findOrderDetail] id: ${orderId}`);
+
+    return await this.service.findOrderDetail(orderId);
   }
 
   @Patch(':orderId')
