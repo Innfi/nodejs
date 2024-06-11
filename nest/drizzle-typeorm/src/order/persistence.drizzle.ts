@@ -7,6 +7,42 @@ import * as drizzleSchema from '../db/drizzle/schema';
 type Order = typeof drizzleSchema.orders.$inferSelect;
 
 // https://orm.drizzle.team/docs/joins
+// https://github.com/drizzle-team/drizzle-orm/blob/main/docs/joins.md
+
+/** is this mandatory?......
+
+  import { InferModel } from 'drizzle-orm';
+
+  type User = InferModel<typeof users>;
+  type City = InferModel<typeof cities>;
+
+  const rows = await db
+    .select({
+      city: cities,
+      user: users,
+    })
+    .from(cities)
+    .leftJoin(users, eq(users.cityId, cities.id));
+
+  const result = rows.reduce<Record<number, { city: City; users: User[] }>>(
+    (acc, row) => {
+      const city = row.city;
+      const user = row.user;
+
+      if (!acc[city.id]) {
+        acc[city.id] = { city, users: [] };
+      }
+
+      if (user) {
+        acc[city.id].users.push(user);
+      }
+
+      return acc;
+    },
+    {},
+  );
+
+ */
 
 @Injectable()
 export class PersistenceDrizzleOrm {
