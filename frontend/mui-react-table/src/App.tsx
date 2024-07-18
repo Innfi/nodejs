@@ -100,7 +100,15 @@ export function App() {
 
   const table = useMaterialReactTable({
     columns,
-    data, //data must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    data, 
+    muiTableBodyRowProps: ({ row }) => ({
+      onClick: (event) => {
+        console.info(event, row.id);
+      },
+      sx: {
+        cursor: 'pointer',
+      },
+    }),
   });
 
   return <MaterialReactTable table={table} />;
