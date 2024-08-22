@@ -1,7 +1,10 @@
 import { Box, Card, Grid, TextField, Typography } from "@mui/material";
 import { useMemo, useRef, useState } from "react";
+import { useRecoilState } from "recoil";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
+
+import { counterSelector } from "../common/state";
 
 const initData: string = `
   <body>
@@ -14,6 +17,7 @@ const initData: string = `
 
 export const SimpleHtmlEditor = () => {
   const [data, setData] = useState(initData);
+  const [counter, setCounter] = useRecoilState(counterSelector);
 
   const quillRef = useRef<ReactQuill>();
   const quillModules = useMemo(() => ({
@@ -26,11 +30,13 @@ export const SimpleHtmlEditor = () => {
   }), []);
 
   const onChange = (e: string) => {
+    setCounter(counter +1);
     setData(e);
   };
 
   return (
     <Grid container spacing={2} sx={{ display: "flex" }}>
+      <Grid item xs={6}>{counter}</Grid>
       <Grid item xs={6}>
         <TextField sx={{
           width: 800,
