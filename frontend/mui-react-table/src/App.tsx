@@ -1,6 +1,7 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import {
   MaterialReactTable,
+  MRT_PaginationState,
   useMaterialReactTable,
   type MRT_ColumnDef,
 } from 'material-react-table';
@@ -97,10 +98,22 @@ export function App() {
     ],
     [],
   );
+  const [pagination, setPagination] = useState<MRT_PaginationState>({
+    pageIndex:0,
+    pageSize: 10
+  });
+  const dummyTotalRowCount = 100;
+  // can use pagination in useEffect() for refetching
 
   const table = useMaterialReactTable({
     columns,
     data, 
+    manualPagination: true,
+    onPaginationChange: setPagination,
+    rowCount: dummyTotalRowCount,
+    state: {
+      pagination,
+    },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: (event) => {
         console.info(event, row.id);
