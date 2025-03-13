@@ -31,5 +31,5 @@ const validateEmail = async (email: string): Promise<void> => {
 };
 
 (async () => {
-  await validateEmail('thisis@gmail.com');
+  await validateEmail('thisis@notexist');
 })()
