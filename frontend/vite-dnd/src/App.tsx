@@ -5,6 +5,7 @@ import {
   type MRT_Row,
   MRT_TableContainer,
 } from 'material-react-table';
+import { Button } from '@mui/material';
 
 export type Person = {
   firstName: string;
@@ -62,12 +63,13 @@ const Example = () => {
   );
 
   const [data, setData] = useState(() => initData);
+  const [toggle, setToggle] = useState(false);
 
   const table = useMaterialReactTable({
     autoResetPageIndex: false,
     columns,
     data,
-    enableRowOrdering: true,
+    enableRowOrdering: toggle,
     enableRowNumbers: true,
     rowNumberDisplayMode: 'static',
     enableSorting: false,
@@ -89,7 +91,10 @@ const Example = () => {
     }),
   });
 
-  return <MRT_TableContainer table={table} />;
+  return (<div>
+    <Button variant="outlined" onClick={() => { setToggle(!toggle); }}>Outlined</Button>
+    <MRT_TableContainer table={table} />
+  </div>);
 };
 
 export default Example;
