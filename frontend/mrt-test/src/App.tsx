@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   MaterialReactTable,
   MRT_PaginationState,
+  MRT_Row,
   useMaterialReactTable,
   type MRT_ColumnDef,
 } from 'material-react-table';
@@ -75,8 +76,9 @@ const data: Person[] = [
 ];
 
 export function App() {
+  const [personList, setPersonList] = useState<Person[]>([]);
 
-  const { isError, isRefetching, isLoading, refetch } = useQuery<FetchPersonList>({
+  const { data: response, isError, isRefetching, isLoading, refetch } = useQuery<FetchPersonList>({
     queryKey: 'PersonList',
     queryFn: async () => {
       // fetching: fetch / axios?
@@ -86,6 +88,10 @@ export function App() {
       } as FetchPersonList;
     },
   });
+
+  useEffect(() => {
+    if (response) setPersonList(response.list);
+  }, [response]);
 
 
   //should be memoized or stable
@@ -127,6 +133,7 @@ export function App() {
   // can use pagination in useEffect() for refetching
 
   const table = useMaterialReactTable({
+    autoResetPageIndex: false,
     columns,
     data, 
     manualPagination: true,
@@ -136,6 +143,7 @@ export function App() {
       pagination,
       isLoading,
       showProgressBars: isRefetching,
+      showAlertBanner: isError,
     },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: (event) => {
@@ -143,6 +151,19 @@ export function App() {
       },
       sx: {
         cursor: 'pointer',
+      },
+    }),
+    muiRowDragHandleProps: ({ table }) => ({
+      onDragEnd: () => {
+        const { draggingRow, hoveredRow } = table.getState();
+        if (hoveredRow && draggingRow) {
+          personList.splice(
+            (hoveredRow as MRT_Row<Person>).index,
+            0,
+            personList.splice(draggingRow.index, 1)[0],
+          );
+          setPersonList([...personList]);
+        }
       },
     }),
     renderTopToolbarCustomActions: () => (
