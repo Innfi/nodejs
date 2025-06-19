@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Typography } from '@mui/material';
+import { Slider, Typography } from '@mui/material';
 import { BarPlot } from '@mui/x-charts/BarChart';
 import { LineHighlightPlot, LinePlot } from '@mui/x-charts/LineChart';
 import { ChartContainer } from '@mui/x-charts/ChartContainer';
@@ -8,6 +8,7 @@ import { ChartsXAxis } from '@mui/x-charts/ChartsXAxis';
 import { ChartsYAxis } from '@mui/x-charts/ChartsYAxis';
 import { ChartsTooltip } from '@mui/x-charts/ChartsTooltip';
 import { ChartsAxisHighlight } from '@mui/x-charts/ChartsAxisHighlight';
+import useId from '@mui/utils/useId';
 import alphabetStock from '../dataset/GOOGL.json';
 
 const series = [
@@ -36,10 +37,45 @@ const series = [
   },
 ] as AllSeriesType[];
 
+const minDistance = 10;
+
 export function CombinedChart() {
+  const [xLimits, setXLimits] = React.useState<number[]>([0, alphabetStock.length-1]);
+  
+  const id = useId();
+  const clipPathId = `${id}-clip-path`;
+
+  const handleChange = (
+    event: Event,
+    newValue: number | number[],
+    activeThumb: number,
+  ) => {
+    if (!Array.isArray(newValue)) {
+      return;
+    }
+
+    console.log(`newValue[0]: ${newValue[0]}`);
+    console.log(`newValue[1]: ${newValue[1]}`);
+    console.log(`activeThumb: ${activeThumb}`);
+
+    if (newValue[1] - newValue[0] < minDistance) {
+      if (activeThumb === 0) {
+        const clamped = Math.min(newValue[0], 100 - minDistance);
+        setXLimits([clamped, clamped + minDistance]);
+      } else {
+        const clamped = Math.max(newValue[1], minDistance);
+        setXLimits([clamped - minDistance, clamped]);
+      }
+    } else {
+      setXLimits(newValue as number[]);
+    }
+  };
+
+
   return (
     <div style={{ width: '100%'}}>
       <Typography>google stocks</Typography>
+      <Slider value={xLimits} onChange={handleChange} valueLabelDisplay="auto" min={0} max={alphabetStock.length-1}/>
       <div>
         <ChartContainer series={series} height={400}
           xAxis={[
@@ -49,6 +85,8 @@ export function CombinedChart() {
               scaleType: 'band',
               valueFormatter: (value) => value.toLocaleDateString(),
               height: 40,
+              min: new Date(alphabetStock[xLimits[0]].date),
+              max: new Date(alphabetStock[xLimits[1]].date),
             }
           ]}
           yAxis={[
@@ -62,10 +100,11 @@ export function CombinedChart() {
             }
           ]}
         >
-          <ChartsAxisHighlight x="line" />
-          <BarPlot />
-          <LinePlot />
-
+          <g clipPath={`url(#${clipPathId})`}>
+            <ChartsAxisHighlight x="line" />
+            <BarPlot />
+            <LinePlot />
+          </g>
           <LineHighlightPlot />
           <ChartsXAxis
             label="Date"

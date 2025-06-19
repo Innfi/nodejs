@@ -7,7 +7,7 @@ const lData: number[] = [42, 24, 56, 45, 3];
 const rData: number[] = [57, 7, 19, 16, 22];
 const colors: string[] = ['#006BD6', '#EC407A'];
 
-export function SxStyling(): React.JSX.Element {
+export function SxStyling(): React.JSX.Element {1
   return (
     <BarChart
       sx={(theme) => ({
