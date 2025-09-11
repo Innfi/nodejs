@@ -25,6 +25,8 @@
     "@mastra/loggers": "^0.10.11",
     "@mastra/mcp": "^0.11.4",
     "@mastra/memory": "^0.14.4",
+    "duckduckgo-search": "^1.0.5",
+    "node-fetch": "^3.3.2",
     "zod": "^3.25.76"
   },
   "devDependencies": {
