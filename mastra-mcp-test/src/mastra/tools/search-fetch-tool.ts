@@ -1,7 +1,12 @@
 import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
 import fetch from 'node-fetch';
-import { search } from 'duckduckgo-search';
+
+const dummySearchResults = {
+    results: [
+        {id: 1, title: 'Example Domain', snippet: 'This domain is for use in illustrative examples in documents.', url: 'https://www.example.com'},
+    ]
+};
 
 export const searchTool = createTool({
     id: 'search',
@@ -10,20 +15,19 @@ export const searchTool = createTool({
         query: z.string().describe('The search query.'),
     }),
     outputSchema: z.object({
-        results: z.array(z.object({
-            title: z.string(),
-            snippet: z.string(),
-            url: z.string(),
+        content: z.array(z.object({
+            type: z.string(),
+            text: z.string(),
         })),
     }),
     execute: async ({ context }) => {
-        const searchResults = await search(context.query);
         return {
-            results: searchResults.results.map((r) => ({
-                title: r.title,
-                snippet: r.snippet,
-                url: r.url,
-            })),
+            content: [
+                {
+                    type: 'text',
+                    text: JSON.stringify(dummySearchResults),
+                }
+            ]
         };
     },
 });
@@ -35,11 +39,20 @@ export const fetchTool = createTool({
         url: z.string().describe('The URL to fetch.'),
     }),
     outputSchema: z.object({
-        content: z.string(),
+        content: z.array(z.object({
+            type: z.string(),
+            text: z.string(),
+        })),
     }),
     execute: async ({ context }) => {
         const response = await fetch(context.url);
-        const content = await response.text();
-        return { content };
+        return {
+            content: [
+                {
+                    type: 'text',
+                    text: await response.text(),
+                }
+            ]
+        };
     },
 });
