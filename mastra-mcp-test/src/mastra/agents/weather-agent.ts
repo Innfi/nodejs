@@ -4,6 +4,9 @@ import { Memory } from '@mastra/memory';
 import { LibSQLStore } from '@mastra/libsql';
 import { weatherTool } from '../tools/weather-tool';
 import { searchTool, fetchTool } from '../tools/search-fetch-tool';
+import { TokenLimiter } from '@mastra/memory/processors';
+
+const workingMemoryTemplate = `## weather summary by date, location as key`;
 
 export const weatherAgent = new Agent({
   name: 'Weather Agent',
@@ -27,8 +30,28 @@ export const weatherAgent = new Agent({
   model: openai('gpt-4o-mini'),
   tools: { weatherTool, searchTool, fetchTool },
   memory: new Memory({
+    processors: [
+      new TokenLimiter(127000), // how does token count affect memory performance?
+    ],
+    options: {
+      threads: {
+        generateTitle: true
+      },
+      workingMemory: {
+        enabled: true,
+        // TemplateWorkingMemory?
+        scope: 'resource', // 'thread' | 'resource'
+        template: workingMemoryTemplate,
+      },
+      lastMessages: 20,
+      semanticRecall: {
+        topK: 5,
+        messageRange: 50,
+        scope: 'resource',
+      },
+    },
     storage: new LibSQLStore({
-      url: 'file:../mastra.db', // path is relative to the .mastra/output directory
+      url: 'file:../mastra.db', // TODO: test vectordb
     }),
   }),
 });
